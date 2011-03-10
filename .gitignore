@@ -1,0 +1,6 @@
+/PythonInclude
+/AIManager.exe
+/addr_check.exe
+*.bin
+*.obj
+/lapi.o

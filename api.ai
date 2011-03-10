@@ -1,0 +1,348 @@
+ACT_UP = 0;
+ACT_DOWN = 1;
+ACT_LEFT = 2;
+ACT_RIGHT = 3;
+ACT_A = 4;
+ACT_B = 5;
+ACT_C = 6;
+ACT_D = 7;
+ACT_AB = 8;
+ACT_BC = 9;
+ACT_DLEFT = 10;
+ACT_DRIGHT = 11;
+ACT_ULEFT = 12;
+ACT_URIGHT = 13;
+
+TAG_MY = 0;
+TAG_ENEMY = 1;
+
+RIFT_ATTACK	=  1;
+SMASH_ATTACK	=  2;
+BORDER_RESIST	=  4;
+CHAIN_ARTS	=  8;
+CHAIN_SPELL	= 16;
+COUNTER_HIT	= 32;
+
+thread_list = {};
+thread_param = {};
+thread_num = 0;
+
+function create_thread(proc, ...)
+	if(proc==nil)then
+		error("引数が不正です",2);
+	end
+
+	--print("thread add");
+	thread_list[thread_num] = coroutine.create(getfunc(proc));
+	thread_param[thread_num] = {...};
+	thread_num = thread_num+1;
+end
+
+function thread_main()
+	local i;
+	local ret;
+
+	while(thread_num>=2)do
+		i = 0;
+		while(i<thread_num)do
+			ret = coroutine.resume(thread_list[i],unpack(thread_param[i],1));
+			thread_param[i] = {};
+			--print("call",i,ret);
+			if(ret)then
+				i = i+1;
+			else
+				table.remove(thread_list,i);
+				table.remove(thread_param,i);
+				thread_num = thread_num-1;
+			end
+		end
+	end
+end
+
+function yield(end_check)
+	if(end_check~=nil)then
+		error("引数が不正です",2);
+	end
+
+	coroutine.yield();
+end
+
+function frame_skip()
+	while(true)do
+		_yield();
+		yield();
+	end
+end
+
+function api_main()
+	create_thread(main);
+	create_thread(frame_skip);
+	thread_main();
+end
+
+function wait(n,end_check)
+	if(n==nil or end_check~=nil)then
+		error("引数が不正です",2);
+	end
+
+	while(n>0)do
+		yield();
+		n = n-1
+	end
+end
+
+function key_event(n,end_check)
+	if(n==nil or end_check~=nil)then
+		error("引数が不正です",2);
+	end
+
+	key_on(n);
+	wait(2);
+	key_off(n);
+	wait(2);
+end
+
+function key_event2(n,m,end_check)
+	if(n==nil or m==nil or end_check~=nil)then
+		error("引数が不正です",2);
+	end
+
+	key_on(n);
+	key_on(m);
+	wait(2);
+	key_off(n);
+	key_off(m);
+end
+
+
+function dash(end_check)
+	local i;
+	if(end_check~=nil)then
+		error("引数が不正です",2);
+	end
+
+	i = 0;
+	while(my_act ~= 200 and i < 30)do
+		key_off(front);
+		wait(2);
+		key_on(front);
+		wait(2);
+		i = i+1;
+	end
+end
+function dattack(n,end_check)
+	if(n==nil or (not(n>=4 and n<=6)) or end_check~=nil)then
+		error("引数が不正です",2);
+	end
+
+	dash();
+	key_event(n);
+	key_reset();
+end
+
+function command(s,end_check)
+	local ACT_UP = 0
+	local ACT_DOWN = 1
+	local ACT_LEFT = 2
+	local ACT_RIGHT = 3
+	local ACT_A = 4
+	local ACT_B = 5
+	local ACT_C = 6
+	local ACT_D = 7
+	local ACT_AB = 8
+	local ACT_BC = 9
+	local ACT_DOWNLEFT = 10
+	local ACT_DOWNRIGHT = 11
+	local ACT_UPLEFT = 12
+	local ACT_UPRIGHT = 13
+	local i;
+	local len;
+	local a;
+
+	if(s==nil or end_check~=nil)then
+		error("引数が不正です",2);
+	end
+
+	key_reset();
+	len = string.len(s);
+	i = 1;
+	while(i <= len)do
+		a = s:sub(i,i);
+		if(s:sub(i+1,i+2)=="HJ")then
+			key_reset();
+			key_on(ACT_D);
+			if(a=="7")then
+				key_on(u_back);
+			elseif(a=="8")then
+				key_on(ACT_UP);
+			elseif(a=="9")then
+				key_on(u_front);
+			else
+				break;
+			end
+			wait(2);
+			key_reset();
+			wait(2);
+			i = i+3;
+		else
+			if(a=="5")then
+				key_reset();
+			elseif(a=="1")then
+				if(get_key_stat(back)==1)then
+					key_on(ACT_DOWN);
+				elseif(get_key_stat(ACT_DOWN)==1)then
+					key_on(back);
+				else
+					key_off(d_back);
+					key_on(d_back);
+				end
+			elseif(a=="3")then
+				if(get_key_stat(front)==1)then
+					key_on(ACT_DOWN);
+				elseif(get_key_stat(ACT_DOWN)==1)then
+					key_on(front);
+				else
+					key_off(d_front);
+					key_on(d_front);
+				end
+			elseif(a=="7")then
+				if(s:sub(i+1,i+1)=="J")then
+					i = i+1;
+				end
+				if(get_key_stat(back)==1)then
+					key_on(ACT_UP);
+				elseif(get_key_stat(ACT_UP)==1)then
+					key_on(back);
+				else
+					key_off(u_back);
+					key_on(u_back);
+				end
+			elseif(a=="9")then
+				if(s:sub(i+1,i+1)=="J")then
+					i = i+1;
+				end
+				if(get_key_stat(front)==1)then
+					key_on(ACT_DOWN);
+				elseif(get_key_stat(ACT_DOWN)==1)then
+					key_on(front);
+				else
+					key_off(u_front);
+					key_on(u_front);
+				end
+			elseif(a=="2")then
+				if(get_key_stat(ACT_DOWN)==0)then
+					key_reset();
+					key_on(ACT_DOWN);
+				else
+					if(get_key_stat(front)==1 or get_key_stat(back)==1)then
+						key_off(front);
+					else
+						key_off(ACT_DOWN);
+						i = i-1;
+					end
+				end
+			elseif(a=="4")then
+				if(get_key_stat(back)==0)then
+					key_reset();
+					key_on(back);
+				else
+					if(get_key_stat(ACT_DOWN)==1 or get_key_stat(ACT_UP)==1)then
+						key_off(ACT_DOWN);
+					else
+						key_off(back);
+						i = i-1;
+					end
+				end
+			elseif(a=="6")then
+				if(get_key_stat(front)==0)then
+					key_reset();
+					key_on(front);
+				else
+					if(get_key_stat(ACT_DOWN)==1 or get_key_stat(ACT_UP)==1)then
+						key_off(ACT_DOWN);
+					else
+						key_off(front);
+						i = i-1;
+					end
+				end
+			elseif(a=="8" or a=="J")then
+				if(y~=0)then
+					break;
+				end
+				if(s:sub(i+1,i+1)=="J")then
+					i = i+1;
+				end
+				if(get_key_stat(ACT_UP)==0)then
+					key_reset();
+					key_on(ACT_UP);
+				else
+					if(get_key_stat(front)==1 or get_key_stat(back)==1)then
+						key_off(front);
+					else
+						key_off(ACT_UP);
+						i = i-1;
+					end
+				end
+			elseif(a=="A")then
+				key_on(ACT_A);
+				wait(2);
+				key_reset();
+			elseif(a=="B")then
+				key_on(ACT_B);
+				wait(2);
+				key_reset();
+			elseif(a=="C")then
+				key_on(ACT_C);
+				wait(2);
+				key_reset();
+			elseif(a=="E")then
+				key_on(ACT_E);
+				wait(2);
+				key_reset();
+			elseif(a=="F")then
+				key_on(ACT_F);
+				wait(2);
+				key_reset();
+			elseif(a=="D")then
+				a = tonumber(s:sub(i-1,i-1));
+				if(i>1 and a>=0 and a<=9)then
+					key_on(ACT_D);
+					wait(2);
+					key_reset();
+				else
+					dash();
+				end
+			elseif(a=="H")then
+				i = i+1;
+				a = s:sub(i,i);
+				if(a=="J")then
+					key_event(ACT_D,ACT_UP);
+				elseif(a=="A")then
+					key_on(ACT_A);
+					wait(40);
+					key_reset();
+				elseif(a=="B")then
+					key_on(ACT_B);
+					wait(40);
+					key_reset();
+				elseif(a=="C")then
+					key_on(ACT_C);
+					wait(40);
+					key_reset();
+				else
+					print("Error:command関数内のHの使い方が不正です");
+					i = i-1;
+				end
+			elseif(a=="(")then
+				a = tonumber(s:sub(i+1,string.find(s,")",i+1)-1));
+				i = string.find(s,")",i+1);
+				wait(a);
+			else
+				print(string.format("Error:command関数内で%d文字目が想定外の文字(%s)です",i,a));
+			end
+			i = i+1;
+			wait(2);
+		end
+	end
+	key_reset();
+end
