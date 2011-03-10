@@ -1,12 +1,6 @@
 
 #pragma once
 
-#include <stdio.h>
-#include <windows.h>
-#include "lib.h"
-
-
-
 class scriptEngine {
 private:
 	void convertFilePath(char *path)const;

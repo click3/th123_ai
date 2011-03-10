@@ -1,6 +1,10 @@
 cc  = cl
-opt = /errorReport:none /W1 /MT /EHsc /IPythonInclude /Ox
-obj = lapi.obj lauxlib.obj lbaselib.obj lcode.obj ldblib.obj ldebug.obj ldo.obj ldump.obj lfunc.obj lgc.obj linit.obj liolib.obj llex.obj lmathlib.obj lmem.obj loadlib.obj lobject.obj lopcodes.obj loslib.obj lparser.obj lstate.obj lstring.obj lstrlib.obj ltable.obj ltablib.obj ltm.obj lundump.obj lvm.obj lzio.obj my_luacode.obj script.obj network.obj keyboard.obj lib.obj address.obj scriptBase.obj scriptLua.obj main.obj th105_ai.res
+!if $(RELEASE) == y
+	opt = /errorReport:none /we4715 /W2 /MT /EHsc /Ox /Fpth123_ai.pch /IPythonInclude /DBOOST_DISABLE_ASSERTS
+!else
+	opt = /errorReport:none /we4715 /W2 /MT /EHsc /Ox /Fpth123_ai.pch /IPythonInclude
+!endif
+obj = lapi.obj lauxlib.obj lbaselib.obj lcode.obj ldblib.obj ldebug.obj ldo.obj ldump.obj lfunc.obj lgc.obj linit.obj liolib.obj llex.obj lmathlib.obj lmem.obj loadlib.obj lobject.obj lopcodes.obj loslib.obj lparser.obj lstate.obj lstring.obj lstrlib.obj ltable.obj ltablib.obj ltm.obj lundump.obj lvm.obj lzio.obj my_luacode.obj script.obj network.obj keyboard.obj lib.obj address.obj scriptBase.obj scriptLua.obj version.obj main.obj th105_ai.res
 exe = th123_ai
 
 .c.obj:
@@ -8,11 +12,16 @@ exe = th123_ai
 .cpp.obj:
         $(cc) $(opt) -c /Tp $<
 $(exe).exe: $(obj)
-	version.exe
+	version_count.exe
         $(cc) $(opt) /Fe$* $** $(lib)
 
 next_ver.exe: next_ver.obj
         $(cc) $(opt) -e$* $** $(lib2)
+
+stdafx.h: resource.h consts.h version.h dik_list.h keyboard.h network.h lib.h address.h scriptBase.h scriptLua.h scriptPython.h script.h main.h
+	touch stdafx.h
+stdafx.obj: stdafx.h
+        $(cc) $(opt) /c /Yc /Tp stdafx.cpp
 
 lapi.obj: lua_src/lapi.c
 lauxlib.obj: lua_src/lauxlib.c
@@ -44,16 +53,17 @@ lundump.obj: lua_src/lundump.c
 lvm.obj: lua_src/lvm.c
 lzio.obj: lua_src/lzio.c
 my_luacode.obj: lua_src/my_luacode.c
-main.obj: main.cpp main.h address.h network.h consts.h
-script.obj: script.cpp main.h address.h
-keyboard.obj: keyboard.cpp main.h address.h
-network.obj: network.cpp network.h main.h address.h
-lib.obj: lib.cpp address.h
-address.obj: address.cpp address.h
-scriptLua.obj: scriptLua.cpp scriptBase.h script.h main.h lib.h
-scriptBase.obj: scriptBase.cpp scriptBase.h main.h lib.h
+
+main.obj: main.cpp stdafx.obj
+script.obj: script.cpp stdafx.obj
+keyboard.obj: keyboard.cpp stdafx.obj
+network.obj: network.cpp stdafx.obj
+lib.obj: lib.cpp stdafx.obj
+address.obj: address.cpp stdafx.obj
+scriptLua.obj: scriptLua.cpp stdafx.obj
+scriptBase.obj: scriptBase.cpp stdafx.obj
+version.obj: version.cpp version.h version_impl.h
 th105_ai.res: th105_ai.rc th105_ai.ico th105_ai2.ico resource.h api.bin
 	rc th105_ai.rc
 api.bin:  api.ai
 	luac.exe -s -o api.bin api.ai
-

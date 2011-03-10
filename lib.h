@@ -1,10 +1,6 @@
 
 #pragma once
 
-#include <atlbase.h>
-#include <stdio.h>
-
-#define snprintf(str,size,format, ...)	sprintf(str,format,__VA_ARGS__);
 void GetAppDir(char *str);
 int atoi2(const char *str,int def);
 float atof2(const char *str,float def);
@@ -16,7 +12,6 @@ void to_lowstring(char *s);
 void SetConsoleTitle2(char *str);
 void change_icon(int id);
 #define strmove(s1,s2)	memmove(s1,s2,strlen(s2)+1)
-int del_space(char *s);
 
 
 
@@ -39,19 +34,19 @@ public:
 		head = NULL;
 	}
 
-	virtual char *GetValue(const char *name){
-		LIST *a;
-		a = get_list(name);
-		if(a==NULL)return NULL;
-		return a->value;
-	}
-	virtual int GetInt(const char *name,int def = 0){
-		return atoi2(GetValue(name),def);
-	}
-	virtual float GetFloat(const char *name){
-		return atof2(GetValue(name),0.0);
+	virtual char *GetValue(const char *name) {
+		return GetValueImpl(head, name);
 	}
 
+	virtual const char *GetValue(const char *name) const {
+		return GetValueImpl(head, name);
+	}
+	virtual int GetInt(const char *name, int def = 0) const {
+		return atoi2(GetValue(name), def);
+	}
+	virtual float GetFloat(const char *name, float def = 0.0) const {
+		return atof2(GetValue(name), def);
+	}
 
 	int LoadFile(const char *fn){
 		FILE *fp;
@@ -117,7 +112,7 @@ public:
 		strncpy(a->value, value, sizeof(a->value));
 		//printf("%s->%s = %s\n",a->section,a->name,a->value);
 	}
-private:
+protected:
 	typedef struct list{
 		char section[256];
 		char name[256];
@@ -127,7 +122,7 @@ private:
 	LIST *head;
 	LIST *tail;
 
-	int del_space(char *s){
+	static unsigned int del_space(char *s) {
 		int count = 0;
 		while(*s != '\0'){
 			if(*s == ' ' || *s == '\t'){
@@ -140,7 +135,14 @@ private:
 		return count;
 	}
 
-	LIST *get_list(const char *name){
+	static char *GetValueImpl(LIST *head, const char *name) {
+		LIST *a;
+		a = Search(head, name);
+		if(a==NULL)return NULL;
+		return a->value;
+	}
+
+	static LIST *Search(LIST *head, const char *name) {
 		LIST *a;
 
 		a = head;
@@ -152,6 +154,14 @@ private:
 		}
 		return NULL;
 	}
+
+	LIST *get_list(const char *name) {
+		return Search(head, name);
+	}
+	const LIST *get_list(const char *name) const {
+		return Search(head, name);
+	}
+
 };
 
 class th_ini : public ini
@@ -162,43 +172,52 @@ public:
 		TYPE_TH105_SWR,
 		TYPE_TH123_SOKU
 	};
-	TYPE type;
 
-	th_ini(){
-		type = TYPE_NONE;
-	}
-	th_ini(TYPE a){
-		type = a;
-	}
+	th_ini() : type(TYPE_NONE) { }
+	th_ini(TYPE a) : type(a) { }
+	~th_ini() { }
 
-	bool SetType(TYPE a){
+	bool SetType(TYPE a) {
 		if(a!=TYPE_NONE && a!=TYPE_TH105_SWR && a!=TYPE_TH123_SOKU){
-			AtlTrace("Error ini::SetType param error( type = %d)\n",a);
-			ATLASSERT(false);
+			printf("Error ini::SetType param error( type = %d)\n",a);
+			BOOST_ASSERT(false);
 			return false;
 		}
 		type = a;
 		return true;
 	}
+	TYPE GetType(void) const {
+		return type;
+	}
 
-	char *GetValue(const char *name){
+	char *GetValue(const char *name) {
+		return ini::GetValue(GetTypeName(name, type));
+	}
+
+	const char *GetValue(const char *name) const {
+		return ini::GetValue(GetTypeName(name, type));
+	}
+protected:
+	TYPE type;
+
+	static const char *GetTypeName(const char *name, TYPE type) {
 		if(strncmp(name, "ADDR_", 4) != 0){
-			return ini::GetValue(name);
+			return name;
 		}
-		char temp[256] = "";
+		static char temp[256];
 		if(type == TYPE_TH105_SWR){
-			strcpy(temp, "SWR_");
+			::strcpy(temp, "SWR_");
 		} else if(type == TYPE_TH123_SOKU){
-			strcpy(temp, "SWRS_");
+			::strcpy(temp, "SWRS_");
 		} else {
-			AtlTrace("Error ini::GetValue type error( type = %d)\n",type);
-			ATLASSERT(false);
+			printf("Error ini::GetValue type error(name = %s, type = %d)\n", name, type);
+			BOOST_ASSERT(false);
 			return "";
 		}
-		strcat(temp, name);
-		//printf("%d:%s\t%s\t%s\n",type,name,temp,ini::GetValue(temp));
-		return ini::GetValue(temp);
+		::strcat(temp, name);
+		return temp;
 	}
+
 };
 
 extern th_ini g_ini;

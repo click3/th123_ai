@@ -1,5 +1,4 @@
 #pragma once
-#include <windows.h>
 
 void ErrorPost(const char *url,const char *s);
 char *get(const char *address,int *data_len=NULL);

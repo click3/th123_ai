@@ -1,6 +1,5 @@
 
-#include "scriptPython.h"
-#include "main.h"
+#include "stdafx.h"
 
 #define METH_VARARGS 0
 

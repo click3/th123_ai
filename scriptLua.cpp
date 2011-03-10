@@ -1,6 +1,5 @@
 
-#include "scriptLua.h"
-#include "main.h"
+#include "stdafx.h"
 
 
 scriptLua *scriptLua::instance = NULL;
@@ -18,7 +17,7 @@ scriptLua *scriptLua::instance = NULL;
 		lua_getglobal(state, name);
 		ret = lua_tonumber(state, -1);
 		lua_pop(state, 1);
-		return ret;
+		return (int)ret;
 	}
 	void scriptLua::setScriptValue(const char *name, double value){
 		lua_pushnumber(state, value);
@@ -434,7 +433,7 @@ scriptLua *scriptLua::instance = NULL;
 			lua_pushstring(L,"ˆø”‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ");
 			lua_error(L);
 		}
-		a = get_key_stat(lua_tonumber(L,1));
+		a = get_key_stat((int)lua_tonumber(L,1));
 		lua_pushnumber(L,a);
 		return 1;
 	}
@@ -619,7 +618,7 @@ scriptLua *scriptLua::instance = NULL;
 			lua_pushstring(L,"ˆø”‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ");
 			lua_error(L);
 		}
-		lua_pushstring(L,OPEN_VERSION);
+		lua_pushstring(L, GetTH123AIVersionString());
 		return 1;
 	}
 	int scriptLua::lua_get_key_stat2(lua_State *L){
@@ -635,7 +634,7 @@ scriptLua *scriptLua::instance = NULL;
 		} else {
 			p = &enemy_data;
 		}
-		lua_pushnumber(L, p->GetKeyState(lua_tonumber(L,2)));
+		lua_pushnumber(L, p->GetKeyState((int)lua_tonumber(L,2)));
 		return 1;
 	}
 	int scriptLua::lua_get_key_map2(lua_State *L){

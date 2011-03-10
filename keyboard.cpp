@@ -1,7 +1,6 @@
-#include <windows.h>
-#include <mmsystem.h>
-#include "keyboard.h"
-#include "dik_list.h"
+
+#include "stdafx.h"
+
 #pragma comment (lib,"winmm.lib")
 
 struct code_array{

@@ -1,5 +1,5 @@
-#include "scriptBase.h"
-#include "main.h"
+
+#include "stdafx.h"
 
 #pragma comment (lib,"Comdlg32.lib")
 

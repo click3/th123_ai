@@ -1,25 +1,5 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <math.h>
-#include <time.h>
 
-#include <winsock2.h>
-#include <psapi.h>
-#include <tlhelp32.h>
-
-#include <atlbase.h>
-
-#include "main.h"
-#include "lib.h"
-#include "script.h"
-#include "keyboard.h"
-#include "network.h"
-#include "version.h"
-#include "resource.h"
-#include "address.h"
-#include "dik_list.h"
-#include "consts.h"
+#include "stdafx.h"
 
 //#define DEBUG
 #define DEBUG2
@@ -42,8 +22,8 @@ int get_delay = 0;
 
 char on[10] = {0,0,0,0,0,0,0,0,0,0};
 char get_key_stat(int n){
-	ATLASSERT(n >= 0);
-	ATLASSERT(n <= 9);
+	BOOST_ASSERT(n >= 0);
+	BOOST_ASSERT(n <= 9);
 	return on[n];
 }
 
@@ -58,6 +38,7 @@ player enemy_data(player::ENEMY);
 #pragma	comment(lib,"advapi32.lib")
 #pragma	comment(lib,"psapi.lib")
 #pragma	comment(lib,"gdi32.lib")
+#pragma	comment(lib,"user32.lib")
 
 
 //•s³‘Îô
@@ -135,8 +116,8 @@ long WINAPI exep(EXCEPTION_POINTERS *pep){
 	list[i] = pctx->EFlags;
 
 	sprintf(&s[strlen(s)],"Exception!!!\n--Status--\n" );
-	sprintf(&s[strlen(s)],"Version: %s\n",OPEN_VERSION);
-	sprintf(&s[strlen(s)],"CloseVersion: %d\n",VERSION);
+	sprintf(&s[strlen(s)],"Version: %s\n",GetTH123AIVersionString());
+	sprintf(&s[strlen(s)],"CloseVersion: %d\n",GetTH123AIVersion());
 	sprintf(&s[strlen(s)],"Code: %08X\n", per->ExceptionCode );
 	sprintf(&s[strlen(s)],"Address: %08X\n", per->ExceptionAddress );
 	if(ph==0){
@@ -557,7 +538,7 @@ char *id2char(int id){
 		{"ƒ`ƒ‹ƒm"},{"”ü—é"},{"‹ó"},{"z–KŽq"}};
 	if( (is_swr && id>15) || id>20){
 		printf("Error:id2char ”ÍˆÍŠO‚ÌID\n");
-		ATLASSERT(false);
+		BOOST_ASSERT(false);
 		return db[0];
 	}
 	return db[id];
@@ -571,7 +552,7 @@ char *id2char2(int id){
 		{"chirno"},{"meirin"},{"utsuho"},{"suwako"}};
 	if( (is_swr && id>15) || id>20){
 		printf("Error:id2char ”ÍˆÍŠO‚ÌID\n");
-		ATLASSERT(false);
+		BOOST_ASSERT(false);
 		return db[0];
 	}
 	return db[id];
@@ -1042,6 +1023,10 @@ void yield(void){
 	key_delay = engine->getScriptValue("key_delay");
 	get_delay = engine->getScriptValue("data_delay");
 	weather_delay = engine->getScriptValue("weather_delay");
+
+	if(ph == NULL) {
+		ph = GetProcessHandle();
+	}
 
 	while(wh && !is_th105_active()){
 		reload_check();

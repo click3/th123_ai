@@ -1,10 +1,6 @@
-#include <cstdio>
-#include <cstdarg>
-#include <windows.h>
-#include "main.h"
-#include "lib.h"
-#include "version.h"
-#include "resource.h"
+
+#include "stdafx.h"
+
 using namespace std;
 
 void GetAppDir(char *str){
@@ -98,10 +94,10 @@ void SetConsoleTitle2(char *str){
 		if(strncmp(s,str,strlen(str)) == 0)return;
 		free(s);
 	}
-	s = static_cast<char*>(malloc(strlen(str)+1+strlen(OPEN_VERSION)+3));
+	s = static_cast<char*>(malloc(strlen(str)+1+strlen(GetTH123AIVersionString())+3));
 	strcpy(s,str);
 	strcat(s," - ");
-	strcat(s,OPEN_VERSION);
+	strcat(s,GetTH123AIVersionString());
 	SetConsoleTitle(s);
 }
 

@@ -1,14 +1,6 @@
 
 #pragma once
 
-#include "scriptBase.h"
-#include "lib.h"
-#include "version.h"
-#include "network.h"
-#include "consts.h"
-#include "resource.h"
-#include "Python.h"
-
 
 class scriptPython : public scriptEngine {
 private:

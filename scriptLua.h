@@ -1,15 +1,5 @@
 
 #pragma once
-
-#include "scriptBase.h"
-#include "lib.h"
-#include "version.h"
-#include "network.h"
-#include "consts.h"
-#include "resource.h"
-#include "lua_src/lua.h"
-#include "lua_src/lualib.h"
-#include "lua_src/lauxlib.h"
 #pragma comment (lib,"Comdlg32.lib")
 
 

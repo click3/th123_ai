@@ -1,3 +1,3 @@
-#define VERSION 1766
-#define OPEN_VERSION "ver0.94a"
-#define API_SIZE 5911
+unsigned int GetTH123AIVersion(void);
+const char *GetTH123AIVersionString(void);
+unsigned int GetTH123AIAPIFileSize(void);

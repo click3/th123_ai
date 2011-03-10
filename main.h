@@ -1,10 +1,5 @@
 
 #pragma once
-#include <windows.h>
-#include <math.h>
-#include <vector>
-#include "lib.h"
-#include "address.h"
 
 
 
@@ -167,15 +162,15 @@ public:
 			BOX *a = hitarea;
 			while(i < 10){
 				if(i < hitarea_n){
-					ReadProcessMemory(ph,(void *)(p + i*16),a,sizeof(*a),NULL);
-					a->left = x+a->left;
-					a->top = -y+a->top;
-					a->right = x+a->right;
-					a->bottom = -y+a->bottom;
+					ReadProcessMemory(ph, (void *)(p + i*16), a, sizeof(*a), NULL);
+					a->left = (int)x+a->left;
+					a->top = -(int)y+a->top;
+					a->right = (int)x+a->right;
+					a->bottom = -(int)y+a->bottom;
 					a->top *= -1;
 					a->bottom *= -1;
 				} else {
-					memset(a,0,sizeof(*a));
+					memset(a, 0, sizeof(*a));
 				}
 				a++;
 				i++;
@@ -189,10 +184,10 @@ public:
 					ReadProcessMemory(ph,(void *)(base_addr + ADDR_HITAREAFLAGOFS + i*sizeof(flag)),&flag,sizeof(flag),NULL);
 					ReadProcessMemory(ph,(void *)(base_addr + ADDR_HITAREA2OFS + i*sizeof(*a)),a,sizeof(*a),NULL);
 					if(flag!=0){//相対座標
-						a->left = x+a->left;
-						a->top = -y+a->top;
-						a->right = x+a->right;
-						a->bottom = -y+a->bottom;
+						a->left = (int)x+a->left;
+						a->top = -(int)y+a->top;
+						a->right = (int)x+a->right;
+						a->bottom = -(int)y+a->bottom;
 					}
 					a->top *= -1;
 					a->bottom *= -1;
@@ -216,10 +211,10 @@ public:
 					} else {
 						//当たり判定矩形を取得して表示する(オブジェクト位置からの相対)
 						ReadProcessMemory(ph,(void *)p,a,16,NULL);
-						a->left = x+a->left;
-						a->top = -y+a->top;
-						a->right = x+a->right;
-						a->bottom = -y+a->bottom;
+						a->left = (int)x+a->left;
+						a->top = -(int)y+a->top;
+						a->right = (int)x+a->right;
+						a->bottom = -(int)y+a->bottom;
 					}
 					a->top *= -1;
 					a->bottom *= -1;
@@ -398,7 +393,7 @@ public:
 				}
 				if(is_swr){
 					ReadProcessMemoryFloat(ph,(void*)(base_addr+0x4BC),&f,4,NULL);
-					data = floor((f-1.05)/0.05+0.5);
+					data = (int)floor((f-1.05)/0.05+0.5);
 					if(data<0){
 						data = 0;
 					}
@@ -406,7 +401,7 @@ public:
 					ReadProcessMemory(ph,(void*)(base_addr+ADDR_KOKUSHIOFS),&data,4,NULL);
 					if(data < 0 || data > 3){
 						ReadProcessMemoryFloat(ph,(void*)(base_addr+ADDR_KOKUSHIOFS),&f,4,NULL);
-						data = f;
+						data = (int)f;
 						if(data < 0 || data > 3){
 							data = 0;
 						}
@@ -493,14 +488,14 @@ public:
 				break;
 			case 17://制御棒使用個数
 				ReadProcessMemory(ph,(void*)(base_addr+ADDR_ATTACKSTICKOFS),&f,4,NULL);
-				data = f;
+				data = (int)f;
 				if(data < 0 || data > 4){
 					data = 0;
 				}
 				break;
 			case 18://身代わり人形使用個数
 				ReadProcessMemory(ph,(void*)(base_addr+ADDR_DEFENSEDOLLOFS),&f,4,NULL);
-				data = f;
+				data = (int)f;
 				if(data < 0 || data > 4){
 					data = 0;
 				}

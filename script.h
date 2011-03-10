@@ -1,13 +1,6 @@
 
 #pragma once
 
-#include <windows.h>
-
-
-
-
-#include "scriptLua.h"
-
 
 void scriptExec(const char *fn);
 void SetActiveWindow2(HWND hWnd);

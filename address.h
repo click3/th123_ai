@@ -1,9 +1,6 @@
 
 #pragma once
 
-#include <string.h>
-#include "lib.h"
-
 
 #define WINDOW_CLASS		g_ini.GetValue("WINDOW_CLASS")
 #define WINDOW_TEXT		g_ini.GetValue("WINDOW_TEXT")

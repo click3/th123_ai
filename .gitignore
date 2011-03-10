@@ -4,3 +4,7 @@
 *.bin
 *.obj
 /lapi.o
+/list.glvn
+/th123_ai.pch
+/th105_ai.RES
+/test.ai

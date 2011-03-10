@@ -1,5 +1,5 @@
 
-#include "main.h"
+#include "stdafx.h"
 
 scriptEngine *engine;
 
