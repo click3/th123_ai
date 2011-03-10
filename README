@@ -1,142 +1,142 @@
-�v���O�������Fth123_AI(��)
+プログラム名：th123_AI(仮)
 
-�p�r�F������z�V�Ⓦ����z�V���œƎ�AI
-
-
-�g�����F
-�EStory��VS Network�ȊO�̃��[�h��1P���L�[�{�[�h�̃A���X�A2P�������Ŏg�������L�����ɐݒ肵�܂��B
-���Q�[���p�b�h�g���Ȃ��1P��2P�͂ǂ���ł��\���܂���B
-�EAI�X���Ȃǂ�AI����肵�܂�
-�Eth123_ai.exe���N�����܂�
-�E�t�@�C���I���_�C�A���O�œ��肵��ai��I�����܂��B
-�E�ΐ���n�߂܂�
-
-������@�F
-�EF9	��z�V�N��
-�EF10	��z�V��(������Ȃ���Δ�z�V)�N��
-�EF11	�w��t�@�C������X�N���v�g�ēǂݍ���
-�EF12	�X�N���v�g�ēǂݍ���
-
-�C���X�g�[���F
-zip�W�J���邾��
-
-�A���C���X�g�[���F
-���W�X�g�����e���|�����t�@�C�����M���Ă���܂���B
-�t�H���_���ƍ폜���邾���ł������肳���ς肨����΂ł��܂��B
-
-�t�@�C������F
-th123_ai.exe		�v���O�����{�̂ł��B
-th123_ai.ini		�ݒ�t�@�C���ł��A�ݒ�K�{�ł͂Ȃ��̂ŃX���[�B
-Readme.txt		���ǂ�ł��邱��
-History.txt		�X�V�����ł��B
-document.txt		AI���������߂̒��ȈՃ��t�@�����X�ł��B
-motion.txt		��L���t�@�����X�̕t�����ł��B
-card.txt		����
-skill.txt		����
-spell.txt		����
+用途：東方緋想天や東方非想天則で独自AI
 
 
-Q&A�F
-	Q:����AI�g�������z�V(��z�V��)�̃f�[�^����\������H
-	A:����܂���B
-	�{�A�v���̓L�[�{�[�h���͈ȊO�Ŕ�z�V�������͔�z�V���̓���Ɋ����邱�Ƃ͂���܂���B
-	�����܂ŃL�[�{�[�h����ɂ���Ă̂ݓ��삷��AI�ł��B
+使い方：
+・StoryとVS Network以外のモードで1Pをキーボードのアリス、2Pを自分で使いたいキャラに設定します。
+※ゲームパッド使いならば1Pと2Pはどちらでも構いません。
+・AIスレなどでAIを入手します
+・th123_ai.exeを起動します
+・ファイル選択ダイアログで入手したaiを選択します。
+・対戦を始めます
 
-	Q:�L�[�{�[�h�v���C���[�Ȃ񂾂��ǁA�L�[�����Ԃ��đΐ�ł��Ȃ�
-	A:�v���t�@�C������g���L�[��ǂݍ���ł��܂��B
-	�Ȃ̂ŁAAI�p�Ɏg��Ȃ��ł��낤�L�[��ݒ肵�Ă�����΃L�[�{�[�_�[�ł����Ȃ��ΐ�ł��܂��B
-	�������A�A���t�@�x�b�g�ȊO��ݒ肵���ꍇ�ɖ�肪�N���邱�Ƃ������̂�
-	��{�I�ɃA���t�@�x�b�g�݂̂Őݒ肷�邱�Ƃ������߂��܂��B
+操作方法：
+・F9	緋想天起動
+・F10	非想天則(見つからなければ緋想天)起動
+・F11	指定ファイルからスクリプト再読み込み
+・F12	スクリプト再読み込み
 
-	Q:�L�[�R���t�B�O���炢AI���ŉ��Ƃ������
-	A:�L�[�R���t�B�O�L�[�{�[�h����݂̂ł͎����ł��܂���B
-	���������������B
+インストール：
+zip展開するだけ
 
-	Q:�ΐ��ʂɓ��邽�тɂ��������I������񂾂���
-	A:����Ɠ����Q&A�̂ق����������������B
+アンインストール：
+レジストリもテンポラリファイルも弄っておりません。
+フォルダごと削除するだけですっきりさっぱりおさらばできます。
 
-	Q:PANIC: �قɂ���`�ƕ\������Ă����I�����Ă��܂�
-	A:AI�̒��ŃG���[���Ă��܂��B
-	�{�v���O������ai�őz�肳�ꂽ���̂����Â��Ǝv���܂��B
-	�����ŐV�łł������G���[���o��ꍇ�Aai�̍�҂���܂ł��A����
-
-	Q:�F���͂��Ă��邯�Ǔ��������`���N�`��
-	A:1P�����L�[�{�[�h�̐ݒ�ɂȂ��Ă��Ȃ����A�w�肳��Ă���L�[�����Ή��̃L�[���Ǝv���܂��B
-	�����A�L���A�e���L�[�A���̑�����L�[�͔F�����Ȃ��\��������܂��B
-	qwertyuiopa�ȂǁA�A���t�@�x�b�g���g�����L�[�R���t�B�O�̃v���t�@�C����p�ӂ��Ă��������B
-
-	Q:�u�O���ɒʐM���悤�Ƃ��Ă��܂��A�����܂����H�v�Ƃ����_�C�A���O�o��񂾂�
-	A:th105_ai�{�̂Œv���I��肪�N�����ꍇ�Ɏ����ŃG���[����҈��ɑ��M����悤�g�܂�Ă��܂��B
-	���̂��߁A�ꕔ�Z�L�����e�B�[�\�t�g�͋N�����A�������͑��M���ɏ�L�̂悤�ȃ_�C�A���O���o���ă��[�U�[�ɓ��ӂ����߂Ă���\��������܂��B
-	�u���b�N���Ă��g�p�ɖ��͂Ȃ��̂ŁA�f�o�b�O�Ȃ�ļ�ȂƂ��������ҐM�����܂���Ƃ������̓u���b�N���Ă��������B
-
-	Q:�X�N���v�g�̓ǂݒ������ʓ|
-	A:F12�������΍ēǂݍ��݂���܂�
-	���������������X���ڂȂ̂ŁA���߂ɉ����Ȃ��Ɣ������Ȃ���������܂���B
-	�܂�AI���A�N�e�B�u�łȂ��Ƃ������[�h����͉\�ł�(�G�f�B�^�ŕҏW�㑦�����[�h�ł���悤��)
-
-	Q:���������ʃX�N���v�g�ǂނ��߂�ini����������̖ʓ|
-	A:F11�L�[����_�C�A���O���J���ēǂݍ��߂܂��B
-	�܂��Aini��dialog�Ƃ��Ă����΃f�t�H���g�Ń_�C�A���O�w��ł��Aexe�t�@�C���Ƀh���b�O���h���b�v�ł��ǂݍ��܂��邱�Ƃ��\�ł��B
-
-	Q:�^�C�g���o�[�ɐF�X�\������Ă��邯�ǉ�����
-	A:���ɈӖ��͂���܂���A�C�ɂ����畉���B
-
-	Q:�����͎g���h�������ʂɃX�y�[�X�Ƃ肷��
-	A:�d�l�ł��B
-
-	Q:ai�̏������܂������킩���
-	A:�ꕔ�ϐl�ȊO�񂹕t���Ȃ��͎̂d�l�ł��B
-	���P�v��͂���܂����AGUI�ɂ��J�������p�ӂ���邱�Ƃ͂����炭10�N�҂��Ă�����܂���B
-	��������������
-
-	Q:�����ɕ\������Ă��鐔�l�͉��H
-	A:AI�X�N���v�g����o�͂���Ă��鉽���ł��A�{�v���O��������o�͂��Ă�����̂ł͂���܂���B
-
-	Q:AI�X�N���v�g�z�z�������񂾂��ǁAexe���ꏏ�ɓ������Ă���
-	A:�\���܂���A�ނ��됄�����܂��B
-	���������L���C�Z���X�̍��̏�����p�����ڂ��Ă����Ȃ��Ɠ{���邩������܂���B
-	�ڂ����̓��C�Z���X�̍������ǂ݂��������B
-
-	Q:�X�N���v�g�́����̓��삨�������ˁH
-	A:��z�V�c�[���X������҃��[���A�h���X�܂ŘA�����Ă��炦��Β��邩������܂���B
-
-	Q:AI���ɋH�ɈӐ}���Ȃ����������
-	A:�ɋH�ł���Ύd�l�ł��B
-	��z�V�������͔�z�V���Ɉ�؂̊Q��^���Ȃ��悤�݌v����Ă��邽�ߓ��������S�ł͂���܂���B
-	�Ȃ̂ŁAAI�ɂ�������炸�L�[���͎��s������A�ˌ��������Ƃ����肵�܂��B
-	�������A�{���Ƀo�O�̉\��������̂ō�҂ɕ񍐂��Ă���Ă����܂��܂���B
-
-	Q:AI�Ł����Ȃ��Ƃ����������Ǎ���API�����ł͎����ł��Ȃ�
-	A:��҂̗͕s���ł��B
-	�c�[���X������҃��[���A�h���X�܂ŗv�]�𓊂��Ă��炦��΂�����������邩������܂���B
-
-	Q:set_key_delay��set_data_delay���ĉ����Ⴄ�́H
-	A:set_key_delay�̓L�[���͑S�Ăɉe�����܂����Aset_data_delay�͓G�̏�Ԏ擾�݂̂��x���Ȃ�܂��B
-	���̂��߁A��������}�~�������Ȃ�set_data_delay�����ŏ\���ł��傤�B
-
-	Q:��z�V���ɍX�V�������Ďg���Ȃ��Ȃ����񂾂���
-	A:�Ή�����SWRSAddr.ini������Γ��삵�܂����A��҈ȊO�ɂ͗���s�\���Ǝv����̂�
-	��҂��Ή�����̂����҂����������B
-
-	Q:���̑��o�O���݂��� or ���삵�Ȃ� or �v�]������
-	A:��z�V�c�[���X���ɏ�������ł��炦��΁A�m�F����Ή��\�ł���ΑΉ����܂��B
-	�ǂ����Ă����ɓ`�������ꍇ�A���J���Ă���肪�������[���A�h���X�ɂ�
-	�����ɋL�ڂ��ꂽ�A�h���X�܂Ń��[�����ǂ����B
-
-	Q:�Ă񂱂������Ă�H
-	A:����ʂ�
-
-	Q:���ʰ��H
-	A:���ʰ��I 
+ファイル解説：
+th123_ai.exe		プログラム本体です。
+th123_ai.ini		設定ファイルです、設定必須ではないのでスルー可。
+Readme.txt		今読んでいるこれ
+History.txt		更新履歴です。
+document.txt		AIを書くための超簡易リファレンスです。
+motion.txt		上記リファレンスの付属物です。
+card.txt		同上
+skill.txt		同上
+spell.txt		同上
 
 
-��ҁFsweetie
-���[���A�h���X�F�������������R�R�Q���i�����Ɓj��������.�������D�����D����
+Q&A：
+	Q:このAI使ったら緋想天(非想天則)のデータ壊れる可能性ある？
+	A:ありません。
+	本アプリはキーボード入力以外で緋想天もしくは非想天則の動作に干渉することはありません。
+	あくまでキーボード操作によってのみ動作するAIです。
+
+	Q:キーボードプレイヤーなんだけど、キーがかぶって対戦できない
+	A:プロファイルから使うキーを読み込んでいます。
+	なので、AI用に使わないであろうキーを設定してあげればキーボーダーでも問題なく対戦できます。
+	ただし、アルファベット以外を設定した場合に問題が起こることが多いので
+	基本的にアルファベットのみで設定することをお勧めします。
+
+	Q:キーコンフィグぐらいAI側で何とかしろよ
+	A:キーコンフィグキーボード操作のみでは実現できません。
+	ご了承ください。
+
+	Q:対戦画面に入るたびにすぐ強制終了するんだけど
+	A:一つ下と二つ下のQ&Aのほうをご覧ください。
+
+	Q:PANIC: ほにゃらら～と表示されてすぐ終了してしまう
+	A:AIの中でエラーしています。
+	本プログラムがaiで想定されたものよりも古いと思われます。
+	もし最新版でも同じエラーが出る場合、aiの作者さんまでご連絡を
+
+	Q:認識はしているけど動きがメチャクチャ
+	A:1P側がキーボードの設定になっていないか、指定されているキーが未対応のキーだと思われます。
+	数字、記号、テンキー、その他特殊キーは認識しない可能性があります。
+	qwertyuiopaなど、アルファベットを使ったキーコンフィグのプロファイルを用意してください。
+
+	Q:「外部に通信しようとしています、許可しますか？」というダイアログ出るんだが
+	A:th105_ai本体で致命的問題が起きた場合に自動でエラーを作者宛に送信するよう組まれています。
+	そのため、一部セキュリティーソフトは起動時、もしくは送信時に上記のようなダイアログを出してユーザーに同意を求めてくる可能性があります。
+	ブロックしても使用に問題はないので、デバッグなんてｼﾗﾈという方や作者信じられませんという方はブロックしてください。
+
+	Q:スクリプトの読み直しが面倒
+	A:F12を押せば再読み込みされます
+	ただし反応が少々悪目なので、長めに押さないと反応しないかもしれません。
+	またAIがアクティブでなくともリロード動作は可能です(エディタで編集後即リロードできるように)
+
+	Q:いちいち別スクリプト読むためにini書き換えるの面倒
+	A:F11キーからダイアログを開いて読み込めます。
+	また、iniでdialogとしておけばデフォルトでダイアログ指定でき、exeファイルにドラッグ＆ドロップでも読み込ませることが可能です。
+
+	Q:タイトルバーに色々表示されているけど何これ
+	A:特に意味はありません、気にしたら負け。
+
+	Q:黒窓は使い辛いし無駄にスペースとりすぎ
+	A:仕様です。
+
+	Q:aiの書き方まったくわからん
+	A:一部変人以外寄せ付けないのは仕様です。
+	改善計画はありますが、GUIによる開発環境が用意されることはおそらく10年待ってもありません。
+	ご了承ください
+
+	Q:黒窓に表示されている数値は何？
+	A:AIスクリプトから出力されている何かです、本プログラムから出力しているものではありません。
+
+	Q:AIスクリプト配布したいんだけど、exeも一緒に同梱していい
+	A:構いません、むしろ推奨します。
+	ただし下記ライセンスの項の小難しい英文を載せておかないと怒られるかもしれません。
+	詳しくはライセンスの項をお読みください。
+
+	Q:スクリプトの○○の動作おかしくね？
+	A:緋想天ツールスレか作者メールアドレスまで連絡してもらえれば直るかもしれません。
+
+	Q:AIが極稀に意図しない動作をする
+	A:極稀であれば仕様です。
+	緋想天もしくは非想天則に一切の害を与えないよう設計されているため同期が完全ではありません。
+	なので、AIにもかかわらずキー入力失敗したり、射撃を見落としたりします。
+	ただし、本当にバグの可能性もあるので作者に報告してくれてもかまいません。
+
+	Q:AIで○○なことをしたいけど今のAPIだけでは実現できない
+	A:作者の力不足です。
+	ツールスレか作者メールアドレスまで要望を投げてもらえればいつか実装されるかもしれません。
+
+	Q:set_key_delayとset_data_delayって何が違うの？
+	A:set_key_delayはキー入力全てに影響しますが、set_data_delayは敵の状態取得のみが遅くなります。
+	そのため、超反応を抑止したいならset_data_delayだけで十分でしょう。
+
+	Q:非想天則に更新かかって使えなくなったんだけど
+	A:対応したSWRSAddr.iniがあれば動作しますが、作者以外には理解不能だと思われるので
+	作者が対応するのをお待ちください。
+
+	Q:その他バグをみつけた or 動作しない or 要望がある
+	A:緋想天ツールスレに書き込んでもらえれば、確認次第対応可能であれば対応します。
+	どうしても直に伝えたい場合、公開しても問題が無いメールアドレスにて
+	下部に記載されたアドレスまでメールをどうぞ。
+
+	Q:てんこあいしてる？
+	A:いや別に
+
+	Q:ｼｬﾝﾊｰｲ？
+	A:ｼｬﾝﾊｰｲ！ 
 
 
-���C�Z���X�F
-�{�v���O������MIT���C�Z���X���ꂽ�v���O����Lua���g�p���Ă��܂��B
+作者：sweetie
+メールアドレス：ｂｎｒｙｘｘ３３２ａ（あっと）ｍａｉｌ.ｇｏｏ．ｎｅ．ｊｐ
+
+
+ライセンス：
+本プログラムはMITライセンスされたプログラムLuaを使用しています。
 http://www.lua.org/license.html
 {{{
 	Copyright (c) 1994-2008 Lua.org, PUC-Rio.
@@ -147,40 +147,40 @@ http://www.lua.org/license.html
 
 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 }}}
-����ȊO�̎��암�����C�Z���X�F
-�E�{���C�Z���X�ɂ����āA�S�Ă̏����́u�ύX�̗L�����킸�A�����Î����킸�A���Ǝ��P���킸�A�l�@�l���킸�A�ێ��g�p���킸�A�L���������킸�v�Ƒ�������Ă��镨�Ƃ��Ĉ����B
-�E���쌠�҂͖{�\�t�g�E�F�A�Ɋւ����؂̕ۏ�`���������Ȃ��B
-�E��L�����B��̗�O�Ƃ��āA�{���C�Z���X�Ɉᔽ�����ꍇ�������Ē��쌠�҂���{�\�t�g�E�F�A�Ɋւ����؂̖@�I�[�u���󂯂鎖���������̂ݕۏ؂����B
-�E���쌠�҂₻�̑��ێ��҂����̃��C�Z���X�͈̔͂ōs�������Ɏx�Ⴊ�����͈͂ł���Ή����s���Ă��\��Ȃ��B
-�E��L�����́h�����s���Ă��\��Ȃ��h�ɂ͖{�\�t�g�E�F�A�̐���҂��U���Ă̍Ĕz�z���܂܂��B
-�E�S�Ă̌����̍s�g�ɂ����āA���쌠�҂ւ̘A���A���쌠�҂⃉�C�Z���X�����̋L�ځA�K�p���C�Z���X�Ȃǂ̐����͈�ؑ��݂��Ȃ��B
-���쌠�Җ��Fsweetie
+それ以外の自作部分ライセンス：
+・本ライセンスにおいて、全ての条項は「変更の有無を問わず、明示暗示を問わず、商業慈善を問わず、個人法人を問わず、保持使用を問わず、有料無料を問わず」と装飾されている物として扱う。
+・著作権者は本ソフトウェアに関する一切の保障義務をもたない。
+・上記条項唯一の例外として、本ライセンスに違反した場合を除いて著作権者から本ソフトウェアに関する一切の法的措置を受ける事が無い事のみ保証される。
+・著作権者やその他保持者がこのライセンスの範囲で行う活動に支障が無い範囲であれば何を行っても構わない。
+・上記条項の”何を行っても構わない”には本ソフトウェアの製作者を偽っての再配布も含まれる。
+・全ての権利の行使において、著作権者への連絡、著作権者やライセンス条項の記載、適用ライセンスなどの制限は一切存在しない。
+著作権者名：sweetie
 
 
-�ʓ|�Ȑl�������C�Z���X����F
-Lua�̃��C�Z���X���ǂ����ɏ����Ă����΍Ĕz�z�o���܂��B
-���암���̃��C�Z���X�ɂ��Ă͋L�ڋ`�����炠��܂���B
-��L������������ɕ��荞��ł����Ƃ����ł��傤�B
+面倒な人向けライセンス解説：
+Luaのライセンスをどこかに書いておけば再配布出来ます。
+自作部分のライセンスについては記載義務すらありません。
+上記二つだけ説明書に放り込んでおくといいでしょう。
 
 
-�X�y�V�����T���N�X�F
-freelight6	�e�X�g�v���C�A���[�V�����l�̎��W�A���̑��F�X
-�c�[���X��931	���[�V�����l�̎��W����ѕ\�̐��`
-��419,425	�I�u�W�F�N�g���Ɋւ���Z�p��
-��447,448	Lua�G���W���������Ɋւ���Z�p��
-��652		��z�V�A�N�e�B�u���ʕ��@
-��948		�A�C�R���摜�̒�
-���̑��A�c�[���X�������AI�X���Z���S��
+スペシャルサンクス：
+freelight6	テストプレイ、モーション値の収集、その他色々
+ツールスレ931	モーション値の収集および表の整形
+同419,425	オブジェクト情報に関する技術提供
+同447,448	Luaエンジン初期化に関する技術提供
+同652		緋想天アクティブ判別方法
+同948		アイコン画像の提供
+その他、ツールスレおよびAIスレ住民全て
 
 
-�Z�p���(�ƁA�ǂ��ł������b)�F
-SwrAddr.ini�Ǎ��͔�s�Ղ����Ɋ���ȃ��C�Z���X�ł���A��҂���z�V����є�z�V�����o�邽�тɍX�V�������Ȃ����߂Ɏ�������Ă��܂��A���̐l�������킯�ł͂���܂���B
-�����AAI�̋@�\�g��ɔ���SwrAddr.ini�����ł͑���Ȃ��Ȃ茋�ǎg���܂킷���Ԃ͈�x�����Ȃ��܂܂ƂȂ�܂����B
-�L�[�{�[�h�G�~�����[�g��keybd_event�A���̓ǂݎ�聨ReadProcessMemory�A�X�N���v�g��Lua�A�Ƃ������ƂŃx�[�X�����͋Z�p���J�͂��債�Ē������܂�Ă��܂���A�����ƒN�ł����܂��B
-�{�v���O�����͔�z�V����є�z�V���̓�����e�ɃL�[�{�[�h����������Ĉ�؉e����^���܂���A�����܂ŏ��ǂݎ��݂̂��s���Ă��܂��B
-�e����^�����铮��ꗗ�F
-	�E�B���h�E���A�N�e�B�u�ɂ���ۂɎg��CreateRemoteThread
-	AI�X�N���v�g����̃L�[�{�[�h����
-	���ǂݎ��Ɏg��OpenProcess�AReadProcessMemory
-rep2prof�Apn2c�̃R�[�h���ʂɎg�p���Ă��܂��A���̂��߈ꕔ�Ӗ����Ȃ��R�[�h�����݂��܂��B
-�R���p�C�����̓R�}���h���C����VC++15.00.30729.01���g�p���Ă��܂��B
+技術情報(と、どうでもいい話)：
+SwrAddr.ini読込は緋行跡が非常に寛大なライセンスであり、作者が緋想天および非想天則が出るたびに更新したくないために実装されています、中の人が同じわけではありません。
+ただ、AIの機能拡大に伴いSwrAddr.iniだけでは足らなくなり結局使いまわす事態は一度も来ないままとなりました。
+キーボードエミュレート→keybd_event、情報の読み取り→ReadProcessMemory、スクリプト→Lua、ということでベース部分は技術も労力も大して注ぎ込まれていません、きっと誰でも作れます。
+本プログラムは緋想天および非想天則の動作内容にキーボード操作を除いて一切影響を与えません、あくまで情報読み取りのみを行っています。
+影響を与えうる動作一覧：
+	ウィンドウをアクティブにする際に使うCreateRemoteThread
+	AIスクリプトからのキーボード入力
+	情報読み取りに使うOpenProcess、ReadProcessMemory
+rep2prof、pn2cのコードを大量に使用しています、そのため一部意味がないコードが存在します。
+コンパイル環境はコマンドライン版VC++15.00.30729.01を使用しています。

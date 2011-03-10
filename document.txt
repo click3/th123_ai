@@ -1,197 +1,197 @@
-�Eth123_ai���ȈՃh�L�������g
+・th123_ai超簡易ドキュメント
 
-�E���[��
-�X�N���v�g��Lua����ł��A��{�I�Ȏd�l�͑S��Lua����ɏ������܂��B
-��z�V�������͔�z�V���𔭌������i�K��ini�Ŏw�肳�ꂽ���@��ai��ǂݍ��ݎ��s���܂��B
-�N����n�߂đΐ탂�[�h�ɂȂ������Amain�֐������s����܂��B
-���̌�A�ΐ풆�Ȃ��yield�֐����Ă΂�邽�т�1�t���[�������ҋ@���܂��B
-�ΐ풆�Ŗ����Ȃ�΁A�ΐ풆�ɂȂ�܂�yield���琧��͕Ԃ�܂���B
-main�֐����I������Ɩ{�̃v���O�������I�����܂��B
+・ルール
+スクリプトはLua言語です、基本的な仕様は全てLua言語に準拠します。
+緋想天もしくは非想天則を発見した段階でiniで指定された方法でaiを読み込み実行します。
+起動後始めて対戦モードになった時、main関数が実行されます。
+その後、対戦中ならばyield関数が呼ばれるたびに1フレームだけ待機します。
+対戦中で無いならば、対戦中になるまでyieldから制御は返りません。
+main関数が終了すると本体プログラムも終了します。
 
-�E��܂��ȗ���
-��������������ԊO���ɏ���
-���C�����[�`����main�֐��Ƃ��Ē�`����B
-1���[�v���Ƃ�yield�֐����Ă�ł��B
+・大まかな流れ
+初期化処理を一番外側に書く
+メインルーチンをmain関数として定義する。
+1ループごとにyield関数を呼んでやる。
 
-�E���@
-����������ǂ݂��������B
+・文法
+こちらをお読みください。
 http://sugarpot.sakura.ne.jp/yuno/html/lua51_manual_ja.html
 
-�E�ݒ�t�@�C��
-�A�v���P�[�V�����Ɠ����f�B���N�g���ɑ��݂���SWRSAddr.ini�ASwrAddr.ini�Ath105_ai.ini�Ath123_ai.ini�Adev.ini���N�����Ɏ����œǂݍ��݂܂��B
-ini�t�@�C�������݂��Ȃ������ꍇ�͓����I�ɕێ����Ă���f�t�H���g�l���g���܂��B
-�܂��S�Ă�ini�͓ǂݍ��ޏ��ԈȊO�͓����ł���ASwrAddr.ini��SWRSAddr.ini��th105_ai.ini��th123_ai.ini��dev.ini�̏��œǂݍ��܂�܂��B
-�����ݒ荀�ڂ�������w�肳�ꂽ�ꍇ�͍Ō�Ɏw�肵�����݂̂̂��L���ɂȂ�܂��B
-�����������č���ݒ��dev.ini�ɋL�ڂ��邱�ƂőS�ď㏑���ł��ݒ肪�������ɂ��ނ悤�ɂȂ�܂��B
-���Ȃ݂Ɉ�ʓI��ini�Ƃ͈Ⴄ�G�Zini�ł��A�Ȃ̂ŃR�����g�A�E�g�ɂ�:��//��#���g�������s�R�����g�A�E�g�͂���܂���B
+・設定ファイル
+アプリケーションと同じディレクトリに存在するSWRSAddr.ini、SwrAddr.ini、th105_ai.ini、th123_ai.ini、dev.iniを起動時に自動で読み込みます。
+iniファイルが存在しなかった場合は内部的に保持しているデフォルト値が使われます。
+また全てのiniは読み込む順番以外は等価であり、SwrAddr.ini→SWRSAddr.ini→th105_ai.ini→th123_ai.ini→dev.iniの順で読み込まれます。
+同じ設定項目が複数回指定された場合は最後に指定したもののみが有効になります。
+書き換えられて困る設定はdev.iniに記載することで全て上書きでも設定が消えずにすむようになります。
+ちなみに一般的なiniとは違うエセiniです、なのでコメントアウトには:と//と#が使え複数行コメントアウトはありません。
 
-�ڂ����ݒ���e�ɂ��Ă�th123_ai.ini���Q�Ƃ��Ă��������B
+詳しい設定内容についてはth123_ai.iniを参照してください。
 
-�ELua���C�u����
-�W�����C�u�����̂���base�Astring�Atable�Amath�Adebug�Aio�Aos���g�p�\�ł��B
-�ȉ��A�{�ƂƎd�l���Ⴄ�֐��Ƃ��̏ڍ�
-	os.execute�F
-	os.exit�F
-	os.getenv�F
-	os.remove�F
-	os.rename�F
-	os.setlocale�F
-	os.tmpname�F
-	io.popen�F
-		�g�p�ł��܂���
-	io.open�F
-		�t�@�C�����̎w��ɕ����񂪎g�����A����ɐ��l�w�肪�o���܂��B
-		���̏ꍇ�ɊJ�����t�@�C�����́uscript_data/����.dat�v�ƂȂ�܂�
-		fp = io.open(12345);--script_data/12345.dat���J��
-	io.input�F
-	io.output�F
+・Luaライブラリ
+標準ライブラリのうちbase、string、table、math、debug、io、osが使用可能です。
+以下、本家と仕様が違う関数とその詳細
+	os.execute：
+	os.exit：
+	os.getenv：
+	os.remove：
+	os.rename：
+	os.setlocale：
+	os.tmpname：
+	io.popen：
+		使用できません
+	io.open：
+		ファイル名の指定に文字列が使えず、代わりに数値指定が出来ます。
+		その場合に開かれるファイル名は「script_data/数字.dat」となります
+		fp = io.open(12345);--script_data/12345.datを開く
+	io.input：
+	io.output：
 	io.lines
-		io.open�Ɠ�����������w�肪�o�����A����ɐ��l�w�肪�s����悤�ɂȂ��Ă��܂��B
-		����ȊO�̋@�\�Ɋւ��Ă͕ς�肠��܂���B
-	require�F
-	module�F
-		package.require��package.module�Ƀ��l�[������Ă��܂��B
-		����Ƃ͕ʂ�require�֐������݂��܂����A��؊֌W�͂���܂���B
+		io.openと同じく文字列指定が出来ず、代わりに数値指定が行えるようになっています。
+		それ以外の機能に関しては変わりありません。
+	require：
+	module：
+		package.requireとpackage.moduleにリネームされています。
+		それとは別にrequire関数が存在しますが、一切関係はありません。
 
-�E�L�[�w��q
-�{�A�v���P�[�V�����ɂ����āA�u�L�[�v�ƍs�����炱��������܂��B�ȉ��ꗗ�\
-�L�[		���l	�萔
+・キー指定子
+本アプリケーションにおいて、「キー」と行ったらこれをさします。以下一覧表
+キー		数値	定数
 UP		0	ACT_UP
 DOWN		1	ACT_DOWN
 LEFT		2	ACT_LEFT
 RIGHT		3	ACT_RIGHT
-A(�i��)		4	ACT_A
-B(��ˌ�)	5	ACT_B
-C(���ˌ�)	6	ACT_C
-D(����)		7	ACT_D
-AB(�J�[�h����)	8	ACT_AB
-BC(�J�[�h�g�p)	9	ACT_BC
+A(格闘)		4	ACT_A
+B(弱射撃)	5	ACT_B
+C(強射撃)	6	ACT_C
+D(飛翔)		7	ACT_D
+AB(カード送り)	8	ACT_AB
+BC(カード使用)	9	ACT_BC
 DOWN+LEFT	10	ACT_DLEFT
 DOWN+RIGHT	11	ACT_DRIGHT
 UP+LEFT		12	ACT_ULEFT
 UP+RIGHT	13	ACT_URIGHT
 
-�E�Ώێw��q
-�{�A�v���P�[�V�����ɂ����āA�v���C���[���w�肷��ۂɎg���l�ł��B�ȉ��ꗗ�\
-0	����	TAG_MY
-1	����	TAG_ENEMY
+・対象指定子
+本アプリケーションにおいて、プレイヤーを指定する際に使う値です。以下一覧表
+0	自分	TAG_MY
+1	相手	TAG_ENEMY
 
-�E�t���[��
-�{�A�v���P�[�V�����ɂ�����ŏ��P�ʎ��ԁA16ms(��1/60�b)�ł��B
-��z�V�ɂ�����ŏ��P�ʎ��Ԃ�����16ms�ł��邽�߂̎d�l�ł��B
+・フレーム
+本アプリケーションにおける最小単位時間、16ms(約1/60秒)です。
+緋想天における最小単位時間が同じ16msであるための仕様です。
 
-�EAPI
+・API
 yield()
-	������{�̃v���O�������ɕԂ��A�O���yield���s���琔����1�t���[���o�܂őҋ@���܂��B
-	���ϐ��Q�̍X�V�������ōs���܂��B
-	create_thread�֐��ɂ��쐬���ꂽ�X���b�h�����݂���ꍇ�̂݁A������֏������ڍs���܂��B
-	���̏ꍇ�A�v���O�����̑ҋ@�Ǝ��ϐ��̍X�V�͑S�ẴX���b�h����yield���Ă΂ꂽ��ɂȂ�܂�
+	処理を本体プログラム側に返し、前回のyield実行から数えて1フレーム経つまで待機します。
+	環境変数群の更新もここで行われます。
+	create_thread関数により作成されたスレッドが存在する場合のみ、そちらへ処理が移行します。
+	その場合、プログラムの待機と次変数の更新は全てのスレッドからyieldが呼ばれた後になります
 dash()
-	front�����փ_�b�V�����܂��Afront�̃L�[��ON�̂܂ܐ��䂪�Ԃ�܂��B
-	���Ƀ_�b�V�����̏ꍇ�͉������܂���B
-	�_�b�V����ԂɂȂ邩�A120�t���[���o�߂����ꍇ�ɏ������߂�܂��B
+	front方向へダッシュします、frontのキーがONのまま制御が返ります。
+	既にダッシュ中の場合は何もしません。
+	ダッシュ状態になるか、120フレーム経過した場合に処理が戻ります。
 key_reset()
-	�S�ẴL�[��OFF(����)�ɂ��܂��B
+	全てのキーをOFF(離す)にします。
 key_off(key)
-	�w�肵���L�[��OFF�ɂ��܂��B
-	�����L�[���w�肵���ꍇ�A�t���̕����L�[��OFF�ɂȂ�܂��B
+	指定したキーをOFFにします。
+	方向キーを指定した場合、逆側の方向キーもOFFになります。
 key_on(key)
-	�w�肵���L�[��ON�ɂ��܂��A����ON�̏ꍇ�͉������܂���B
-	�����L�[���w�肵���ꍇ�A�t���̕����L�[��OFF�ɂȂ�܂��B
+	指定したキーをONにします、既にONの場合は何もしません。
+	方向キーを指定した場合、逆側の方向キーはOFFになります。
 key_event2(key1,key2)
-	��̃L�[�𓯎��ɉ����Ă��痣���܂��B
-	6A���Ƃ������R�}���h�p�ł��B
-	���͂����f���ꂽ���̃`�F�b�N�͍s�킸�A�K��4�t���[����ɐ��䂪�Ԃ�܂��B
+	二つのキーを同時に押してから離します。
+	6A等といったコマンド用です。
+	入力が反映されたかのチェックは行わず、必ず4フレーム後に制御が返ります。
 key_event(key)
-	��̃L�[�������Ă��痣���܂��B
-	���͂����f���ꂽ���̃`�F�b�N�͍s�킸�A�K��4�t���[����ɐ��䂪�Ԃ�܂��B
+	一つのキーを押してから離します。
+	入力が反映されたかのチェックは行わず、必ず4フレーム後に制御が返ります。
 dattack()
-	dash,key_event,key_reset���ꊇ���čs���܂��B
+	dash,key_event,key_resetを一括して行います。
 wait(time)
-	�w��񐔂���yield�����s���܂��B
+	指定回数だけyieldを実行します。
 require(filename)
-	�w��t�@�C����ai�X�N���v�g�ƔF�������s���܂��B
-	���΃p�X���w�肵���ꍇ�A�֐��O�ɋL�q�����ꍇ�̓t�@�C���ʒu����
-	�֐����ɋL�q�����ꍇ�͒�`�t�@�C�������ł��Ȃ�����exe�t�@�C������̑��΂ɂȂ�܂��B
-	���̂��߁A�֐����ł̎g�p�͔񐄏��ł��B
-	ver0.72���Aini��StartupAI�̋@�\��daialog�ȊO�g�p�\�ɂȂ�܂����B
-	����ɂ��
-	require("��%c2�K�[�h.ai")--���肪�A���X�Ȃ��alice�K�[�h.ai��ǂݍ���
-	�Ƃ������R�[�h���g�p�\�ł�
-	�u�����������ꗗ�\:
+	指定ファイルをaiスクリプトと認識し実行します。
+	相対パスを指定した場合、関数外に記述した場合はファイル位置から
+	関数内に記述した場合は定義ファイルを特定できないためexeファイルからの相対になります。
+	そのため、関数内での使用は非推奨です。
+	ver0.72より、iniのStartupAIの機能がdaialog以外使用可能になりました。
+	これにより
+	require("対%c2ガード.ai")--相手がアリスなら対aliceガード.aiを読み込む
+	といったコードが使用可能です
+	置き換え文字一覧表:
 	id	%C		%c
-	0	�얲		reimu
-	1	������		marisa
-	2	���		sakuya
-	3	�A���X		alice
-	4	�p�`�����[	patchouli
-	5	�d��		youmu
-	6	���~���A	remilia
-	7	�H�X�q		yuyuko
-	8	��		yukari
-	9	��		suika
-	10	�D�܉�		udonge
-	11	��		aya
-	12	����		komachi
-	13	�ߋ�		iku
-	14	�V�q		tenshi
+	0	霊夢		reimu
+	1	魔理沙		marisa
+	2	咲夜		sakuya
+	3	アリス		alice
+	4	パチュリー	patchouli
+	5	妖夢		youmu
+	6	レミリア	remilia
+	7	幽々子		yuyuko
+	8	紫		yukari
+	9	萃香		suika
+	10	優曇華		udonge
+	11	文		aya
+	12	小町		komachi
+	13	衣玖		iku
+	14	天子		tenshi
 get_skill_lv(player,skill_id)
-	player(0�Ŏ����A1�ő���)�̎w��ID(0�`14�Askill.txt�̃J�[�hID���񌅂Ɠ���)�̃X�L����Lv���擾���܂��B
-	�w��ID�̃X�L�������݂��Ȃ��������͎g�p�s�\����-1�A�f�t�H���g�Z��0
-	�X�L���J�[�h�ɂ��Lv���オ���Ă���ꍇ��1�`4���Ԃ�܂��B
-	�a�J���ł��K��Lv���Ԃ�ׁALv���f�Ɏg���ꍇ�͓V�󔻒f�ƕ��p���Ă��������B
+	player(0で自分、1で相手)の指定ID(0～14、skill.txtのカードID下二桁と同じ)のスキルのLvを取得します。
+	指定IDのスキルが存在しないもしくは使用不能時は-1、デフォルト技は0
+	スキルカードによりLvが上がっている場合は1～4が返ります。
+	疎雨時でも習得Lvが返る為、Lv判断に使う場合は天候判断と併用してください。
 get_card_id(player,num)
-	player(0�Ŏ����A1�ő���)�̎w�薇���ڂ̃X�y����ID���擾���܂��B
-	num�ɂ�1���ڂ�0�Ƃ���0�`4���w��ł��܂��B
-	�J�[�h�Q�[�W�����܂��Ă��Ȃ��A��������0�`4�ȊO���w�肵���ꍇ�ɂ�-1���Ԃ�܂��B
+	player(0で自分、1で相手)の指定枚数目のスペルのIDを取得します。
+	numには1枚目を0として0～4を指定できます。
+	カードゲージが溜まっていない、もしくは0～4以外を指定した場合には-1が返ります。
 set_key_delay(delay)
-	delay�Ŏw�肳�ꂽ�t���[�������L�[���͂��x��đ�����悤�ɂȂ�܂�(1�t���[����1/60�b)
-	���̖��߂ɂ��ݒ肳��Ă���delay�͊��ϐ�key_delay����m�邱�Ƃ��ł��܂��A�����l��0�ł��B
-	���̖��߂ɂ��delay���ȑO��葽���Ȃ����ꍇ�A���̍��̊Ԃ͉��̓��͂������܂���B
-	��F
+	delayで指定されたフレームだけキー入力が遅れて送られるようになります(1フレーム＝1/60秒)
+	この命令により設定されているdelayは環境変数key_delayから知ることができます、初期値は0です。
+	この命令によりdelayが以前より多くなった場合、その差の間は何の入力も送られません。
+	例：
 		set_key_delay(0);
 		key_on(front);
 		set_key_delay(20);
 		key_off(front);
-		���̃R�[�h�����s�����ꍇ�A1/3�b�ԑ���Ɍ������ĕ��������܂��B
-	�t�ɈȑO�����Z���Ȃ����ꍇ�A���łɑ���ꂽ���͓͂��͎���delay�ɂ��킹�Ď��s����܂��B
-	��F
+		このコードを実行した場合、1/3秒間相手に向かって歩き続けます。
+	逆に以前よりも短くなった場合、すでに送られた入力は入力時のdelayにあわせて実行されます。
+	例：
 		set_key_delay(0);
 		key_on(front);
 		set_key_delay(20);
 		key_off(front);
 		set_key_delay(10);
 		key_event(ACT_A);
-		���̃R�[�h�����s�����ꍇ�A1/6�b�ԕ����Ă���6A�ɂȂ�܂��B
+		このコードを実行した場合、1/6秒間歩いてから6Aになります。
 set_data_delay(delay)
-	delay�Ŏw�肳�ꂽ�t���[���������ϐ�enemy_act��enemy_frame�x��đ�����悤�ɂȂ�܂�(1�t���[����1/60�b)
-	���̖��߂ɂ��ݒ肳��Ă���delay�͊��ϐ�data_delay����m�邱�Ƃ��ł��܂��A�����l��0�ł��B
-	���̖��߂����s�����ꍇ�A�ȑO�w�肳��Ă���delay�Ɋւ�炸delay�t���[���̊Ԃ�enemy_act��enemy_frame��ǂ�ł�0���Ԃ�܂��B
+	delayで指定されたフレームだけ環境変数enemy_actとenemy_frame遅れて送られるようになります(1フレーム＝1/60秒)
+	この命令により設定されているdelayは環境変数data_delayから知ることができます、初期値は0です。
+	この命令を実行した場合、以前指定されていたdelayに関わらずdelayフレームの間はenemy_actとenemy_frameを読んでも0が返ります。
 get_obj_data(player,num)
-	�w��v���C���[��num�ڂ̃I�u�W�F�N�g(�ˌ��̒e��l�`�Ȃ�)�̏����擾���܂��B
-	�A���Ă������id�Ax���W�Ay���W�AHP�A�摜ID�A�t���[�����Ax���x�Ay���x�A�ŗL���ʎq�A�U���͈͐��A�H�炢�͈͐��ł��B
-	�ŗL���ʎq�̓I�u�W�F�N�g���Ƃ̌ŗL�̐��l�ł���A�I�u�W�F�N�g����ӂɓ��肷�邽�߂Ɏg�p���܂��B
-	�ʂ̃I�u�W�F�N�g���������ʎq�������Ƃ͂���܂���B
-	�g�p��F
+	指定プレイヤーのnum個目のオブジェクト(射撃の弾や人形など)の情報を取得します。
+	帰ってくる情報はid、x座標、y座標、HP、画像ID、フレーム数、x速度、y速度、固有識別子、攻撃範囲数、食らい範囲数です。
+	固有識別子はオブジェクトごとの固有の数値であり、オブジェクトを一意に特定するために使用します。
+	別のオブジェクトが同じ識別子を持つことはありません。
+	使用例：
 	id,ox,oy,hp,img,frame,oxs,oys,oid,attack_n,hit_n = get_obj_data(TAG_MY,0);
 set_weather_delay(delay)
-	�Ɍ����ɔ�������V����ʂ��킩��悤�ɂȂ�܂ł̎��Ԃ�ݒ肵�܂��B
-	���Ԃ͋C���J�E���^�[�ˑ��ŁA
-	1000-weather_delay>weather_time���^�̂Ƃ������ǂ߂�悤�ɂȂ�܂��B
-	����ȊO�̂Ƃ���weather�ɃA�N�Z�X���Ă��Ɍ��������l���A��܂��B
+	極光時に発現する天候効果がわかるようになるまでの時間を設定します。
+	時間は気質カウンター依存で、
+	1000-weather_delay>weather_timeが真のときだけ読めるようになります。
+	それ以外のときはweatherにアクセスしても極光を示す値が帰ります。
 get_card_cost(player,num)
-	�w��v���C���[��num���ڂ̃J�[�h�̃R�X�g��Ԃ��܂��B
-	���s���␰������-1��Ԃ��܂��B
-	���̊֐��͓ܓV�̉e�����󂯂܂���A�ܓV�ɂ��e�����󂯂����Ƃ̒l���K�v�ł���ꍇ��get_card_cost2���g���Ă��������B
+	指定プレイヤーのnum枚目のカードのコストを返します。
+	失敗時や晴嵐時は-1を返します。
+	この関数は曇天の影響を受けません、曇天による影響を受けたあとの値が必要である場合はget_card_cost2を使ってください。
 get_card_cost2(player,num)
-	�ܓV�̉e�����󂯂�get_card_cost�B
-	���̑���get_card_cost�ɏ������܂��B
-	weather_delay�̉e�����󂯂邽�߁AAI�X�N���v�g���weather���Q�Ƃ��Čv�Z�����ꍇ�Ɗ��S�ɓ����ɋ@�\����B
+	曇天の影響を受けるget_card_cost。
+	その他はget_card_costに準拠します。
+	weather_delayの影響も受けるため、AIスクリプト上でweatherを参照して計算した場合と完全に等価に機能する。
 get_opt_xy(player,num)
-	�w��v���C���[��num+1�ڂ̕t�����̍��W��Ԃ��܂�
-	�d���̔���A�A���X��C�ːl�`�A�����̔��j�\�썰���擾�ł��܂��B
-	�g�p��F
-		--�t�����̑S���W���o�͂���
+	指定プレイヤーのnum+1個目の付属物の座標を返します
+	妖夢の半霊、アリスのC射人形、小町の爆破可能霊魂が取得できます。
+	使用例：
+		--付属物の全座標を出力する
 		local i = 0;
 		while(true)do
 			ox,oy = get_opt_xy(TAG_MY,i);
@@ -200,52 +200,52 @@ get_opt_xy(player,num)
 			i = i+1;
 		end
 command(string)
-	�R�}���h���͋L�@�Ɏ����ȈՌ���ɂ��L�[���͂��s���܂��B
-	22B��236C�ȂǂƂ������������^���邱�ƂŊȒP�ɃR�}���h�Z�̎��s���\�ł��B
-	�܂�(30)�ȂǂƏ������ƂŎw��t���[�������҂�Ƃ��͂��ނ��Ƃ��o���܂��B
-	��F
+	コマンド入力記法に似た簡易言語によるキー入力を行います。
+	22Bや236Cなどといった文字列を与えることで簡単にコマンド技の実行が可能です。
+	また(30)などと書くことで指定フレームだけ待つ作業をはさむことが出来ます。
+	例：
 	command("AA(10)A(5)236B(50)236B");
-	�����AAA��236B��236B�Ƃ����s�����s�����܂�(�J�b�R���̐����̓R�}���h�Z���Ƃɒ�������K�v������܂�)
-	�����̖��߂̓c�[���X�����̗L�u�ɂ���ĊJ������Ă���SetInput�֐�����Ɏ����I�Ɏ������ꂽ���̂ł��B
-	���̂��ߎd�l���傫���ύX����鋰�ꂪ����A�g�p�͐�������܂���B
-	����g�p���ړI�̕���SetInput�֐���ʓr���肵�Ă��g�����������B
+	これでAAA＞236B＞236Bという行動を行いします(カッコ内の数字はコマンド技ごとに調整する必要があります)
+	※この命令はツールスレ内の有志によって開発されていたSetInput関数を基に試験的に実装されたものです。
+	そのため仕様が大きく変更される恐れがあり、使用は推奨されません。
+	安定使用が目的の方はSetInput関数を別途入手してお使いください。
 get_deck_list()
-	�����̃f�b�L���X�g���擾���܂��B
-	20���S�ď��s���œn����܂��A�e�[�u���̌`�ł͂���܂���B
+	自分のデッキリストを取得します。
+	20枚全て順不同で渡されます、テーブルの形ではありません。
 	deck = {get_deck_list(0)};
-	�Ƃ����`�Ŏg����deck[1�`20]�Ɋi�[�ł��܂��B
-	�܂��A�����܂Ńf�b�L���X�g�ł���A�܂������Ă��Ȃ��J�[�h�ł͂���܂���B
-	�v���N�e�B�X��2P���ɐݒ肵���ꍇ�ǂނ��Ƃ͏o���܂���B
-	��z�V���ł͖��Ή��ł��B
+	という形で使えばdeck[1～20]に格納できます。
+	また、あくまでデッキリストであり、まだ引いていないカードではありません。
+	プラクティスで2P側に設定した場合読むことは出来ません。
+	非想天則では未対応です。
 get_key_stat(n)
-	�L�[�w��qn��ON�Ȃ��1�AOFF�Ȃ��0���Ԃ�܂��B
-	�΂߃L�[(n>=10)�̎w��͏o���܂���B
+	キー指定子nがONならば1、OFFならば0が返ります。
+	斜めキー(n>=10)の指定は出来ません。
 get_key_stat2(player,n)
-	�w��v���C���[�̃L�[�w��qn��ON�ɂȂ��Ă���̌o�߃t���[�������擾���܂��B
-	OFF�Ȃ��0���Ԃ�܂��B
-	�v���N�e�B�X��NPC�Ȃǎ擾�s�\�ȏꍇ�͏��0���Ԃ�܂��B
-	�΂߃L�[(n>=10)�̎w��͏o���܂���B
+	指定プレイヤーのキー指定子nがONになってからの経過フレーム数を取得します。
+	OFFならば0が返ります。
+	プラクティスやNPCなど取得不能な場合は常に0が返ります。
+	斜めキー(n>=10)の指定は出来ません。
 get_key_map()
-	�L�[�w��q0�`9��ON/OFF���܂Ƃ߂Ď擾���܂��B
-	�e�[�u���ł͂Ȃ�10�̕Ԃ�l�Ƃ��Ė߂�܂��B
+	キー指定子0～9のON/OFFをまとめて取得します。
+	テーブルではなく10個の返り値として戻ります。
 get_key_map2(player)
-	�w��v���C���[�̃L�[�w��q0�`9�̌o�߃t���[�������܂Ƃ߂Ď擾���܂��B
-	�e�[�u���ł͂Ȃ�10�̕Ԃ�l�Ƃ��Ė߂�܂��B
+	指定プレイヤーのキー指定子0～9の経過フレーム数をまとめて取得します。
+	テーブルではなく10個の返り値として戻ります。
 get_real_key_stat(n)
-	��z�V�̃L�[�R���t�B�O�Ɋ֌W�Ȃ��A�w��L�[��ON/OFF���擾���܂��B
-	Win32API��GetKeyState��lua����Ăׂ�@�\�ł��A�Ȃ̂œ��o�͂̎d�l�� http://msdn.microsoft.com/ja-jp/library/cc364676.aspx �ɏ������܂��B
+	緋想天のキーコンフィグに関係なく、指定キーのON/OFFを取得します。
+	Win32APIのGetKeyStateをluaから呼べる機能です、なので入出力の仕様は http://msdn.microsoft.com/ja-jp/library/cc364676.aspx に準拠します。
 	VK_F10 = 121;
 	if(get_real_key_stat(VK_F10)<0)then
-		--F10��������Ă����Ƃ��̏���
+		--F10が押されていたときの処理
 	end
-	���̂悤�Ɏg���܂��B
-	������AI�Ƃ��Ăł͂Ȃ��A�v���N�e�B�X�p��f�o�b�O�p�Ɏg�����Ƃ��o���܂��B
+	このように使います。
+	純粋なAIとしてではなく、プラクティス用やデバッグ用に使うことが出来ます。
 create_thread(name[, param1, param2...])
-	name�Ƃ������̂̊֐���0�ȏ�̈�����^���ă}�C�N���X���b�h�Ƃ��Ď��s���܂��B
-	�֐��𒼂ɓn���Ă��A�֐�����n���Ă����삵�܂��B
-	�������Ώۂ̊֐���葽�������ꍇ�͓ǂݎ̂Ă��A���Ȃ������ꍇ�͑���Ȃ�������nil���n���ꂽ���Ƃ��ē��삵�܂�(Lua���ꎩ�̂̎d�l)
-	���s���͓o�^���ꂽ���ł��A�����̕ύX��i�͂���܂���B
-	�g�p��F
+	nameという名称の関数に0個以上の引数を与えてマイクロスレッドとして実行します。
+	関数を直に渡しても、関数名を渡しても動作します。
+	引数が対象の関数より多かった場合は読み捨てられ、少なかった場合は足りない部分にnilが渡された物として動作します(Lua言語自体の仕様)
+	実行順は登録された順です、順序の変更手段はありません。
+	使用例：
 	function a()
 		while true do
 			key_event(ACT_A);
@@ -265,471 +265,471 @@ create_thread(name[, param1, param2...])
 			yield();
 		end
 	end
-	0.71b�̏C���ɂ��Acreate_thread�������_�Ŏw��֐���ޔ�����悤�ɂȂ�܂����B
-	���̂��߁Acreate_thread���_�Ŋ֐�����`����Ă��Ȃ��ꍇ�̓G���[���܂��B
+	0.71bの修正により、create_threadした時点で指定関数を退避するようになりました。
+	そのため、create_thread時点で関数が定義されていない場合はエラーします。
 get_special_data(player,n)
-	�w��v���C���[�̌ŗL�Ȑݒ�l���擾���܂��B
-	�w��v���C���[���Y�����Ȃ��L�����N�^�[�̏ꍇ��-1���Ԃ�܂��B
-	�ȉ��ꗗ�\
-	n	�擾�ł���l
-	0	���̐��E�̎c��t���[����
-	1	�����u�v���C�x�[�g�X�N�E�F�A�v�̎c��t���[����
-	2	�u���z�V���v�̎c��t���[����
-	3	�����u�H���̋�ցv����э�鮁u�H�������������̖@�v�̎c��t���[����
-	4	�̗͉񕜂̎c��t���[����
-	5	�V���u�I�[�����[�Y�T���v�̎c��t���[����
-	6	�ΐ��؋��y���u���҂̐΁v�̎c��t���[����
-	7	����u���m���o�̖�v�̓K�p��
-	8	�u���z�V���v�̓_����(7�ȏ�ɂ������܂�)
-	9	��z�u��z���z�̌��v�̎c��t���[����(�X�y�����e�������ɐݒ肳��܂�)
-	10	�C���u���O���z�̋��n�v�̎c��t���[����
-	11	�t�B�[���h�E���g�����b�h�̎c��t���[����(���肪�t�B�[���h���ɂ������A�c��t���[��3�ŌŒ�)
-	12	�t�B�[���h�E���g���o�C�I���b�g(���肪�t�B�[���h���ɂ������A�c��t���[��3�ŌŒ�)
-	13	�����u�W�F���[�t�B�b�V���v�����Z�X�v�̎c��t���[����
-	14	�����u�W�F���[�t�B�b�V���v�����Z�X�v�̎c��HP
-	15	�S�_�u�~�b�V���O�p�[�v���p���[�v�̎c��t���[����
-	16	�ŉ����u���z�D���̋ʁv�̎c��t���[����
-	17	����_�̎g�p��
-	18	�g����l�`�̎g�p��
-	19	�V��c��̎g�p��
-	20	�O�������[���̎g�p��
-	21	�O���̐��H�g�p��(���G����3�A���G���Ďg�p�ł�3�̂܂܁A���ʏI�����0)
-	22	�O���̐��H�ɂ�閳�G���Ԏc��t���[����
-	23	�����ɂ�閳�G���Ԏc��t���[����
-	24	�_�ގq�Q�[�W�g�p�\�܂ł̎c�t���[����
-	25	�z�K�q�Q�[�W�g�p�\�܂ł̎c�t���[����
-	26	�����u�Ԍ���(�C���t���A�h���[��)�v�̎c�t���[����
-	27	�_�C�A�����h�n�[�h�l�X�̎c�t���[����
-	��
-	�����u�������X�g�b�v�E�H�b�`�v�͔͈͓��L������hitstop��1�ɂ�������X�y���J�[�h�̂��߁A�����ł͎��ʂł��܂���B
+	指定プレイヤーの固有な設定値を取得します。
+	指定プレイヤーが該当しないキャラクターの場合は-1が返ります。
+	以下一覧表
+	n	取得できる値
+	0	咲夜の世界の残りフレーム数
+	1	時符「プライベートスクウェア」の残りフレーム数
+	2	「夢想天生」の残りフレーム数
+	3	魂符「幽明の苦輪」および魂魄「幽明求聞持聡明の法」の残りフレーム数
+	4	体力回復の残りフレーム数
+	5	儀符「オーレリーズサン」の残りフレーム数
+	6	火水木金土符「賢者の石」の残りフレーム数
+	7	生薬「国士無双の薬」の適用数
+	8	「夢想天生」の点灯数(7以上にも増えます)
+	9	非想「非想非非想の剣」の残りフレーム数(スペルを被弾した側に設定されます)
+	10	気符「無念無想の境地」の残りフレーム数
+	11	フィールドウルトラレッドの残りフレーム数(相手がフィールド内にいる限り、残りフレーム3で固定)
+	12	フィールドウルトラバイオレット(相手がフィールド内にいる限り、残りフレーム3で固定)
+	13	水符「ジェリーフィッシュプリンセス」の残りフレーム数
+	14	水符「ジェリーフィッシュプリンセス」の残りHP
+	15	鬼神「ミッシングパープルパワー」の残りフレーム数
+	16	毒煙幕「瓦斯織物の玉」の残りフレーム数
+	17	制御棒の使用個数
+	18	身代わり人形の使用個数
+	19	天狗団扇の使用個数
+	20	グリモワールの使用個数
+	21	三粒の水滴使用個数(無敵中は3、無敵中再使用でも3のまま、効果終了後は0)
+	22	三粒の水滴による無敵時間残りフレーム数
+	23	竜星による無敵時間残りフレーム数
+	24	神奈子ゲージ使用可能までの残フレーム数
+	25	諏訪子ゲージ使用可能までの残フレーム数
+	26	長視「赤月下(インフレアドムーン)」の残フレーム数
+	27	ダイアモンドハードネスの残フレーム数
+	※
+	時符「咲夜特性ストップウォッチ」は範囲内キャラのhitstopを1にし続けるスペルカードのため、ここでは識別できません。
 get_obj_attackarea(player,num,n)
-	�w��v���C���[��num�ڂ̃I�u�W�F�N�g�̍U������������l�p�`��n�ڂ�Ԃ��܂��B
-	�Ԃ�l�͎l�p�`�̒��_������킷���A��A�E�A���̏��Ŏl�̒l�ł��B
-	��F
-	left,top,right,bottom = get_obj_attackarea(TAG_MY,0,0);--������0�ڂ̃I�u�W�F�N�g��0�ڂ̍U��������擾
+	指定プレイヤーのnum個目のオブジェクトの攻撃判定を示す四角形のn個目を返します。
+	返り値は四角形の頂点をあらわす左、上、右、下の順で四つの値です。
+	例：
+	left,top,right,bottom = get_obj_attackarea(TAG_MY,0,0);--自分の0個目のオブジェクトの0個目の攻撃判定を取得
 get_attackarea(player,n)
-	�w��v���C���[�̍U������������l�p�`��n�ڂ�Ԃ��܂��B
+	指定プレイヤーの攻撃判定を示す四角形のn個目を返します。
 get_obj_hitarea(player,num,n)
-	�w��v���C���[��num�ڂ̃I�u�W�F�N�g�̐H�炢����������l�p�`��n�ڂ�Ԃ��܂��B
+	指定プレイヤーのnum個目のオブジェクトの食らい判定を示す四角形のn個目を返します。
 get_hitarea(player,n)
-	�w��v���C���[�̐H�炢����������l�p�`��n�ڂ�Ԃ��܂��B
+	指定プレイヤーの食らい判定を示す四角形のn個目を返します。
 get_correction(player,flag)
-	�w��v���C���[�������flag�̓���␳��^���Ă��邩���ʂ��܂��B
-	���̓���␳���������Ă���ꍇ��true�A�������Ă��Ȃ��ꍇ��false���Ԃ�܂��B
-	�Ō�ɗ^�����U���Ɋւ����񂪎擾�����̂ŁA�q�b�g�m�F�����ƕ��p���Ďg�p���Ă��������B
-	flag�̏ڍׂ͊��ϐ�my_correction���Q�Ƃ��Ă��������B
-	��F
+	指定プレイヤーが相手にflagの特殊補正を与えているか判別します。
+	その特殊補正がかかっている場合はtrue、かかっていない場合はfalseが返ります。
+	最後に与えた攻撃に関する情報が取得されるので、ヒット確認処理と併用して使用してください。
+	flagの詳細は環境変数my_correctionを参照してください。
+	例：
 	if(get_correction(0,32))then
-		--�J�E���^�[�q�b�g�����Ƃ��̏���
+		--カウンターヒットしたときの処理
 	end
 get_version()
-	AI�{�̂̃o�[�W�����𕶎���Ƃ��Ď擾���܂��B
-	�hver0.86a�h�Ƃ������`���ŕԂ�ׁA���p�ɂ͕ʓr�������K�v�ȏꍇ������܂��B
+	AI本体のバージョンを文字列として取得します。
+	”ver0.86a”といった形式で返る為、利用には別途処理が必要な場合もあります。
 get_fflags(player, flag)
-	�w��v���C���[�̍U���Ɋւ��Ȃ��t���O���擾���܂��B
-	�w��t���O�������Ă���ꍇ��true�A����ȊO�̏ꍇ��false���Ԃ�܂��B
-	flag�̏ڍׂ͊��ϐ�my_fflags���Q�Ƃ��Ă��������B
-	��F
+	指定プレイヤーの攻撃に関わらないフラグを取得します。
+	指定フラグがたっている場合はtrue、それ以外の場合はfalseが返ります。
+	flagの詳細は環境変数my_fflagsを参照してください。
+	例：
 	if(get_fflags(0,4))then
-		--�󒆂ɂ��鎞�̏���
+		--空中にいる時の処理
 	end
 get_aflags(player, flag)
-	�w��v���C���[�̍U���֘A�t���O���擾���܂��B
-	�w��t���O�������Ă���ꍇ��true�A����ȊO�̏ꍇ��false���Ԃ�܂��B
-	flag�̏ڍׂ͊��ϐ�my_aflags���Q�Ƃ��Ă��������B
-	��F
+	指定プレイヤーの攻撃関連フラグを取得します。
+	指定フラグがたっている場合はtrue、それ以外の場合はfalseが返ります。
+	flagの詳細は環境変数my_aflagsを参照してください。
+	例：
 	if(get_fflags(1,1))then
-		--���i�U�����ꂽ���̏���
+		--下段攻撃された時の処理
 	end
 
-�E���ϐ�
-�O���[�o���ϐ��̈�����yield�֐����ĂԂ��тɍX�V�����ϐ��Q�ł��B
-��z�V������𓾂��Ȏ�i�ƂȂ�܂��B
+・環境変数
+グローバル変数の扱いでyield関数を呼ぶたびに更新される変数群です。
+緋想天から情報を得る主な手段となります。
 
 
-���ϐ��ꗗ�F
+環境変数一覧：
 front:
-	���肪��������A���2(ACT_LEFT)��3(ACT_RIGHT)�̒l���Ƃ�܂��B
-	����Ƃ̈ʒu���画�ʂ��邽�߁A�U������O�ȂǃR�}���h���t�ɂȂ邱�Ƃ�����܂��B
+	相手が居る方向、常に2(ACT_LEFT)か3(ACT_RIGHT)の値をとります。
+	相手との位置から判別するため、振り向く前などコマンドが逆になることがあります。
 back:
-	front�̋t�A���肪���Ȃ���������Ɏw���܂��B
+	frontの逆、相手が居ない方向を常に指します。
 u_front:
-	���肪�������+ACT_UP�Ɠ��`�ł���L�[�w��q�̒l���Ƃ�܂��B
+	相手がいる方向+ACT_UPと同義であるキー指定子の値をとります。
 d_front:
-	���肪�������+ACT_DOWN�Ɠ��`�ł���L�[�w��q�̒l���Ƃ�܂��B
+	相手がいる方向+ACT_DOWNと同義であるキー指定子の値をとります。
 u_back:
-	u_front�̋t�̃L�[�w��q�̒l���Ƃ�܂��B
+	u_frontの逆のキー指定子の値をとります。
 d_back:
-	d_front�Ƌt�̃L�[�w��q�̒l���Ƃ�܂��B
+	d_frontと逆のキー指定子の値をとります。
 dis:
-	����Ƃ�x�����̋����Amath.floor(math.abs(x-ex))�̕Ԃ�l�Ə�ɓ������l�ɂȂ�܂��B
+	相手とのx方向の距離、math.floor(math.abs(x-ex))の返り値と常に同じ数値になります。
 dis_x:
-	dis�Ɠ����ł��B
+	disと同じです。
 dis_y:
-	����Ƃ�y�����̋����Amath.floor(math.abs(y-ey))�̕Ԃ�l�Ə�ɓ������l�ɂȂ�܂��B
+	相手とのy方向の距離、math.floor(math.abs(y-ey))の返り値と常に同じ数値になります。
 dis2:
-	����Ƃ�xy�܂߂������ł��Bmath.floor(math.sqrt(dis_x*dis_x+dis_y*dis_y))�̕Ԃ�l�Ə�ɓ������l�ɂȂ�܂��B
+	相手とのxy含めた距離です。math.floor(math.sqrt(dis_x*dis_x+dis_y*dis_y))の返り値と常に同じ数値になります。
 my_act:
-	�����̌��݃��[�V�����ł��B
-	��̓I�ɉ��̃��[�V�������m�肽���ꍇ��motion.txt��skill.txt��������������
+	自分の現在モーションです。
+	具体的に何のモーションか知りたい場合はmotion.txt＆skill.txtをご覧ください
 enemy_act:
-	����̃��[�V�����ł�
+	相手のモーションです
 weather:
-	�V��ł��B�Ɍ����Ɍ����莞�Ԃ���ƋɌ��ł͂Ȃ����ۂɔ������Ă���V����ʂ̔ԍ����Ԃ�悤�ɂȂ�܂��B
-	set_weather_delay��ݒ肷�邱�ƂŌ��ʂ��������鎞�Ԃ�ݒ�ł��܂��B
-	�ȉ��Ή��\
-	0:����
-	1:���J
-	2:�ܓV
-	3:���V
-	4:�
-	5:�ԓ�
-	6:�Z��
-	7:��
-	8:�V�C�J
-	9:�a�J
-	10:���J
-	11:����
-	12:�얶
-	13:�䕗
-	�E��z�V�ł����
-	14:�Ɍ�
-	16:�Ȃ�
-	�E��z�V���ł����
-	14:��
-	15:�޲������޽�
-	16:����
-	17:���
-	18:�~�J
-	19:�Ɍ�
-	21:�Ȃ�
+	天候です。極光時に限り一定時間すると極光ではなく実際に発動している天候効果の番号が返るようになります。
+	set_weather_delayを設定することで効果が判明する時間を設定できます。
+	以下対応表
+	0:快晴
+	1:霧雨
+	2:曇天
+	3:蒼天
+	4:雹
+	5:花曇
+	6:濃霧
+	7:雪
+	8:天気雨
+	9:疎雨
+	10:風雨
+	11:晴嵐
+	12:川霧
+	13:台風
+	・緋想天であれば
+	14:極光
+	16:なし
+	・非想天則であれば
+	14:凪
+	15:ﾀﾞｲﾔﾓﾝﾄﾞﾀﾞｽﾄ
+	16:黄砂
+	17:烈日
+	18:梅雨
+	19:極光
+	21:なし
 my_char:
-	�����̃L�����ł��A�ȉ��Ή��\
-	0�F�얲
-	1�F������
-	2�F���
-	3�F�A���X
-	4�F�p�`�����[
-	5�F�d��
-	6�F���~���A
-	7�F�H�X�q
-	8�F��
-	9�F��
-	10�F�D�܉�
-	11�F��
-	12�F����
-	13�F�ߋ�
-	14�F�V�q
-	15�F���c
-	16�F�`���m
-	17�F����
-	18�F��
-	19�F�z�K�q
+	自分のキャラです、以下対応表
+	0：霊夢
+	1：魔理沙
+	2：咲夜
+	3：アリス
+	4：パチュリー
+	5：妖夢
+	6：レミリア
+	7：幽々子
+	8：紫
+	9：萃香
+	10：優曇華
+	11：文
+	12：小町
+	13：衣玖
+	14：天子
+	15：早苗
+	16：チルノ
+	17：美鈴
+	18：空
+	19：諏訪子
 enemy_char:
-	����̃L�����ł��B
+	相手のキャラです。
 my_hp:
-	������HP�ł��A�ő�10000
+	自分のHPです、最大10000
 enemy_hp:
-	�����HP�ł��B
+	相手のHPです。
 my_rei:
-	�����̗�͂ł��A��͋������200�A�ő��1000�ɂȂ�܂��B
+	自分の霊力です、霊力球一個当り200、最大で1000になります。
 enemy_rei:
-	����̗�͂ł��B
+	相手の霊力です。
 my_rmax:
-	�����̍ő��͒l�ł��A�ő�1000�ň����邲�Ƃ�200����܂��B
+	自分の最大霊力値です、最大1000で一つ割れるごとに200減ります。
 enemy_rmax:
-	����̍ő��͒l�ł��B
+	相手の最大霊力値です。
 my_rei_stop:
-	�����̗�͉񕜒�~���Ԃł��A������0�ɂȂ�܂ŗ�͉͂񕜂��܂���A�e���͏���s�����s�����тɐݒ肳��܂��B
+	自分の霊力回復停止時間です、ここが0になるまで霊力は回復しません、各種霊力消費行動を行うたびに設定されます。
 enemy_rei_stop:
-	����̗�͉񕜒�~���Ԃł��B
+	相手の霊力回復停止時間です。
 my_spell:
-	�����̃X�y���J�[�h�Q�[�W�̗ʂł��A�ꖇ����500�ōő�2500�ł��B
-	�������͎��ۂ̗ʂɊւ�炸���0���Z�b�g����܂��B
+	自分のスペルカードゲージの量です、一枚当り500で最大2500です。
+	晴嵐時は実際の量に関わらず常に0がセットされます。
 enemy_spell:
-	����̃X�y���J�[�h�Q�[�W�̗ʂł��B
+	相手のスペルカードゲージの量です。
 my_combo:
-	�����̃R���{�q�b�g���ł��A�ʂ̍U�����K�[�h����邩�q�b�g����܂őO��̃R���{�q�b�g�����w�������܂��B
+	自分のコンボヒット数です、別の攻撃がガードされるかヒットするまで前回のコンボヒット数を指し続けます。
 enemy_combo:
-	����̃R���{�q�b�g���ł��B
+	相手のコンボヒット数です。
 my_dam:
-	�����̍��v�R���{�^�_���[�W�ł��B
+	自分の合計コンボ与ダメージです。
 enemy_dam:
-	����̍��v�R���{�^�_���[�W�ł��B
+	相手の合計コンボ与ダメージです。
 my_limit:
-	�����̗^���~�b�g�ł��B
+	自分の与リミットです。
 enemy_limit:
-	����̗^���~�b�g�ł��B
+	相手の与リミットです。
 my_rate:
-	�����̗^���[�g�ł��B
+	自分の与レートです。
 enemy_rate:
-	����̗^���[�g�ł��B
+	相手の与レートです。
 x:
-	�����̌���X���W�ł��B
+	自分の現在X座標です。
 ex:
-	����̌���X���W�ł��B
+	相手の現在X座標です。
 y:
-	�����̌���Y���W�ł��B
+	自分の現在Y座標です。
 ey:
-	����̌���Y���W�ł��B
+	相手の現在Y座標です。
 obj_dis:
-	�����ɍł��߂��G�_���[�W����̈ʒu�ł��B
-	X���W�݂̂���ɎZ�o���Ă��邽�߁A������щz����ˌ��ɂ��������܂��B
+	自分に最も近い敵ダメージ判定の位置です。
+	X座標のみを基準に算出しているため、頭上を飛び越える射撃にも反応します。
 obj_dis2:
-	�����ɍł��߂��G�I�u�W�F�N�g�̈ʒu�ł��B
+	自分に最も近い敵オブジェクトの位置です。
 my_obj_n:
-	���ݑ��݂��Ă��鎩���̃I�u�W�F�N�g���ł��B
+	現在存在している自分のオブジェクト数です。
 enemy_obj_n:
-	���ݑ��݂��Ă��鑊��̃I�u�W�F�N�g���ł��B
+	現在存在している相手のオブジェクト数です。
 my_card:
-	������1���ڂ̃J�[�hID�ł��B
-	�J�[�h���Ȃ��A�������͐�������-1���Z�b�g����܂��B
-	��̓I�ȃJ�[�hID��card.txt��spell.txt��skill.txt��ǂ�ł��������B
+	自分の1枚目のカードIDです。
+	カードがない、もしくは晴嵐時は-1がセットされます。
+	具体的なカードIDはcard.txtやspell.txtやskill.txtを読んでください。
 enemy_card:
-	�����1���ڂ̃J�[�hID�ł��B
+	相手の1枚目のカードIDです。
 my_air:
-	�����̋󒆃_�b�V���񐔂ł��A���ꂪ2(���J�Ȃ��3)�̏ꍇ�󒆃_�b�V�����g�p�ł��Ȃ���Ԃł��B
+	自分の空中ダッシュ回数です、これが2(風雨ならば3)の場合空中ダッシュが使用できない状態です。
 enemy_air:
-	����̋󒆃_�b�V���񐔂ł��B
+	相手の空中ダッシュ回数です。
 my_frame:
-	���������̃��[�V�������͂��߂Ă���̌o�߃t���[�����ł��B
-	����������Ȃǌp�����čs����s���̏ꍇ��4�o�C�g�̌��E�܂ő��������܂��B
+	自分がそのモーションをはじめてからの経過フレーム数です。
+	立ちや歩きなど継続して行える行動の場合は4バイトの限界まで増え続けます。
 enemy_frame:
-	���肪���̃��[�V�������n�߂Ă���̌o�߃t���[�����ł��B
+	相手がそのモーションを始めてからの経過フレーム数です。
 key_delay:
-	set_key_delay�Ŏw��ł���delay(�L�[���͂̒x���t���[����)�ł��B
-	���̃t���[��������key_event��key_on�ȂǂƂ��������ׂẴL�[���͖��߂̎��s���x��܂��B
-	�����ɑ�����Ă�set_key_delay�Ɠ��l�̌��ʂ�����܂��B
+	set_key_delayで指定できるdelay(キー入力の遅延フレーム数)です。
+	このフレーム数だけkey_eventやkey_onなどといったすべてのキー入力命令の実行が遅れます。
+	ここに代入してもset_key_delayと同様の効果があります。
 data_delay:
-	set_data_delay�Ŏw��ł���delay(�����Ԏ擾�x���t���[����)�ł��B
-	���̃t���[��������enemy_act��enemy_frame�̎擾���x��܂��B
-	�����ɑ�����Ă�set_data_delay�Ɠ��l�̌��ʂ�����܂��B
+	set_data_delayで指定できるdelay(相手状態取得遅延フレーム数)です。
+	このフレーム数だけenemy_actとenemy_frameの取得が遅れます。
+	ここに代入してもset_data_delayと同様の効果があります。
 battle_time:
-	�ΐ�J�n���Ă���̌o�߃t���[�����ł��B
-	��z�V�������͔�z�V���ˑ��̂��߁A������ɂ��yield��񂲂ƂɕK��+1����킯�ł͂���܂���B
-	���̂��ߓ���ڈ��Ƃ��Ă��g�����Ƃ��ł��܂��B
+	対戦開始してからの経過フレーム数です。
+	緋想天もしくは非想天則依存のため、動作環境によりyield一回ごとに必ず+1するわけではありません。
+	そのため動作目安としても使うことができます。
 	i = 0;
 	while true do
 		print(battle_time-i);
 		i = i+1;
 		yield();
 	end
-	���̃R�[�h�𓮂����āA�\������Ă��鐔�����ς��Ȃ��̂����z�̊��ł��B
+	このコードを動かして、表示されている数字が変わらないのが理想の環境です。
 is_card_use:
-	���g��1���ڂ̃J�[�h���g�p�\�ł���ΐ^�A�����łȂ��Ȃ�΋U���i�[����܂��B
-	�V�󐰗����͎g�p�\�s�\�Ɋւ�炸�U���Ԃ�܂��B
+	自身の1枚目のカードが使用可能であれば真、そうでないならば偽が格納されます。
+	天候晴嵐時は使用可能不可能に関わらず偽が返ります。
 weather_time:
-	�C���J�E���^�[(�V��\�������ő������Ă��鐔��)��10�{�����l�ł��B
-	�V�󖳂��̂Ƃ��͑������A�V�󂠂�̂Ƃ��͌������Ă����܂��B
-	0�����ɂȂ邱�ƁA�����1000�ȏ�ɂȂ邱�Ƃ͂���܂���B
-	�Ɍ����͋Ɍ��������l�ł͂Ȃ��A���ۂɔ������Ă���V��̒l���A��܂��B
-	�������Aweather_delay�̐ݒ莟��ŋɌ��̒l���A�邱�Ƃ�����܂��B
+	気質カウンター(天候表示部分で増減している数字)を10倍した値です。
+	天候無しのときは増加し、天候ありのときは減少していきます。
+	0未満になること、および1000以上になることはありません。
+	極光時は極光を示す値ではなく、実際に発現している天候の値が帰ります。
+	ただし、weather_delayの設定次第で極光の値が帰ることもあります。
 weather2:
-	�V�C�̗\��ł��B
-	�C����������weather2�Ɠ��l�̓��������܂����A�Ɍ�����weather_delay�Ɋ֌W�Ȃ���ɋɌ��������l���Ԃ�܂��B
+	天気の予報です。
+	気質発現中はweather2と同様の働きをしますが、極光時はweather_delayに関係なく常に極光を示す値が返ります。
 weather_delay:
-	�Ɍ����ɓV����ʂ��킩��悤�ɂȂ�܂ł̎��Ԃł��B
-	1000-weather_delay>weather_time�ɂȂ��weather����Y������V��̐��l���ǂ߂�悤�ɂȂ�܂��B
-	�����l��300�Aset_weather_delay�֐���p���邱�Ƃŕς��邱�Ƃ��ł��܂��B
-	���̕ϐ��ɑ�����s���Ă�set_weather_delay�Ɠ��l�̌��ʂ�����܂��B
+	極光時に天候効果がわかるようになるまでの時間です。
+	1000-weather_delay>weather_timeになるとweatherから該当する天候の数値が読めるようになります。
+	初期値は300、set_weather_delay関数を用いることで変えることができます。
+	この変数に代入を行ってもset_weather_delayと同様の効果があります。
 my_dir:
-	���������������Ă���Ƃ���-1�A�E�������Ă���Ƃ���1���i�[����܂��B
+	自分が左を向いているときは-1、右を向いているときは1が格納されます。
 enemy_dir:
-	���肪���������Ă���Ƃ���-1�A�E�������Ă���Ƃ���1���i�[����܂��B
+	相手が左を向いているときは-1、右を向いているときは1が格納されます。
 is_dir_front:
-	�����������Ă�������ɓG������ꍇ�͐^�A�����łȂ��Ȃ�΋U���i�[����܂��B
+	自分が向いている方向に敵が居る場合は真、そうでないならば偽が格納されます。
 my_hitstop:
-	�Ō��U���𓖂Ă��K�[�h�������A�������͔�e�����K�[�h�������ɋN����d���t���[�������i�[����܂��B
-	�������X�g�b�v�E�H�b�`�ȂǁA�ꕔ����Z�ł����̒l���g�p����邱�Ƃ�����܂��B
+	打撃攻撃を当てたガードさせた、もしくは被弾したガードした時に起こる硬直フレーム数が格納されます。
+	咲夜特製ストップウォッチなど、一部特殊技でもこの値が使用されることがあります。
 enemy_hitstop:
-	����̍d���t���[�����ł��B
+	相手の硬直フレーム数です。
 my_xspeed:
-	������x�����̑��x�ł��B
-	��z�V�������͔�z�V����������擾���Ă���̂ŁAmy_x��������v�Z�������1�t���[�����������擾�ł��܂��B
+	自分のx方向の速度です。
+	緋想天もしくは非想天則内部から取得しているので、my_x差分から計算するよりも1フレーム早く情報を取得できます。
 enemy_xspeed:
-	�����x�����̑��x�ł��B
+	相手のx方向の速度です。
 my_yspeed:
-	������y�����̑��x�ł��B
+	自分のy方向の速度です。
 enemy_yspeed:
-	�����y�����̑��x�ł��B
+	相手のy方向の速度です。
 my_img:
-	�����̌��ݕ\������Ă���L�����摜��ID�ł��B
+	自分の現在表示されているキャラ画像のIDです。
 enemy_img:
-	����̌��ݕ\������Ă���L�����摜��ID�ł��B
+	相手の現在表示されているキャラ画像のIDです。
 my_hitarea_n:
-	�����̐H�炢����������l�p�`�̌��ł�
+	自分の食らい判定を示す四角形の個数です
 enemy_hitarea_n:
-	����̐H�炢����������l�p�`�̌��ł�
+	相手の食らい判定を示す四角形の個数です
 my_attackarea_n:
-	�����̍U������������l�p�`�̌��ł��B
+	自分の攻撃判定を示す四角形の個数です。
 enemy_attackarea_n:
-	����̍U������������l�p�`�̌��ł��B
+	相手の攻撃判定を示す四角形の個数です。
 my_correction:
-	�������Ō�ɑ���ɗ^��������␳�̃t���O�ł��B
-	�ȉ��̐����𑫂����l���ݒ肳��܂��B
-	����␳��	���l
+	自分が最後に相手に与えた特殊補正のフラグです。
+	以下の数字を足した値が設定されます。
+	特殊補正名	数値
 	Rift Attack	1
 	Smash Attack	2
 	Border Resist	4
 	Chain Arts	8
 	Chain Spell	16
 	Counter Hit	32
-	��F
-	������ё��������̍U�����J�E���^�[�q�b�g�����ꍇ�A2+32��34���i�[�����B
+	例：
+	吹き飛び属性もちの攻撃をカウンターヒットした場合、2+32で34が格納される。
 enemy_correction:
-	���肪�Ō�Ɏ����ɗ^��������␳�̃t���O�ł��B
+	相手が最後に自分に与えた特殊補正のフラグです。
 is_th105:
-	�N�����Ă���A�v����������z�V�ł���ΐ^���A����ȊO�ł���΋U���Ԃ�܂��B
+	起動しているアプリが東方緋想天であれば真が、それ以外であれば偽が返ります。
 is_th123:
-	�N�����Ă���A�v����������z�V���ł���ΐ^���A����ȊO�ł���΋U���Ԃ�܂��B
+	起動しているアプリが東方非想天則であれば真が、それ以外であれば偽が返ります。
 my_attack_power:
-	�����̍U���{���ł��B
-	�����l1.0�A1.5�ŕ��i��1.5�{�̃_���[�W��^�����܂��B
-	����u���m���o�̖�v�␧��_�ŏ㏸�B
+	自分の攻撃倍率です。
+	初期値1.0、1.5で普段の1.5倍のダメージを与えられます。
+	生薬「国士無双の薬」や制御棒で上昇。
 enemy_attack_power:
-	����̍U���{���ł��B
+	相手の攻撃倍率です。
 my_defense_power:
-	�����̖h��{���ł��B
-	�����l1.0�A0.5�ŕ��i��1/2�����_���[�W���󂯂Ȃ��Ȃ�܂��B
-	����u���m���o�̖�v��g����l�`�Ō����B
+	自分の防御倍率です。
+	初期値1.0、0.5で普段の1/2しかダメージを受けなくなります。
+	生薬「国士無双の薬」や身代わり人形で減少。
 enemy_defense_power:
-	����̖h��{���ł��B
+	相手の防御倍率です。
 my_speed_power:
-	�����̑��x�{���ł��B
-	�����l1.0�A1.5�ŕ��i��1.5�{�̑��x�ňړ��ł��܂��B
-	1.10�ȑO�̓V��c���V�󕗉J�ŏ㏸�B
+	自分の速度倍率です。
+	初期値1.0、1.5で普段の1.5倍の速度で移動できます。
+	1.10以前の天狗団扇や天候風雨で上昇。
 enemy_speed_power:
-	����̑��x�{���ł��B
+	相手の速度倍率です。
 my_timestop:
-	�����̎��Ԓ�~�t�^�t���[���A������1�ȏ�ł���ԑ���͓����Ȃ�(�����ł͂Ȃ�����ł���_�ɒ���)�B
-	�X�y���Ó]���Ȃǎ����ȊO�S�Ă̓������~�܂鉉�o���ɐݒ肳��A1F���Ƃ�1���Z����Ă����B
-	���̐��E�ȂǁA�ꕔ����X�y�����ɂ����̒l���ݒ肳���B
+	自分の時間停止付与フレーム、ここが1以上である間相手は動けない(自分ではなく相手である点に注意)。
+	スペル暗転中など自分以外全ての動きが止まる演出時に設定され、1Fごとに1減算されていく。
+	咲夜の世界など、一部特殊スペル時にもこの値が設定される。
 enemy_timestop:
-	����̎��Ԓ�~�t�^�t���[���B
+	相手の時間停止付与フレーム。
 stage_number:
-	�X�e�[�W�ԍ�
-	�ȉ��ꗗ�\�F
-	0	�|��_��
-	1	���@�̐X
-	2	�����̑�
-	3	�d���̎R
-	4	���_�C
-	5	�L���V
-	6	��z�V
-	10	����_��
-	11	���J���@�X
-	12	�g���َ��v��
-	13	�l�`�̐X
-	14	�g���ّ�}����
-	15	���E
-	16	�g���ك��r�[
-	17	���ʘO�̐��
-	18	�����̒|��
-	30	���̌΂̕�
-	31	���_��
-	32	�Ԍ���n���Z���^�[�����
-	33	�Ԍ���n���Z���^�[�ʘH
-	34	�j�Z���F�S��
-	36	���̒��̎��v��Q
-	37	���̒��̎��v��R
-	38	���̒�
+	ステージ番号
+	以下一覧表：
+	0	倒壊神社
+	1	魔法の森
+	2	玄武の沢
+	3	妖怪の山
+	4	玄雲海
+	5	有頂天
+	6	緋想天
+	10	博麗神社
+	11	霧雨魔法店
+	12	紅魔館時計台
+	13	人形の森
+	14	紅魔館大図書館
+	15	冥界
+	16	紅魔館ロビー
+	17	白玉楼の雪庭
+	18	迷いの竹林
+	30	霧の湖の辺
+	31	守矢神社
+	32	間欠泉地下センター入り口
+	33	間欠泉地下センター通路
+	34	核融合炉心部
+	36	夢の中の時計台２
+	37	夢の中の時計台３
+	38	夢の中
 bgm_number:
-	BGM�ԍ�
-	�ȉ��ꗗ�\�F
-	BGM�ԍ�	�Ȗ�
-	0	�n�̐F�͉��F
-	1	������t��
-	2	�x�鐅��
-	3	�}��̗V�Y
-	4	�����C�ɍg���@�` Legendary Fish
-	5	�L���V�ρ@�` Wonderful Heaven
-	6	�c�S�n�̗L���V
-	10	�����d���k
-	11	���̊�@�` Casket of Star
-	12	�t���������O�i�C�g
-	13	�u�N���V���e�B�̐l�`�t
-	14	�L�L�ˉ����� �` Till When�H
-	15	���N�g�K�[���@�` ��������
-	16	�H��ɍ炩���A�n���̍��@�` Border of Life
-	17	�S�������ׂ̈̃Z�v�e�b�g
-	18	�邪�~��Ă���
-	19	�ӌ�
-	20	���C�̓��@�` Invisible Full Moon
-	21	���_����
-	22	�ފ݋A�q�@�` Riverside View
-	30	�M�͙R���l�Ԃׂ̈�
-	31	���Ă�Η���
-	32	��C�g���ف@�` Chinese Tea
-	33	��m�̑��z�M�@�` Nuclear Fusion
-	34	�����n���̓��A�P�̍��
-	35	�A���m�E���w�@�` Unfound Adventure
-	36	��ɕ����ԕ��̂w
-	40	��F�@�Ԓ� �` Ancients
-	41	���F�}�W�b�N
+	BGM番号
+	以下一覧表：
+	BGM番号	曲名
+	0	地の色は黄色
+	1	香る樹葉花
+	2	踊る水飛沫
+	3	嘲りの遊戯
+	4	黒い海に紅く　～ Legendary Fish
+	5	有頂天変　～ Wonderful Heaven
+	6	幼心地の有頂天
+	10	東方妖恋談
+	11	星の器　～ Casket of Star
+	12	フラワリングナイト
+	13	ブクレシュティの人形師
+	14	広有射怪鳥事 ～ Till When？
+	15	ラクトガール　～ 少女密室
+	16	幽雅に咲かせ、墨染の桜　～ Border of Life
+	17	亡き王女の為のセプテット
+	18	夜が降りてくる
+	19	砕月
+	20	狂気の瞳　～ Invisible Full Moon
+	21	風神少女
+	22	彼岸帰航　～ Riverside View
+	30	信仰は儚き人間の為に
+	31	おてんば恋娘
+	32	上海紅茶館　～ Chinese Tea
+	33	霊知の太陽信仰　～ Nuclear Fusion
+	34	明日ハレの日、ケの昨日
+	35	アンノウンＸ　～ Unfound Adventure
+	36	空に浮かぶ物体Ｘ
+	40	二色蓮花蝶 ～ Ancients
+	41	恋色マジック
 	42	the Grimoire of Alice
-	43	���������@�}����
+	43	ヴワル魔法図書館
 fflags:
-	�����̍U���Ɋւ��Ȃ��e��t���O�ł��B
-	�����Ă���t���O�ɑΉ������ȉ��̐����𑫂����l���ݒ肳��܂��B
-	�t���O			���l		���l
-	����			1
-	����			2
-	��			4
-	�s��			8
-	�K�[�h�\		16
-	�s���\		32		�L�����Z���܂�
-	��e��CH		64
-	�X�[�p�[�A�[�}�[	128		���S�X�[�p�[�A�[�}�[�̂݁A���̑���specialdata�ȂǂŊǗ�
-	�K�[�h			256		��ɐ��K�[�h����A�K�[�h���[�V���������Ȃ�
-	�K�[�h			512		256�Ƃ̈Ⴂ�͕s��
-	�O���C�Y		1024
-	�s��			2048
-	�s��			4096
-	�n��Ō����G		8192
-	�ˌ����G		16384
-	�󒆑Ō����G		32768		���g�p�H
-	���i�Ō����G		65536		���g�p�H
-	���i�Ō����G		131072		���g�p�H
-	�ꕔ�ˌ����G		262144		���g�p�H
-	�s��			524288
-	�s��			1048576
-	�s��			2097152
-	�s��			4194304
-	�s��			8388608
-	�s��			16777216
-	�����݉�͒�
+	自分の攻撃に関わらない各種フラグです。
+	立っているフラグに対応した以下の数字を足した値が設定されます。
+	フラグ			数値		備考
+	立ち			1
+	座り			2
+	空中			4
+	不明			8
+	ガード可能		16
+	行動可能		32		キャンセル含む
+	被弾時CH		64
+	スーパーアーマー	128		完全スーパーアーマーのみ、その他はspecialdataなどで管理
+	ガード			256		常に正ガードされ、ガードモーションも取らない
+	ガード			512		256との違いは不明
+	グレイズ		1024
+	不明			2048
+	不明			4096
+	地上打撃無敵		8192
+	射撃無敵		16384
+	空中打撃無敵		32768		当身用？
+	中段打撃無敵		65536		当身用？
+	下段打撃無敵		131072		当身用？
+	一部射撃無敵		262144		当身用？
+	不明			524288
+	不明			1048576
+	不明			2097152
+	不明			4194304
+	不明			8388608
+	不明			16777216
+	※現在解析中
 aflags:
-	���g�̍U���֘A�t���O�ł��B
-	�����Ă���t���O�ɑΉ������ȉ��̐����𑫂����l���ݒ肳��܂��B
-	�t���O			���l	���l
-	�s��			1
-	���i�U��		2
-	���i�U��		4
-	�󒆃K�[�h�\		8		�󒆃K�[�h�\�Ȃ�true
-	�n��K�[�h�s�\		16		�n��K�[�h�\�Ȃ�false
-	�s��			32
-	��K�s�\		64		��K�[�h�����ꍇ�ɒʏ�ʂ�q�b�g����(�K�[�N���ɂ��炸)
-	�K�[�h�����薳�G	128		�K�[�h�����Ƃ��΂炭���肪���G��ԂɂȂ葽�i�K�[�h�ɂȂ�Ȃ�
-	�s��			256
-	�s��			512
-	�N���b�V���q�b�g	1024
-	�s��			2048
-	�s��			4096
-	�s��			8192
-	�s��			16384
-	�U�����m�b�N�o�b�N	32768
-	�s��			65536
-	�s��			131072
-	�s��			262144
-	�K�[�h�N���b�V��	524288		��K�[�h���̂�
-	�����ʍU��		1048576		�����G�����ł͂Ȃ����݂��̃I�u�W�F�N�g�ɂ�������
-	�s��			2097152		
-	�ˌ�����		4194304		�O���C�Y�\�A���K�[�h�ł���͌���
-	�O���C�Y�s��		8388608		�ԓ܂ł��O���C�Y�ł��Ȃ��A�ˌ������Ȃ��ԓ܂ł��O���C�Y�ł��Ȃ�
-	�s��			16777216
-	�����݉�͒�
+	自身の攻撃関連フラグです。
+	立っているフラグに対応した以下の数字を足した値が設定されます。
+	フラグ			数値	備考
+	不明			1
+	中段攻撃		2
+	下段攻撃		4
+	空中ガード可能		8		空中ガード可能ならtrue
+	地上ガード不能		16		地上ガード可能ならfalse
+	不明			32
+	誤ガ不能		64		誤ガードした場合に通常通りヒットする(ガークラにあらず)
+	ガード時相手無敵	128		ガードされるとしばらく相手が無敵状態になり多段ガードにならない
+	不明			256
+	不明			512
+	クラッシュヒット	1024
+	不明			2048
+	不明			4096
+	不明			8192
+	不明			16384
+	攻撃側ノックバック	32768
+	不明			65536
+	不明			131072
+	不明			262144
+	ガードクラッシュ	524288		誤ガード時のみ
+	無差別攻撃		1048576		自分敵だけではなくお互いのオブジェクトにも当たる
+	不明			2097152		
+	射撃属性		4194304		グレイズ可能、正ガードでも霊力減少
+	グレイズ不可		8388608		花曇でもグレイズできない、射撃属性なし花曇でもグレイズできない
+	不明			16777216
+	※現在解析中
 my_win_count:
-	�����̏������E���h��
+	自分の勝利ラウンド数
 enemy_win_count:
-	����̏������E���h��
+	相手の勝利ラウンド数
 

@@ -1,435 +1,435 @@
 2010/12/01	ver0.94a
-�R���p�C�����̕ύX
-get_special_data��13��14�����삷��悤��
+コンパイル環境の変更
+get_special_dataの13と14が動作するように
 
 2010/03/14	ver0.94
-���ϐ�act_block�̒ǉ�
+環境変数act_blockの追加
 
 2010/01/28	ver0.93a
-get_obj_data�ŕԂ�HP���������������s��̏C��
+get_obj_dataで返るHPがおかしかった不具合の修正
 
 2010/01/24	ver0.93
-���ϐ�my_win_count�Aenemy_win_count������
-��z�V��1.10�ɑΉ�
+環境変数my_win_count、enemy_win_countを実装
+非想天則1.10に対応
 
 2010/01/23	ver0.92a
-ver0.91�����ϐ��̏����_�ȉ����؂�̂Ă��Ă����s��̏C��
-ver0.91e�̏C���ɂ�胊���[�h�������I�ɔ�z�V�����A�N�e�B�u�ɂȂ�Ȃ������s��̏C��
+ver0.91より環境変数の小数点以下が切り捨てられていた不具合の修正
+ver0.91eの修正によりリロード時自動的に非想天則がアクティブにならなかった不具合の修正
 
 2010/01/23	ver0.92
-�֐�get_key_stat2�Aget_key_map2������
+関数get_key_stat2、get_key_map2を実装
 
 2010/01/22	ver0.91e
-ver0.91d�̏C���ɂ��A���ϐ��������������O�Ƀ��[�h�����������Ă����s����C��
+ver0.91dの修正により、環境変数が初期化される前にロード処理が走っていた不具合を修正
 
 2010/01/20	ver0.91d
-ver0.91c�̏C���ɂ�胊���[�h�@�\������ɓ��삵�Ă��Ȃ������s��̏C��
-ver0.91c�̏C���ɂ�胊���[�h�������I�ɔ�z�V�����A�N�e�B�u�ɂȂ�Ȃ������s��̏C��
-���ϐ�my_rei_stop,enemy_rei_stop��ǉ�
+ver0.91cの修正によりリロード機能が正常に動作していなかった不具合の修正
+ver0.91cの修正によりリロード時自動的に非想天則がアクティブにならなかった不具合の修正
+環境変数my_rei_stop,enemy_rei_stopを追加
 
 2010/01/19	ver0.91c
-�X�N���v�g�̓��������啝�ɕύX
+スクリプトの内部動作を大幅に変更
 
 2010/01/12	ver0.91b
-get_special_data�Ń_�C�A�����h�n�[�h�l�X�̏����擾�o����p��
+get_special_dataでダイアモンドハードネスの情報を取得出来る用に
 
 2009/12/02	ver0.91a
-command�֐���22,44,66,88�Ƃ��������͂��s���Ȃ������s��̏C��
+command関数で22,44,66,88といった入力が行えなかった不具合の修正
 
 2009/11/15	ver0.91
-�X�N���v�g�̓����������኱�ύX
+スクリプトの内部実装を若干変更
 
 2009/10/24	ver0.90c
-is_card_use�Amy_spell�Amy_card���������ł��ʏ�ʂ�̒l��Ԃ��Ă����s��̏C��
-�����I�ɂ������̊��ϐ��̏������@��ύX
-get_card_cost2�ɂ����āA�{���ł����-1��Ԃ��ׂ���ʂ�-2��Ԃ��Ă����s����C��
-��z�V���̋Ɍ�����weather_delay������ɓ��삵�Ă��Ȃ������s��̏C��
+is_card_use、my_spell、my_cardが晴嵐時でも通常通りの値を返していた不具合の修正
+内部的にいくつかの環境変数の処理方法を変更
+get_card_cost2において、本来であれば-1を返すべき場面で-2を返していた不具合を修正
+非想天則の極光時にweather_delayが正常に動作していなかった不具合の修正
 
 2009/10/24	ver0.90b
-enemy_hitstop�����my_hitstop�Ɠ����l�ɂȂ��Ă����s��̏C��
+enemy_hitstopが常にmy_hitstopと同じ値になっていた不具合の修正
 
 2009/10/15	ver0.90a
-ini��Player�̐ݒ肪1��2�ȊO�̂Ƃ��A�����I��1P��������͂����ꍇ�ɂ��2P�������Ă����s��̏C��
-�Q�[���p�b�h�g�p���A���쑤���o��������C��
+iniのPlayerの設定が1か2以外のとき、強制的に1P扱いするはずが場合により2P扱いしていた不具合の修正
+ゲームパッド使用時、動作側検出処理を微修正
 
 2009/10/14	ver0.90
-���ϐ�aflags�Afflags������
-�֐�get_aflags�Aget_fflags������
+環境変数aflags、fflagsを実装
+関数get_aflags、get_fflagsを実装
 
 2009/10/13	ver0.89
-get_obj_hitarea�����get_obj_attackarea�ňꕔ�擾�Ɏ��s���Ă����s��̏C��
-��L�ύX�ɔ���obj�֘A��������̑啝�ȕύX
-create_thread�Ő������ꂽ�X���b�h���ꍇ�ɂ����s����������ւ��\�����������s��̏C��
-create_thread�ɂ����ĉψ����̎󂯓n���@�\�ɑΉ�(Thx ������z�V�@AI�֘A�X���b�h2 >>155)
+get_obj_hitareaおよびget_obj_attackareaで一部取得に失敗していた不具合の修正
+上記変更に伴うobj関連内部動作の大幅な変更
+create_threadで生成されたスレッドが場合により実行順序が入れ替わる可能性があった不具合の修正
+create_threadにおいて可変引数の受け渡し機能に対応(Thx 東方緋想天　AI関連スレッド2 >>155)
 
 2009/10/11	ver0.88c
-�H�炢���肪�ɏ��ʂ���Ă������ߎZ�o���@��ύX�����B
+食らい判定が極少量ずれていたため算出方法を変更した。
 
 2009/10/10	ver0.88b
-�L�[�R���t�B�O�ɂč��܂ŔF�����Ă��Ȃ������ꕔ�L���L�[���F������悤�ɂȂ����B
-F11�L�[��F12�L�[�̌��o�������������s��̏C��
-ini�ɔ�z�V�������͔�z�V���I������th123_ai���I������@�\�AAppDownExit��ǉ�
-0.88a��蓯���N�������ꍇ�ɃL�[�R���t�B�O������Ɏ擾�ł��Ă��Ȃ������s��̏C��
+キーコンフィグにて今まで認識していなかった一部記号キーも認識するようになった。
+F11キーとF12キーの検出率が悪かった不具合の修正
+iniに緋想天もしくは非想天則終了時にth123_aiも終了する機能、AppDownExitを追加
+0.88aより同時起動した場合にキーコンフィグが正常に取得できていなかった不具合の修正
 
 2009/10/09	ver0.88a
-get_special_data�ɂ�����8/16/13/14/9/15�Ԃ����삵�Ă��Ȃ������s��̏C��
-get_special_data�Œ����u�Ԍ���(�C���t���A�h���[��)�v�̎c�t���[�������擾�ł���悤��
-AIManager����N����AF11�������ĕ�AI��ǂݍ��񂾏ꍇ�ł��N������AI�̂��̂Ƃ��ăG���[�񍐂����삵�Ă����s��̏C��
-�L�[�{�[�h�g�p���AAI���쑤�����F���̐��x����
+get_special_dataにおいて8/16/13/14/9/15番が動作していなかった不具合の修正
+get_special_dataで長視「赤月下(インフレアドムーン)」の残フレーム数を取得できるように
+AIManagerから起動後、F11を押して別AIを読み込んだ場合でも起動時のAIのものとしてエラー報告が動作していた不具合の修正
+キーボード使用時、AI動作側自動認識の精度向上
 
 2009/10/08	ver0.88
-th123_ai.exe�G���[���̕񍐐��ύX����
-AIManager����N�����ꂽ���Ɍ���A�X�N���v�g�G���[���ɃG���[���e���T�[�o�ɓo�^����@�\�̒ǉ�
-0.86f���p�`�����[����їD�܉؂��g�p���ɗ�O��f���Ă����v���I�s��̏C��
-get_special_data�֐��̑S�@�\����z�V���ɑΉ�
+th123_ai.exeエラー時の報告先を変更した
+AIManagerから起動された時に限り、スクリプトエラー時にエラー内容をサーバに登録する機能の追加
+0.86fよりパチュリーおよび優曇華を使用時に例外を吐いていた致命的不具合の修正
+get_special_data関数の全機能が非想天則に対応
 
 2009/10/07	ver0.87a
-�L�[�{�[�h�g�p���AAI���쑤���o�̐��x������
+キーボード使用時、AI動作側検出の精度を向上
 
 2009/09/27	ver0.87
-0.86f�̎����N���̏C���ɘR�ꂪ�����������C��
-0.80���G���[���ɃT�[�o�փG���[���𑗐M����@�\�������Ă��Ȃ������s��̏C��
-���ϐ�my_timestop/enemy_timestop�̒ǉ�
-get_obj_data�̕Ԃ�l�ɍU���͈͂̐��ƐH�炢�͈͂̐���ǉ��B
-get_version�֐���ǉ��B
-get_special_data�Ő_�ގq�Q�[�W�Ɛz�K�q�Q�[�W���擾�\�ɁB
-���ϐ�stage_number�̒ǉ�
-���ϐ�bgm_number�̒ǉ�
+0.86fの自動起動の修正に漏れがあった問題を修正
+0.80よりエラー時にサーバへエラー情報を送信する機能が動いていなかった不具合の修正
+環境変数my_timestop/enemy_timestopの追加
+get_obj_dataの返り値に攻撃範囲の数と食らい範囲の数を追加。
+get_version関数を追加。
+get_special_dataで神奈子ゲージと諏訪子ゲージを取得可能に。
+環境変数stage_numberの追加
+環境変数bgm_numberの追加
 
 2009/09/27	ver0.86f
-ver0.80���StartupTH105���@�\���Ă��Ȃ������s��̏C��(Thx �u������z�V�@AI�֘A�X���b�h2�v >>114)
-ini��StartupTH123��ǉ��B
-StartuoTH105�����StartupTH123�̎������������@�\�̔p�~
-get_skill_lv���ꍇ�ɂ�萳��Ȓl��Ԃ��Ȃ����Ƃ��������s��̏C��(Thx �u������z�V�@AI�֘A�X���b�h2�v >>116)
-get_card_id���ꍇ�ɂ�萳��Ȓl��Ԃ��Ȃ����Ƃ��������s��̏C��
-get_card_cost���ꍇ�ɂ�萳��Ȓl��Ԃ��Ȃ����Ƃ��������s��̏C��
-get_card_cost2���ꍇ�ɂ�萳��Ȓl��Ԃ��Ȃ����Ƃ��������s��̏C��
-get_hitarea���ꍇ�ɂ�萳��Ȓl��Ԃ��Ȃ����Ƃ��������s��̏C��
-get_attackarea���ꍇ�ɂ�萳��Ȓl��Ԃ��Ȃ����Ƃ��������s��̏C��
-get_special_data���ꍇ�ɂ�萳��Ȓl��Ԃ��Ȃ����Ƃ��������s��̏C��
-get_skill_lv�Ńp�`�����[��112~114��Lv���擾�ł��Ȃ������s��̏C��
-�����N�����ꍇ�ɂ�蓮���Ȃ����Ƃ��������s��̏C��
+ver0.80よりStartupTH105が機能していなかった不具合の修正(Thx 「東方緋想天　AI関連スレッド2」 >>114)
+iniにStartupTH123を追加。
+StartuoTH105およびStartupTH123の自動書き換え機能の廃止
+get_skill_lvが場合により正常な値を返さないことがあった不具合の修正(Thx 「東方緋想天　AI関連スレッド2」 >>116)
+get_card_idが場合により正常な値を返さないことがあった不具合の修正
+get_card_costが場合により正常な値を返さないことがあった不具合の修正
+get_card_cost2が場合により正常な値を返さないことがあった不具合の修正
+get_hitareaが場合により正常な値を返さないことがあった不具合の修正
+get_attackareaが場合により正常な値を返さないことがあった不具合の修正
+get_special_dataが場合により正常な値を返さないことがあった不具合の修正
+get_skill_lvでパチュリーの112~114のLvを取得できなかった不具合の修正
+自動起動が場合により動かないことがあった不具合の修正
 
 2009/09/24	ver0.86e
-ver0.86���obj_dis�����obj_dis2�Ŗ�������10000�ł͂Ȃ�2147483647��Ԃ��Ă����s��̏C���B
+ver0.86よりobj_disおよびobj_dis2で未発見時10000ではなく2147483647を返していた不具合の修正。
 
 2009/09/23	ver0.86d
-���ԃt�@�C�����폜���ꂸ���̂܂ܕ��u����鎖���������s��̏C��
+中間ファイルが削除されずそのまま放置される事があった不具合の修正
 
 2009/09/22	ver0.86c
-�h�L�������g��ver0.86���̐������L�ڂ���Ă��Ȃ������̂ŒǋL(Thx �u������z�V�@AI�֘A�X���b�h2�v >>94)
-get_special_data�ɂ����ĎO���̐��H�g�p���E�O���̐��H���G���ԁE�������G���Ԃ��擾�ł���悤��
+ドキュメントにver0.86分の説明が記載されていなかったので追記(Thx 「東方緋想天　AI関連スレッド2」 >>94)
+get_special_dataにおいて三粒の水滴使用個数・三粒の水滴無敵時間・竜星無敵時間が取得できるように
 
 2009/09/21	ver0.86b
-���������[�X
+内部リリース
 
 2009/09/20	ver0.86a
-�ΐ�J�n���I�[�g�����[�h�@�\�������Ă��Ȃ������s��̏C��(Thx �u������z�V�@AI�֘A�X���b�h2�v >>79)
-�ΐ�J�n���I�[�g�����[�h�ɂ����āA�������őO��ɂȂ邱�Ƃ��������s��̏C��
-ver0.86�ɂ����ăf�o�b�O�o�͂��������܂܂������s��̏C��
-F9�L�[�Ŕ�z�V���N������@�\�̒ǉ�
-th123_ai�N����ɔ�z�V�Ɣ�z�V�����s��������Ɠ��삪���������Ȃ��Ă����s��̏C��
+対戦開始時オートリロード機能が動いていなかった不具合の修正(Thx 「東方緋想天　AI関連スレッド2」 >>79)
+対戦開始時オートリロードにおいて、黒窓が最前列になることがあった不具合の修正
+ver0.86においてデバッグ出力が動いたままだった不具合の修正
+F9キーで緋想天を起動する機能の追加
+th123_ai起動後に緋想天と非想天則を行き来すると動作がおかしくなっていた不具合の修正
 
 2009/09/20	ver0.86
-attack_power���ϐ���ǉ�
-defense_power���ϐ���ǉ�
-speed_power���ϐ���ǉ�
-get_special_data�̍��m���o�g�p���擾���g�p�\��
-get_special_data�ɂ����Đ���_�E�g����l�`�E�V��c��E�O�������[���̎g�p�����擾�ł���悤��
+attack_power環境変数を追加
+defense_power環境変数を追加
+speed_power環境変数を追加
+get_special_dataの国士無双使用個数取得が使用可能に
+get_special_dataにおいて制御棒・身代わり人形・天狗団扇・グリモワールの使用個数が取得できるように
 
 2009/09/19	ver0.85a
-��z�V�������͔�z�V���������ōőO�ʂɂ���@�\�����삵�Ă��Ȃ������s��̏C��
-ver0.85�Ńf�o�b�O�o�͂������Y��Ă����s��̏C��
-is_th105���ϐ���ǉ�
-is_th123���ϐ���ǉ�
+緋想天もしくは非想天則を自動で最前面にする機能が動作していなかった不具合の修正
+ver0.85でデバッグ出力を消し忘れていた不具合の修正
+is_th105環境変数を追加
+is_th123環境変数を追加
 
 2009/09/19	ver0.85
-get_special_data,get_deck_list�������S�@�\�̔�z�V���Ή�����
+get_special_data,get_deck_listを除く全機能の非想天則対応完了
 
 2009/09/18	ver0.84
-���������[�X
+内部リリース
 
 2009/09/18	ver0.83a
-���������[�X
+内部リリース
 
 2009/09/17	ver0.83
-th123_ai.ini��ǂݍ���ł��Ȃ������s��̏C��
-Player��2�ł��قƂ�ǂ̏ꍇ�ɂ�����Player=1�Ƃ��Ĉ�����s��̏C��
-SWRSAddr.ini�ǂݍ��ݎ��A�ꕔ����ɓǂݍ��܂�Ȃ����Ƃ��������s��̏C��
+th123_ai.iniを読み込んでいなかった不具合の修正
+Playerが2でもほとんどの場合においてPlayer=1として扱われる不具合の修正
+SWRSAddr.ini読み込み時、一部正常に読み込まれないことがあった不具合の修正
 
 2009/09/16	ver0.82
-ver0.81���ꕔ�ݒ肪��Ƀf�t�H���g�l�Ƃ��Ĉ����Ă����s��̏C��
-ver0.81���HP�̒l���������Ȃ������s��̏C��
+ver0.81より一部設定が常にデフォルト値として扱われていた不具合の修正
+ver0.81よりHPの値が正しくなかった不具合の修正
 
 2009/09/12	ver0.81
-StartupAI�ɍŌオ % �ŏI��镶�����w�肵�Ă���ƃG���[�I�����Ă����s��̏C��
-SWRSAddr.ini���ǂݍ��ނ悤�ɕύX
+StartupAIに最後が % で終わる文字を指定しているとエラー終了していた不具合の修正
+SWRSAddr.iniも読み込むように変更
 
 2009/04/29	ver0.80
-��z�V����A�N�e�B�u���ɔ�z�V���I�������th105_ai���ł܂����s��̏C��
+緋想天が非アクティブ時に緋想天を終了するとth105_aiが固まった不具合の修正
 
 2009/04/16	ver0.78d
-�����[�h�����ۂɍ������A�N�e�B�u�ɂ���@�\���z�V�t���X�N���[�����͗}������悤�ɏC��
-ini�ō�������O�ɕ\������@�\��ON/OFF��ݒ�\�ɏo����MyWindowActive���ڂ�ǉ�
-ini��0��ݒ肵���ہA�ꍇ�ɂ��듮�삷��\�����������s��̏C��
+リロードした際に黒窓をアクティブにする機能を緋想天フルスクリーン時は抑制するように修正
+iniで黒窓を手前に表示する機能のON/OFFを設定可能に出来るMyWindowActive項目を追加
+iniで0を設定した際、場合により誤動作する可能性があった不具合の修正
 
 2009/04/13	ver0.78c
-�����[�h�����ۂɍ�������O�ɂȂ�@�\�̒ǉ�
-get_obj_data���g�p�����ۂ�lua�X�^�b�N���j�����A�Ԃ�l���s��ɂȂ��Ă����s��̏C��
+リロードした際に黒窓も手前になる機能の追加
+get_obj_dataを使用した際にluaスタックが破損し、返り値が不定になっていた不具合の修正
 
 2009/04/11	ver0.78b
-�ꕔ�󋵉���get_card_cost,get_card_cost2,get_card_id���g�p�����ꍇ�ɗ�O��f���s��̏C��(Thx ��O�񍐂��s���Ă��ꂽ�N��)
-�X�g�[���[���[�h�ŃL�����N�^�[�������ɎO�l���݂���󋵂ɂȂ����ꍇ�ɗ�O��f���s��̏C��
-��莞�ԏ������؂����ۂɃ`�[�g�΍�R�[�h���듮�삷��\�����������s��̏C��
-��z�V�������s�Ɏ��s�����ꍇ�Ƀt�@�C���I���_�C�A���O���o���悤�ɕύX
-ini�ɔ�z�V�������s����ۂ̃p�X��ݒ�ł���StartupTH105���ڂ�ǉ�
-��L���ڂ������I�ɍX�V����@�\�̒ǉ�
+一部状況下でget_card_cost,get_card_cost2,get_card_idを使用した場合に例外を吐く不具合の修正(Thx 例外報告を行ってくれた誰か)
+ストーリーモードでキャラクターが同時に三人存在する状況になった場合に例外を吐く不具合の修正
+一定時間処理が滞った際にチート対策コードが誤動作する可能性があった不具合の修正
+緋想天自動実行に失敗した場合にファイル選択ダイアログを出すように変更
+iniに緋想天自動実行する際のパスを設定できるStartupTH105項目を追加
+上記項目を自動的に更新する機能の追加
 
 2009/04/10	ver0.78
-��d�N������Player�����]����@�\�̔p�~
-��d�N�����Ɉ�ڂƂ͋t��Player���g���@�\�̒ǉ�
-io.lines�֐��ŔC�ӂ̃t�@�C�����I�[�v���ł��Ă��܂����s��̏C��
-get_obj_data�Ŏ擾�ł�����̒ǉ�
-ini�ɏ����_���܂ޒl��ݒ肷��Əꍇ�ɂ���O��f���\�����������s��̏C��(Thx ��O�񍐂��s���Ă��ꂽ�N��)
-ini�ɔ�z�V�N���^�C�~���O��ݒ�ł���th105_start���ڂ�ǉ�
+二重起動時にPlayerが反転する機能の廃止
+二重起動時に一つ目とは逆のPlayerを使う機能の追加
+io.lines関数で任意のファイルをオープンできてしまった不具合の修正
+get_obj_dataで取得できる情報の追加
+iniに小数点を含む値を設定すると場合により例外を吐く可能性があった不具合の修正(Thx 例外報告を行ってくれた誰か)
+iniに緋想天起動タイミングを設定できるth105_start項目を追加
 
 2009/03/01	ver0.77b
-ver0.76b�̃G���[�C������肭�����Ă��Ȃ������s����C��(��������)
+ver0.76bのエラー修正が上手くいっていなかった不具合を修正(したつもり)
 
 2009/03/01	ver0.77
-get_obj_data�ɕԂ�l�ǉ�
-�`�[�g�΍�1��ver0.76��蓮�삵�Ă��Ȃ��������̏C��
-�`�[�g�΍�3
-�\���G���[���N�����Ă��烊���[�h����Ɨ�O��f���Ă����s��̏C��
-Lua�X�N���v�g�G���[�̌��n���@���ꕔ�]�������Ɋ����߂�(�t�@�C����L���΍�)
+get_obj_dataに返り値追加
+チート対策1がver0.76より動作していなかった問題の修正
+チート対策3
+構文エラーを起こしてからリロードすると例外を吐いていた不具合の修正
+Luaスクリプトエラーの検地方法を一部従来方式に巻き戻し(ファイル占有問題対策)
 
 2009/03/01	ver0.76b
-�t�@�C���ǂݏ����@�\���ӂŖ�肪�N���肻���������ӏ����C��
-�ꕔ�󋵉��ŗ�O�G���[����\�����������s����C��(Thx ��O�񍐂��s���Ă��ꂽ�N��)
-�������Z�ɂ����ė�O�G���[��f���\�����������̂��C����������(���m�F)
+ファイル読み書き機能周辺で問題が起こりそうだった箇所を修正
+一部状況下で例外エラーする可能性があった不具合を修正(Thx 例外報告を行ってくれた誰か)
+実数演算において例外エラーを吐く可能性があったのを修正したつもり(未確認)
 
 2009/02/26	ver0.76a
-�Q�[���p�b�h���L�[�{�[�h�ƌ�F���邱�Ƃ��������s��̏C��
-��O�񍐋@�\�������Ă��Ȃ������s��̏C��
-�ꕔAPI�ŕs���Ȉ��������n�ł��Ă��Ȃ������s��̏C��
-set_key_delay������ɓ��삵�Ă��Ȃ������s��̏C��
-is_ard_use������ɓ��삵�Ă��Ȃ������s��̏C��
+ゲームパッドをキーボードと誤認することがあった不具合の修正
+例外報告機能が動いていなかった不具合の修正
+一部APIで不正な引数を検地できていなかった不具合の修正
+set_key_delayが正常に動作していなかった不具合の修正
+is_ard_useが正常に動作していなかった不具合の修正
 
 2009/02/24	ver0.76
-���ϐ�my_correction��enemy_correction�̎���
-�֐�get_correction������
-F11�L�[�ɂ��t�@�C���I��ǂݍ��݋@�\������ɓ��삵�Ă��Ȃ������s��̏C��
+環境変数my_correctionとenemy_correctionの実装
+関数get_correctionを実装
+F11キーによるファイル選択読み込み機能が正常に動作していなかった不具合の修正
 
 2009/02/24	ver0.75
-�ꕔ�󋵉���Player�����]����s��̏C��
-get_opt_xy�ŏ����̗썰�̈ʒu���擾�ł���悤��
-�G���[���N���Ă����n�ł��Ȃ��Ȃ��Ă����s��̏C��)
-io�ȉ��̊֐����g�p�\��(�ꕔ�֐��̎d�l�������̂��̂Ƃ͈قȂ�܂�)
-���ϐ�my_hitarea_n��enemy_hitarea_n��my_attackarea_n��enemy_attackarea_n������
-�֐�get_obj_attackarea��get_attackarea��get_obj_hitarea��get_hitarea�̎���
-Lua�X�N���v�g�G���[�̌��n���@��ύX(2009/03/01�F�����Y��ɕt���ǋL)
+一部状況下でPlayerが反転する不具合の修正
+get_opt_xyで小町の霊魂の位置を取得できるように
+エラーが起きても検地できなくなっていた不具合の修正)
+io以下の関数を使用可能に(一部関数の仕様が公式のものとは異なります)
+環境変数my_hitarea_nとenemy_hitarea_nとmy_attackarea_nとenemy_attackarea_nを実装
+関数get_obj_attackareaとget_attackareaとget_obj_hitareaとget_hitareaの実装
+Luaスクリプトエラーの検地方法を変更(2009/03/01：書き忘れに付き追記)
 
 2009/02/20	ver0.74
-Ver0.72����ꕔ�����ŗ�O��f���Ă����s��̏C��(Thx ��O�񍐂��s���Ă��ꂽ�N��)
-get_obj_data�̕Ԃ�l����ǉ�
-���ϐ�my_img�Aenemy_img������
-get_opt_xy������ɓ��삵�Ă��Ȃ������s��̏C��
-get_opt_xy�ŃA���X�̐l�`�ʒu���擾�ł���悤��
-get_special_data�Ŏ���f�[�^���������ǉ�
+Ver0.72から一部環境下で例外を吐いていた不具合の修正(Thx 例外報告を行ってくれた誰か)
+get_obj_dataの返り値を一つ追加
+環境変数my_img、enemy_imgを実装
+get_opt_xyが正常に動作していなかった不具合の修正
+get_opt_xyでアリスの人形位置を取得できるように
+get_special_dataで取れるデータをいくつか追加
 
 2009/02/19	ver0.73b
-command�֐��̈ꕔ�@�\������ɓ��삵�Ă��Ȃ��������̏C��
+command関数の一部機能が正常に動作していなかった問題の修正
 
 2009/02/19	ver0.73a
-my_xspeed�Amy_yspeed�Aenemy_xspeed�Aenemy_yspeed�ɃA�N�Z�X�ł��Ȃ������s��̏C��
+my_xspeed、my_yspeed、enemy_xspeed、enemy_yspeedにアクセスできなかった不具合の修正
 
 2009/02/17	ver0.73
-�`�[�g�΍􂻂̂Q
-0.72��command�֐�������ɓ��삵�Ă��Ȃ������s��̏C��
-ini�ɐݒ肳�ꂽ�����Q�[���p�b�h�ɂȂ��Ă���ꍇ�A��������ɐ؂�ւ���@�\�̒ǉ�
-th105_ai�����d�N������Ă���ꍇ�ɁA��������̑���ɐ؂�ւ���@�\�̒ǉ�
+チート対策その２
+0.72でcommand関数が正常に動作していなかった不具合の修正
+iniに設定された側がゲームパッドになっている場合、もう一方に切り替える機能の追加
+th105_aiが多重起動されている場合に、もう一方の操作に切り替える機能の追加
 
 2009/02/16	ver0.72
-���ϐ�my_xspeed�Amy_yspeed�Aenemy_xspeed�Aenemy_yspeed������
-require�֐���ini��StartupAI�ɋ@�\�ǉ�
-�`�[�g�΍�
-��z�V�T������F10�L�[�Ŏ����N������@�\�̒ǉ�
+環境変数my_xspeed、my_yspeed、enemy_xspeed、enemy_yspeedを実装
+require関数とiniのStartupAIに機能追加
+チート対策
+緋想天探索中にF10キーで自動起動する機能の追加
 
 2009/02/15	ver0.71b
-create_thread������ɓ��삵�Ȃ������s��̏C��
-��L�ύX�ɔ����āA�e��֐��̏�������
-create_thread�̓�����e���኱�ύX����܂���
+create_threadが正常に動作しなかった不具合の修正
+上記変更に伴って、各種関数の書き直し
+create_threadの動作内容が若干変更されました
 
 2009/02/04	ver0.71a
-yield����x���Ă΂��ɃX���b�h�I������Ɨ�O��f���Ă����o�O�̏C��(Thx ��O�񍐂��s���Ă��ꂽ�N��)
-x==ex�̂Ƃ�x>ex�Ƃ��Ĉ����Ă��������C��
+yieldを一度も呼ばずにスレッド終了すると例外を吐いていたバグの修正(Thx 例外報告を行ってくれた誰か)
+x==exのときx>exとして扱われていた問題を修正
 
 2009/02/03	ver0.71
-AI���쒆�̓A�C�R�����ς��@�\�̒ǉ�
-�֐�get_special_data������
-���ϐ�my_hitstop��enemy_hitstop������
+AI動作中はアイコンが変わる機能の追加
+関数get_special_dataを実装
+環境変数my_hitstopとenemy_hitstopを実装
 
 2009/02/02	ver0.70a
-�ΐ�J�n�O�Ƀ����[�h����Ɨ�O��f���Ă��������C��
-ai�X�N���v�g��main�֐����I������ƌł܂��Ă����s����C��
+対戦開始前にリロードすると例外を吐いていた問題を修正
+aiスクリプトでmain関数が終了すると固まっていた不具合を修正
 
 2009/02/01	ver0.70
-�[���}�C�N���X���b�h���炫����Ƃ����}�C�N���X���b�h��
-�֐�create_thread������
-��L��̕ύX�ɔ���yield�̋������ύX����܂����B
-�A�C�R�����\�������悤�ɂȂ�܂���(thx�u������z�V �֘A�c�[���X���b�h2�v>>948)
+擬似マイクロスレッドからきちんとしたマイクロスレッドに
+関数create_threadを実装
+上記二つの変更に伴いyieldの挙動が変更されました。
+アイコンが表示されるようになりました(thx「東方緋想天 関連ツールスレッド2」>>948)
 
 2009/01/29	ver0.68
-require�֐��̋������ꕔ�ύX
-�^�C�g���o�[�Ƀo�[�W�����\�L��ǉ��B
-�ΐ�J�n���ƂɎ����Ń����[�h�����@�\�̒ǉ��B
-�L�����N�^�[���Ƃɓǂݍ��ރX�N���v�g��ύX����@�\��ǉ�
+require関数の挙動を一部変更
+タイトルバーにバージョン表記を追加。
+対戦開始ごとに自動でリロードされる機能の追加。
+キャラクターごとに読み込むスクリプトを変更する機能を追加
 
 2009/01/27	ver0.67
-my_card��enemy_card���J�[�h�Q�[�W1�����̂Ƃ����삪�������������̂��C��
-�����_���Z�ŋɏ��̒l���������Ƃ���Ɨ�O��f���Ă����o�O�̏C��
-��z�V�����݂��Ȃ��Ƃ��A�����Ŕ�z�V�𗧂��グ��@�\�̒ǉ��B
+my_cardとenemy_cardがカードゲージ1未満のとき動作がおかしかったのを修正
+小数点演算で極小の値を扱おうとすると例外を吐いていたバグの修正
+緋想天が存在しないとき、自動で緋想天を立ち上げる機能の追加。
 
 2009/01/25	ver0.66
-enemy_dir��my_dir��is_dir_front���ꕔ�󋵉��Ő��퓮�삵�Ă��Ȃ������o�O���C��
-ver0.61�̕��@�ł͕s�\���������̂ōēx�o�O�C��(Thx ��O�񍐂��s���Ă��ꂽ�N��)
-��O���M��Version����ǉ�
+enemy_dirとmy_dirとis_dir_frontが一部状況下で正常動作していなかったバグを修正
+ver0.61の方法では不十分だったので再度バグ修正(Thx 例外報告を行ってくれた誰か)
+例外送信にVersion情報を追加
 
 2009/01/24	ver0.65
-��O���M����Y/N�ő��M���邩�I�ׂ�悤�ɕύX
+例外送信時にY/Nで送信するか選べるように変更
 
 2009/01/24	ver0.64
-key_delay�Adata_delay�Aweather_delay�ɑ�������ꍇ�ɂ�set_xxx_delay�֐��Ɠ������ʂ�����悤�ɕύX
-��O�G���[���ɂ�����x�ڍ׏���\������@�\�̒ǉ�
-��L���e�������ŃT�[�o�[�ɕ񍐂���@�\�̒ǉ�
-�X�N���v�g�G���[��ENTER�҂����������������o�O���C��
-�ꕔ�󋵂Ŕ��Ƀ����[�h���h�����������C��
-AI�ǂݍ��݃^�C�~���O����z�V������ł͂Ȃ��Ath105_ai�N�����������s��̏C��
-�v���t�@�C�����������Ƃ�get_deck_list�֐������s���Ă����s��̏C��
+key_delay、data_delay、weather_delayに代入した場合にもset_xxx_delay関数と同じ効果があるように変更
+例外エラー時にある程度詳細情報を表示する機能の追加
+上記内容を自動でサーバーに報告する機能の追加
+スクリプトエラーのENTER待ちがおかしかったバグを修正
+一部状況で非常にリロードし辛かった問題を修正
+AI読み込みタイミングが緋想天発見後ではなく、th105_ai起動時だった不具合の修正
+プロファイル名が長いときget_deck_list関数が失敗していた不具合の修正
 
 2009/01/21	ver0.63
-lua�G���W����dll����������ɕύX
-�֐�get_key_stat��get_key_map������
-ver0.62�̍X�V��1�t���[���ł��������ꂪ�N�����ۂ�key_reset����Ă����s����C��
-�ꕔ�󋵉��Ń����[�h�o���Ȃ����������C��
-�W�����C�u������os���玞�Ԋ֘A�@�\�̂ݎg����悤�ɕύX
-�֐�get_real_key_stat������
-�������x�̌��セ�̂Q
+luaエンジンをdllから内蔵式に変更
+関数get_key_statとget_key_mapを実装
+ver0.62の更新で1フレームでも同期ずれが起きた際にkey_resetされていた不具合を修正
+一部状況下でリロード出来なかった問題を修正
+標準ライブラリのosから時間関連機能のみ使えるように変更
+関数get_real_key_statを実装
+同期精度の向上その２
 
 2009/01/20	ver0.62
-�������x������
-F11�L�[���������ƂŃX�N���v�g��I�����ă����[�h�ł���@�\�̒ǉ�
-�����F���ł���L�[�̒ǉ�
-get_deck_list�̑Ώێw���p�~�������̃f�b�L��������Ȃ��悤�ɕύX
+同期精度を向上
+F11キーを押すことでスクリプトを選択してリロードできる機能の追加
+自動認識できるキーの追加
+get_deck_listの対象指定を廃止し自分のデッキしか見れないように変更
 
 2009/01/19	ver0.61
-�ɋH�ɗ�O��f���\���̂������o�O���C��
+極稀に例外を吐く可能性のあったバグを修正
 
 2009/01/18	ver0.60
-�֐�get_deck_list������
-data_delay��+1����č�p���Ă����s��̏C��(���̏C���ɂ������X�N���v�g�������\��������܂�)
-F12�L�[���������ƂŃX�N���v�g�������[�h����@�\�̒ǉ�
-�G���[���ɏI���ł͂Ȃ������[�h����悤�ɕύX
+関数get_deck_listを実装
+data_delayが+1されて作用していた不具合の修正(この修正により既存スクリプトがずれる可能性があります)
+F12キーを押すことでスクリプトをリロードする機能の追加
+エラー時に終了ではなくリロードするように変更
 
 2009/01/17	ver0.55
-get_obj_data�g�p���ɋ����I�����鋰�ꂪ�������o�O�̏C��
-get_obj_data�̕Ԃ�l��HP��ǉ�
-�֐�get_opt_xy������
-�ΐ�I����ɃL�[��������ςȂ��ɂȂ�s����C��
-�֐�get_card_cost2������
+get_obj_data使用時に強制終了する恐れがあったバグの修正
+get_obj_dataの返り値にHPを追加
+関数get_opt_xyを実装
+対戦終了後にキーが入りっぱなしになる不具合を修正
+関数get_card_cost2を実装
 
 2009/01/16	ver0.54
-��z�V���A�N�e�B�u�łȂ��Ƃ���AI�̓���𒆒f����@�\�̒ǉ�(thx�u������z�V �֘A�c�[���X���b�h2�v>>652)
-�L�[���͂�20ms���x�x�����鎖���������o�O�̏C��
-is_card_use�ɂ����āA�ꕔ�󋵉��Ŏg�p�ł���̂ɋU���Ԃ��Ă��������C��
-�֐�get_card_cost������
-��������my_card,enemy_card,get_card_id,get_card_cost��-1�ɂȂ�悤�ɕύX(�b��)
+緋想天がアクティブでないときにAIの動作を中断する機能の追加(thx「東方緋想天 関連ツールスレッド2」>>652)
+キー入力が20ms程度遅延する事があったバグの修正
+is_card_useにおいて、一部状況下で使用できるのに偽が返っていた問題を修正
+関数get_card_costを実装
+晴嵐時にmy_card,enemy_card,get_card_id,get_card_costは-1になるように変更(暫定)
 
 2009/01/15	ver0.53
-���ϐ�is_dir_front�Amy_dir�Aenemy_dir������
+環境変数is_dir_front、my_dir、enemy_dirを実装
 
 2009/01/15	ver0.52
-�֐�is_card_use��p�~
-���ϐ�is_card_use������
-���ϐ�weather2��weather_time������
-���ϐ�weather_delay������
-�֐�set_weather_delay������
+関数is_card_useを廃止
+環境変数is_card_useを実装
+環境変数weather2とweather_timeを実装
+環境変数weather_delayを実装
+関数set_weather_delayを実装
 
 2009/01/14	ver0.51
-���ϐ�dis_x,dis_y,dis2�̎���
-�֐�command������
-�֐�is_card_use������
-��z�V�������Ɏ����I�ɔ�z�V���A�N�e�B�u�ɂ���@�\�̒ǉ�
+環境変数dis_x,dis_y,dis2の実装
+関数commandを実装
+関数is_card_useを実装
+緋想天発見時に自動的に緋想天をアクティブにする機能の追加
 
 2009/01/13	ver0.50
-2P���ɂ�AI��K�p�ł���@�\�̒ǉ�
+2P側にもAIを適用できる機能の追加
 
 2009/01/12	ver0.48
-get_card_id�֐��Ƀf�o�b�O�p�̕����o�̓R�[�h�����������܂܂ł������o�O�̏C��
-�^�C�g���o�[�̍X�V�p�x��������悤�ɕύX
+get_card_id関数にデバッグ用の文字出力コードが混入したままであったバグの修正
+タイトルバーの更新頻度を下げるように変更
 
 2009/01/10	ver0.47
-�֐�get_obj_data������
-���ϐ�obj_n��enemy_obj_n�ɖ��̕ύX
-���ϐ�my_obj_n������
-AI��get_obj_data���g���Đl�`�U�N���g���R�[�h��ǉ�
+関数get_obj_dataを実装
+環境変数obj_nをenemy_obj_nに名称変更
+環境変数my_obj_nを実装
+AIにget_obj_dataを使って人形振起を使うコードを追加
 
 2009/01/08	ver0.46
-key_off��UP��DOWN���w�肷���LEFT��RIGHT��ON�ɂȂ邱�Ƃ��������s��̏C��
-my_frame�̎擾���ł��Ă��Ȃ������s��̏C��
-���ϐ�battle_time��ǉ�
-lua�W����debug���C�u�������g�p�\��(ver0.45�̏����Y��)
+key_offでUPかDOWNを指定するとLEFTかRIGHTがONになることがあった不具合の修正
+my_frameの取得ができていなかった不具合の修正
+環境変数battle_timeを追加
+lua標準のdebugライブラリを使用可能に(ver0.45の書き忘れ)
 
 2009/01/07	ver0.45
-�֐�set_key_delay��set_data_delay������
-��L�ɔ����Ċ��ϐ�key_delay��data_delay������
-wait�֐���yield�֐��Ɠ����ɂȂ��Ă����s����C��
-key_on,key_off�Ŏ΂߂����͂ł���悤��(10�`13)�A����ɔ������̃L�[���͊֐��ł��΂ߓ��͂��@�\���܂��B
-���ϐ�d_front,d_back,u_front,u_back������
+関数set_key_delayとset_data_delayを実装
+上記に伴って環境変数key_delayとdata_delayを実装
+wait関数がyield関数と等価になっていた不具合を修正
+key_on,key_offで斜めも入力できるように(10～13)、それに伴い他のキー入力関数でも斜め入力が機能します。
+環境変数d_front,d_back,u_front,u_backを実装
 
 2008/12/31	ver0.44
-1P���Q�[���p�b�h�̏�Ԃőΐ��ʂɓ���Əꍇ�ɂ���O��f���Ă����̂��C��
+1Pがゲームパッドの状態で対戦画面に入ると場合により例外を吐いていたのを修正
 
 2008/12/30	ver0.43
-�ǂݍ���ai�t�@�C�����_�C�A���O����I������悤��
-wait�֐���ǉ�(�w��񐔂���yield�֐������s)
-get_skill_lv�֐���ǉ�(�w�肵���X�L����Lv���擾����)
-get_spell_id�֐���ǉ�(�w�肵���ʒu�̃J�[�hID���擾����)
-require�֐���ǉ�(�ʃt�@�C����ai�Ƃ��Ď��s����)
+読み込むaiファイルをダイアログから選択するように
+wait関数を追加(指定回数だけyield関数を実行)
+get_skill_lv関数を追加(指定したスキルのLvを取得する)
+get_spell_id関数を追加(指定した位置のカードIDを取得する)
+require関数を追加(別ファイルをaiとして実行する)
 
 2008/12/27	ver0.42
-lua����ǂݎ������my_frame/enemy_frame��ǉ�
+luaから読み取れる情報にmy_frame/enemy_frameを追加
 
 2008/12/26	ver0.41
-lua����ǂݎ������my_card/enemy_card/my_air/enemy_air��ǉ�
-��̕ύX�ɔ�����AI�̓��e����C��
+luaから読み取れる情報にmy_card/enemy_card/my_air/enemy_airを追加
+上の変更に伴ってAIの内容を微修正
 
 2008/12/26	ver0.40
-Lua�W�����C�u��������io��debug���g�p�֎~��(thx�u������z�V �֘A�c�[���X���b�h2�v>>447-448)
-��L�ύX�ɔ����ĊO���Ǎ����ɖ߂��B
-�X�N���v�g�̗�����Ȃ񂿂���ă}�C�N���X���b�h�����ɕύX(yield�̎���)
+Lua標準ライブラリからioとdebugを使用禁止に(thx「東方緋想天 関連ツールスレッド2」>>447-448)
+上記変更に伴って外部読込式に戻す。
+スクリプトの流れをなんちゃってマイクロスレッド方式に変更(yieldの実装)
 
 2008/12/25	ver0.31
-Sleep���鎞�Ԃ��Œ�16ms���珈�����Ԉˑ���
-�ΐ풆�ȊO��Sleep���鎞�Ԃ�1000ms��
-AI�ɒ������ȏ�Ȃ�ˌ����O���C�Y���鏈���ǉ�
-������ё����̍U���𓖂Ă���6B����悤��
-�X�y�J�g�p�Ɏ��s������؂�ւ���悤��
-pn2c�̋@�\�������Ă����̂��폜
+Sleepする時間を固定16msから処理時間依存に
+対戦中以外はSleepする時間を1000msに
+AIに中距離以上なら射撃をグレイズする処理追加
+吹き飛び属性の攻撃を当てたら6Bするように
+スペカ使用に失敗したら切り替えるように
+pn2cの機能が生きていたのを削除
 
 2008/12/24	ver0.30
-�I�u�W�F�N�g�̈ʒu��F���ł���悤��(thx�u������z�V �֘A�c�[���X���b�h2�v>>419,425)
-AI���I�u�W�F�N�g���W�����ɂ����K�[�h�A�댯���Ȃ���ΐڋ߂��镪���ǉ�
-Lua�̕W�����C�u�������g�����ƂŊ댯�ȏ��������s�\�Ȃ��߁A�O���ǂݍ��݂���U�֎~��
+オブジェクトの位置を認識できるように(thx「東方緋想天 関連ツールスレッド2」>>419,425)
+AIをオブジェクト座標を元にしたガード、危険がなければ接近する分岐を追加
+Luaの標準ライブラリを使うことで危険な処理が実行可能なため、外部読み込みを一旦禁止に
 
 2008/12/23	ver0.21
-�L�[�R���t�B�O���z�V����ǂݎ��悤��
-AI�ɓV��A��́A�X�y�J�����A�����e���[�V���������ǉ�
+キーコンフィグを緋想天から読み取るように
+AIに天候、霊力、スペカ枚数、相手被弾モーション分岐を追加
 
 2008/12/22	ver0.20
-AI�𒼂ɃR�[�f�B���O�����������Lua�X�N���v�g�����ɕύX
-�L�[�̓��͕������C��(fix)
+AIを直にコーディングする方式からLuaスクリプト方式に変更
+キーの入力方式を修正(fix)
 
 2008/12/21	ver0.10
-�Ƃ肠��������
+とりあえず試作
 
