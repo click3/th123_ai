@@ -9,7 +9,3 @@ unsigned int GetTH123AIVersion(void) {
 const char *GetTH123AIVersionString(void) {
 	return OPEN_VERSION;
 }
-
-unsigned int GetTH123AIAPIFileSize(void) {
-	return API_SIZE;
-}

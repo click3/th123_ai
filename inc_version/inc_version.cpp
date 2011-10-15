@@ -1,47 +1,72 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-int main(){
-	FILE *fp;
-	char str[256],ver[256];
-	int a,i,size;
-	const char *template_text = 
-"#define VERSION %d\n"
-"#define OPEN_VERSION \"%s\"\n"
-"#define API_SIZE %d\n";
+#include <vector>
+#include <string>
 
-	fp = fopen("history.txt","r");
-	if(fp==NULL)return 1;
+#include <Windows.h>
 
-	fgets(str,256,fp);
-	fclose(fp);
-	if(str[strlen(str)-1] == '\n'){
-		str[strlen(str)-1] = '\0';
+#include <boost/version.hpp>
+#include <boost/static_assert.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/program_options.hpp>
+
+#include <org/click3/utility.h>
+
+#include "../common/common.h"
+
+unsigned int GetInnerVersion(const char *path) {
+	const boost::shared_ptr<FILE> fp = org::click3::Utility::MyFOpen(path, "r");
+	BOOST_ASSERT(fp);
+	char line[256];
+	const char * const result = ::fgets(line, sizeof(line), fp.get());
+	BOOST_ASSERT(result != NULL);
+	BOOST_ASSERT(STRLEN(line) >= 17);
+	BOOST_ASSERT(::isdigit(line[16]));
+	return ::atoi(&line[16]);
+}
+
+std::string history_path;
+std::string out_path;
+
+bool ParseArgs(unsigned int argc, const char * const *argv) {
+	boost::program_options::options_description opt("オプション");
+	opt.add_options()
+		("help,h",										"ヘルプを表示")
+		("version,v",	boost::program_options::value<std::string>(&history_path),	"versionを取得するhistory.txtのパス")
+		("out,o",	boost::program_options::value<std::string>(&out_path),		"出力先");
+	boost::program_options::variables_map vm;
+	boost::program_options::store(boost::program_options::parse_command_line(argc, argv, opt), vm);
+	boost::program_options::notify(vm);
+	if(vm.count("help") > 0 || vm.count("version") == 0 || vm.count("out") == 0) {
+		std::cout << opt << std::endl;
+		return false;
 	}
-	i = 0;
-	while(str[i] != '\t' && str[i] != '\0')i++;
-	strcpy(ver,&str[i+1]);
+	return true;
+}
 
-	fp = fopen("version_impl.h","r");
-	if(fp==NULL)return 1;
 
-	fgets(str,256,fp);
-	a = atoi(&str[16]);
-	fclose(fp);
-
-	fp = fopen("api.bin","rb");
-	if(fp==NULL)return 1;
-	fseek(fp,0,SEEK_END);
-	size = ftell(fp);
-	fclose(fp);
-
-	fp = fopen("version_impl.h","w");
-	if(fp==NULL) {
+int main(unsigned int argc, const char * const *argv) {
+	if(!::ParseArgs(argc, argv)) {
 		return 1;
 	}
-	fprintf(fp,template_text, a+1, ver, size);
-	fclose(fp);
+
+	std::string version;
+	if(!common::GetVersion(version, history_path.c_str())) {
+		return 1;
+	}
+	const unsigned int inner_version = GetInnerVersion(out_path.c_str());
+
+	const boost::shared_ptr<FILE> fp = org::click3::Utility::MyFOpen(out_path.c_str(), "w");
+	if(!fp) {
+		return 1;
+	}
+	const char * const template_text = 
+"#define VERSION %d\n"
+"#define OPEN_VERSION \"%s\"\n";
+	::fprintf(fp.get(), template_text, inner_version + 1, version.c_str());
 	return 0;
 }
 
