@@ -5,13 +5,22 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "th123_ai", "th123_ai\th123_
 	ProjectSection(ProjectDependencies) = postProject
 		{3ADAEB1F-C876-4F47-B93A-1464C74195F3} = {3ADAEB1F-C876-4F47-B93A-1464C74195F3}
 		{93FBC29F-459E-46DF-BA80-7DC16413AD08} = {93FBC29F-459E-46DF-BA80-7DC16413AD08}
+		{9A8FC7F9-F713-4BA4-A71D-49824E4DA9DD} = {9A8FC7F9-F713-4BA4-A71D-49824E4DA9DD}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lua_engine", "lua_engine\lua_engine.vcxproj", "{3ADAEB1F-C876-4F47-B93A-1464C74195F3}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "deploy", "deploy\deploy.vcxproj", "{35BE9CE8-1FAD-447F-9C05-46455C360DD9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9A8FC7F9-F713-4BA4-A71D-49824E4DA9DD} = {9A8FC7F9-F713-4BA4-A71D-49824E4DA9DD}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "inc_version", "inc_version\inc_version.vcxproj", "{93FBC29F-459E-46DF-BA80-7DC16413AD08}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9A8FC7F9-F713-4BA4-A71D-49824E4DA9DD} = {9A8FC7F9-F713-4BA4-A71D-49824E4DA9DD}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "common", "common\common.vcxproj", "{9A8FC7F9-F713-4BA4-A71D-49824E4DA9DD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +44,10 @@ Global
 		{93FBC29F-459E-46DF-BA80-7DC16413AD08}.Debug|Win32.Build.0 = Debug|Win32
 		{93FBC29F-459E-46DF-BA80-7DC16413AD08}.Release|Win32.ActiveCfg = Release|Win32
 		{93FBC29F-459E-46DF-BA80-7DC16413AD08}.Release|Win32.Build.0 = Release|Win32
+		{9A8FC7F9-F713-4BA4-A71D-49824E4DA9DD}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9A8FC7F9-F713-4BA4-A71D-49824E4DA9DD}.Debug|Win32.Build.0 = Debug|Win32
+		{9A8FC7F9-F713-4BA4-A71D-49824E4DA9DD}.Release|Win32.ActiveCfg = Release|Win32
+		{9A8FC7F9-F713-4BA4-A71D-49824E4DA9DD}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

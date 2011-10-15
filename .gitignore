@@ -28,3 +28,6 @@
 /inc_version/inc_version.vcxproj.user
 /inc_version/Debug
 /inc_version/Release
+/common/common.vcxproj.user
+/common/Release
+/common/Debug
