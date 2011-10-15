@@ -11,8 +11,11 @@
 #include <boost/assert.hpp>
 #include <boost/type_traits/remove_pointer.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/program_options.hpp>
 
 #include <org/click3/utility.h>
+
+#include "../common/common.h"
 
 const char * const list[] = {
 	"th123_ai.exe",	"document.txt",	"th123_ai.ini",
@@ -110,28 +113,31 @@ bool GetRegString(std::string &out, HKEY key, const wchar_t *sub_key, const wcha
 	return true;
 }
 
-bool GetVersion(std::string &out) {
-	const boost::shared_ptr<FILE> fp = org::click3::Utility::MyFOpen(L"history.txt", L"r");
-	if(!fp) {
+std::string history_path;
+bool is_appli;
+bool is_source;
+
+bool ParseArgs(unsigned int argc, const char * const *argv) {
+	boost::program_options::options_description opt("オプション");
+	opt.add_options()
+		("help,h",											"ヘルプを表示")
+		("version,v",	boost::program_options::value<std::string>(&history_path),		"versionを取得するhistory.txtのパス")
+		("appli,a",	boost::program_options::value<bool>(&is_appli)->default_value(true),	"アプリパッケージを作成")
+		("source,s",	boost::program_options::value<bool>(&is_source)->default_value(true),	"ソースパッケージを作成");
+	boost::program_options::variables_map vm;
+	boost::program_options::store(boost::program_options::parse_command_line(argc, argv, opt), vm);
+	boost::program_options::notify(vm);
+	if(vm.count("help") > 0 || vm.count("version") == 0) {
+		std::cout << opt << std::endl;
 		return false;
 	}
-	char line[256];
-	if(NULL == ::fgets(line, sizeof(line), fp.get())) {
-		return false;
-	}
-	const unsigned int len = STRLEN(line);
-	for(unsigned int i = 0; i < len; i++) {
-		if(line[i] == '\t') {
-			const unsigned int start = i + 1;
-			const unsigned int copy_len = len - start + (line[len-1] == '\n' ? -1 : 0);
-			out.assign(&line[start], copy_len);
-			return true;
-		}
-	}
-	return false;
+	return true;
 }
 
-int main(){
+int main(unsigned int argc, const char * const *argv) {
+	if(!::ParseArgs(argc, argv)) {
+		return 1;
+	}
 	char str[256];
 	char s[2048],temp[256],fn[256];
 	int i;
@@ -139,7 +145,7 @@ int main(){
 	org::click3::Utility::SetAppDir();
 
 	std::string version;
-	if(!GetVersion(version)) {
+	if(!common::GetVersion(version, history_path.c_str())) {
 		return 1;
 	}
 
