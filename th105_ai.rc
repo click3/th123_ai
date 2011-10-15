@@ -1,4 +1,0 @@
-#include "resource.h"
-DOLL_ICON ICON DISCARDABLE "th105_ai.ico"
-GEAR_ICON ICON DISCARDABLE "th105_ai2.ico"
-LUA_SCRIPT_RC RT_RCDATA "api.bin"

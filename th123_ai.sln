@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C++ Express 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "th123_ai", "th123_ai\th123_ai.vcxproj", "{B6996FDA-0967-41CC-9080-A57F45F81971}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3ADAEB1F-C876-4F47-B93A-1464C74195F3} = {3ADAEB1F-C876-4F47-B93A-1464C74195F3}
+		{93FBC29F-459E-46DF-BA80-7DC16413AD08} = {93FBC29F-459E-46DF-BA80-7DC16413AD08}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lua_engine", "lua_engine\lua_engine.vcxproj", "{3ADAEB1F-C876-4F47-B93A-1464C74195F3}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "deploy", "deploy\deploy.vcxproj", "{35BE9CE8-1FAD-447F-9C05-46455C360DD9}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "inc_version", "inc_version\inc_version.vcxproj", "{93FBC29F-459E-46DF-BA80-7DC16413AD08}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B6996FDA-0967-41CC-9080-A57F45F81971}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B6996FDA-0967-41CC-9080-A57F45F81971}.Debug|Win32.Build.0 = Debug|Win32
+		{B6996FDA-0967-41CC-9080-A57F45F81971}.Release|Win32.ActiveCfg = Release|Win32
+		{B6996FDA-0967-41CC-9080-A57F45F81971}.Release|Win32.Build.0 = Release|Win32
+		{3ADAEB1F-C876-4F47-B93A-1464C74195F3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3ADAEB1F-C876-4F47-B93A-1464C74195F3}.Debug|Win32.Build.0 = Debug|Win32
+		{3ADAEB1F-C876-4F47-B93A-1464C74195F3}.Release|Win32.ActiveCfg = Release|Win32
+		{3ADAEB1F-C876-4F47-B93A-1464C74195F3}.Release|Win32.Build.0 = Release|Win32
+		{35BE9CE8-1FAD-447F-9C05-46455C360DD9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{35BE9CE8-1FAD-447F-9C05-46455C360DD9}.Debug|Win32.Build.0 = Debug|Win32
+		{35BE9CE8-1FAD-447F-9C05-46455C360DD9}.Release|Win32.ActiveCfg = Release|Win32
+		{35BE9CE8-1FAD-447F-9C05-46455C360DD9}.Release|Win32.Build.0 = Release|Win32
+		{93FBC29F-459E-46DF-BA80-7DC16413AD08}.Debug|Win32.ActiveCfg = Debug|Win32
+		{93FBC29F-459E-46DF-BA80-7DC16413AD08}.Debug|Win32.Build.0 = Debug|Win32
+		{93FBC29F-459E-46DF-BA80-7DC16413AD08}.Release|Win32.ActiveCfg = Release|Win32
+		{93FBC29F-459E-46DF-BA80-7DC16413AD08}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

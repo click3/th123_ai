@@ -1,3 +1,0 @@
-#define DOLL_ICON	101
-#define GEAR_ICON	102
-#define LUA_SCRIPT_RC	103
