@@ -110,5 +110,14 @@
     <CustomBuild Include="api.ai">
       <Filter>リソース ファイル</Filter>
     </CustomBuild>
+    <CustomBuild Include="th123_ai.ini">
+      <Filter>リソース ファイル</Filter>
+    </CustomBuild>
+    <CustomBuild Include="SWRSAddr.ini">
+      <Filter>リソース ファイル</Filter>
+    </CustomBuild>
+    <CustomBuild Include="SwrAddr.ini">
+      <Filter>リソース ファイル</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>
