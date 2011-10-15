@@ -228,7 +228,7 @@ void change_ini(char *fn,char *name,char *param){
 	SetAppDir();
 	rfp = fopen(fn,"r");
 	if((rfp==NULL) || (wfp=fopen(temp_file,"w"))==NULL){
-		SetCurrentDirectory(dir);
+		SetCurrentDirectoryA(dir);
 		return;
 	}
 	while(fgets(temp,256,rfp)!=NULL){
@@ -246,7 +246,7 @@ void change_ini(char *fn,char *name,char *param){
 	fclose(wfp);
 	remove(fn);
 	rename(temp_file,fn);
-	SetCurrentDirectory(dir);
+	SetCurrentDirectoryA(dir);
 }
 
 char *GetTouhouPath(const char *regkey, const char *name, const char *exe_name,char *ini_name){

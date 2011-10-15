@@ -6,7 +6,7 @@ using namespace std;
 void GetAppDir(char *str){
 	int i;
 
-	GetModuleFileName(NULL,str,256);
+	GetModuleFileNameA(NULL,str,256);
 	i = strlen(str)-1;
 	while(str[i] != '\\' && str[i] != '/' && i > 0)i--;
 	str[i] = '\0';
@@ -57,11 +57,11 @@ void SetAppDir(void){
 	int i;
 	char AppDir[256];
 
-	GetModuleFileName(NULL,AppDir,256);
+	GetModuleFileNameA(NULL,AppDir,256);
 	i = strlen(AppDir)-1;
 	while(AppDir[i] != '\\' && AppDir[i] != '/' && i > 0)i--;
 	AppDir[i] = '\0';
-	SetCurrentDirectory(AppDir);
+	SetCurrentDirectoryA(AppDir);
 }
 
 void set_clipboard(char *s){

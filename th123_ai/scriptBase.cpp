@@ -66,13 +66,13 @@
 			}
 			if(s >= dir){
 				s[0] = '\0';
-				SetCurrentDirectory(dir);
+				SetCurrentDirectoryA(dir);
 			}
 			strncpy(fn,&s[1],sizeof(fn));
 		}
 		FILE *fp = fopen(fn, "rb");
 		if(fp == NULL){
-			SetCurrentDirectory(prevDir);
+			SetCurrentDirectoryA(prevDir);
 			return false;
 		}
 		bool ret = loadFile(fp, fullPath);
@@ -80,7 +80,7 @@
 		if(ret){
 			strncpy(scriptName, fullPath, sizeof(scriptName));
 		}
-		SetCurrentDirectory(prevDir);
+		SetCurrentDirectoryA(prevDir);
 		return ret;
 	}
 	bool scriptEngine::loadFile(FILE *fp, const char *name){

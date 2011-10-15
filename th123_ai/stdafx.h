@@ -15,12 +15,18 @@
 #include <string>
 #include <vector>
 
-#include "boost/assert.hpp"
-#include "boost/shared_ptr.hpp"
-#include "boost/lexical_cast.hpp"
-#include "boost/optional.hpp"
-#include "boost/tuple/tuple.hpp"
-#include "boost/utility.hpp"
+#include <boost/version.hpp>
+#include <boost/static_assert.hpp>
+#include <boost/assert.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/lexical_cast.hpp>
+#include <boost/optional.hpp>
+#include <boost/tuple/tuple.hpp>
+#include <boost/utility.hpp>
+
+#include <org/click3/utility.h>
+
+#include "../common/common.h"
 
 #include "lua.h"
 #include "lualib.h"
