@@ -59,6 +59,5 @@ enum{
 	KEY_DOWN,KEY_UP
 };
 
-extern struct code_array code_map[];
 extern int key_delay;
 extern int key_frame;
