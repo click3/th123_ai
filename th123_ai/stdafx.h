@@ -43,6 +43,7 @@
 
 #include "network.h"
 #include "lib.h"
+#include "utility.h"
 #include "address.h"
 #include "scriptBase.h"
 #include "scriptLua.h"
