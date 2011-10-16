@@ -34,7 +34,6 @@ int GetCardCost(int player,int n);
 int GetCardCost2(int player,int n);
 BOX *get_hitarea(int player,int n);
 BOX *get_attackarea(int player,int n);
-void SetAppDir(void);
 short *GetDeckList(int player);
 int GetSpecialData(int player,int n);
 int get_correction(int player,int flag);

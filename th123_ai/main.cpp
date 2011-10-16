@@ -225,7 +225,8 @@ void change_ini(char *fn,char *name,char *param){
 	char dir[256];
 
 	GetCurrentDirectory(256,dir);
-	SetAppDir();
+	const bool set_dir_result = org::click3::Utility::SetAppDir();
+	BOOST_ASSERT(set_dir_result);
 	rfp = fopen(fn,"r");
 	if((rfp==NULL) || (wfp=fopen(temp_file,"w"))==NULL){
 		SetCurrentDirectoryA(dir);
@@ -520,7 +521,8 @@ void change_player(void){
 }
 
 void init(void){
-	SetAppDir();
+	const bool set_dir_result = org::click3::Utility::SetAppDir();
+	BOOST_ASSERT(set_dir_result);
 	create_ini();
 	g_ini.Add("default","SWR_WINDOW_CLASS",		"th105_106");
 	g_ini.Add("default","SWR_WINDOW_TEXT",		"“Œ•û”ê‘z“V Ver1.06");

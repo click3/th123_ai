@@ -45,17 +45,6 @@ BOOL ReadProcessMemoryFloat(HANDLE hProcess,LPCVOID lpBaseAddress,LPVOID lpBuffe
 	}
 }
 
-void SetAppDir(void){
-	int i;
-	char AppDir[256];
-
-	GetModuleFileNameA(NULL,AppDir,256);
-	i = strlen(AppDir)-1;
-	while(AppDir[i] != '\\' && AppDir[i] != '/' && i > 0)i--;
-	AppDir[i] = '\0';
-	SetCurrentDirectoryA(AppDir);
-}
-
 void set_clipboard(char *s){
 	HGLOBAL mem;
 	char *str;

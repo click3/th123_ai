@@ -1,19 +1,16 @@
 
 #pragma once
 
-int atoi2(const char *str,int def);
-float atof2(const char *str,float def);
+int atoi2(const char *str, int def);
+float atof2(const char *str, float def);
 int check_float(float f);
-BOOL ReadProcessMemoryFloat(HANDLE hProcess,LPCVOID lpBaseAddress,LPVOID lpBuffer,DWORD nSize,LPDWORD lpNumberOfBytesRead);
-void SetAppDir(void);
+BOOL ReadProcessMemoryFloat(HANDLE hProcess, LPCVOID lpBaseAddress, LPVOID lpBuffer, DWORD nSize, LPDWORD lpNumberOfBytesRead);
 void set_clipboard(char *s);
 void to_lowstring(char *s);
 void SetConsoleTitle2(char *str);
 void change_icon(int id);
 #define strmove(s1,s2)	memmove(s1,s2,strlen(s2)+1)
 # define snprintf _snprintf
-
-
 
 
 class ini
