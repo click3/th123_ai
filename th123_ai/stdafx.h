@@ -39,7 +39,7 @@
 #include "version.h"
 #include "consts.h"
 #include "dik_list.h"
-#include "keyboard.h"
+#include "keybd_event.h"
 
 #include "network.h"
 #include "lib.h"
