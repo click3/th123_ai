@@ -11,7 +11,7 @@ struct KeyAction{
 };
 
 int key_frame = 0;
-KeyAction *key_list = NULL;
+KeyAction *action_list = NULL;
 
 void keybd_event3(int code, DWORD dwFlags) {
 	if((dwFlags&KEYEVENTF_KEYUP) == 0)code += 768;
@@ -21,9 +21,9 @@ void keybd_event3(int code, DWORD dwFlags) {
 void keybd_event2(int code, DWORD dwFlags) {
 	static KeyAction *a;
 
-	if(key_list == NULL){
-		key_list = static_cast<KeyAction*>(malloc(sizeof(KeyAction)));
-		a = key_list;
+	if(action_list == NULL){
+		action_list = static_cast<KeyAction*>(malloc(sizeof(KeyAction)));
+		a = action_list;
 	} else {
 		a->next = static_cast<KeyAction*>(malloc(sizeof(KeyAction)));
 		a = a->next;
@@ -37,11 +37,11 @@ void keybd_event2(int code, DWORD dwFlags) {
 void kev_call(void) {
 	KeyAction *a,*b,*c;
 
-	a = key_list;
+	a = action_list;
 	if(a == NULL){
 		return;
 	}
-	key_list = NULL;
+	action_list = NULL;
 	c = NULL;
 	while(a != NULL){
 		if(a->frame<=key_frame){
@@ -50,7 +50,7 @@ void kev_call(void) {
 			a = a->next;
 			free(b);
 		} else if(c==NULL){
-			key_list = a;
+			action_list = a;
 			c = a;
 			a = a->next;
 			c->next = NULL;
@@ -66,7 +66,7 @@ void kev_call(void) {
 void kev_clear(void) {
 	KeyAction *a,*b;
 
-	a = key_list;
+	a = action_list;
 	if(a == NULL){
 		return;
 	}
@@ -76,7 +76,7 @@ void kev_clear(void) {
 		a = a->next;
 		free(b);
 	}
-	key_list = a;
+	action_list = a;
 }
 
 BOOL list[MAX] = {FALSE};
