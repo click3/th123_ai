@@ -1,7 +1,6 @@
 
 #pragma once
 
-
 //	キーコード名	仮想キーコード
 #define	VK_0	48
 #define	VK_1	49
@@ -44,20 +43,6 @@ void keybd_event3(int code, DWORD dwFlags);
 void keybd_event2(int code, DWORD dwFlags);
 void kev_call(void);
 void kev_clear(void);
-void regist_joyproc(void (*)(int,int));
-void JoyLoop(void);
-enum{
-	RIGHT,LEFT,UP,DOWN,
-	BOTTON1,BOTTON2,BOTTON3,BOTTON4,BOTTON5,BOTTON6,BOTTON7,BOTTON8,BOTTON9,BOTTON10,
-	BOTTON11,BOTTON12,BOTTON13,BOTTON14,BOTTON15,BOTTON16,BOTTON17,BOTTON18,BOTTON19,BOTTON20,
-	BOTTON21,BOTTON22,BOTTON23,BOTTON24,BOTTON25,BOTTON26,BOTTON27,BOTTON28,BOTTON29,BOTTON30,
-	BOTTON31,BOTTON32,
-	MAX
-};
-
-enum{
-	KEY_DOWN,KEY_UP
-};
 
 extern int key_delay;
 extern int key_frame;
