@@ -3,6 +3,20 @@
 
 using namespace std;
 
+namespace {
+
+//IEEE754形式小数点演算だと仮定して、不正なfloatではないかチェックする
+bool CheckFloat(float f){
+	const unsigned int * const to_int = reinterpret_cast<const unsigned int *>(&f);
+	const unsigned int exponent = (*to_int >> 23)&0xFF;
+	if(exponent > 254 || (*to_int != 0 && exponent < 108)) {
+		return false;
+	}
+	return true;
+}
+
+} // anonymous
+
 //デフォルト指定可能、16進数なども可能版atoi
 int atoi2(const char *str,int def){
 	int i;
@@ -15,7 +29,7 @@ int atoi2(const char *str,int def){
 	return i;
 }
 //デフォルト指定可能版atof
-float atof2(const char *str,float def){
+float atof2(const char *str, float def) {
 	float i;
 
 	if(str == NULL || !isdigit(str[0]))return def;
@@ -24,28 +38,20 @@ float atof2(const char *str,float def){
 
 	return i;
 }
-//IEEE754形式小数点演算だと仮定して、不正なfloatではないかチェックする
-//コンパイラおよびCPUに強く依存する。
-int check_float(float f){
-	int a;
-	a = ((*(int *)&f)>>23)&0xFF;
-	if(a > 254 || (*(int *)&f!=0 && a<108))return FALSE;
-	return TRUE;
-}
-BOOL ReadProcessMemoryFloat(HANDLE hProcess,LPCVOID lpBaseAddress,LPVOID lpBuffer,DWORD nSize,LPDWORD lpNumberOfBytesRead){
-	BOOL ret;
+bool ReadProcessMemoryFloat(HANDLE hProcess, LPCVOID lpBaseAddress, float *lpBuffer, DWORD nSize, LPDWORD lpNumberOfBytesRead) {
 	float f;
-	if(nSize != 4)return FALSE;
-	ret = ReadProcessMemory(hProcess,lpBaseAddress,&f,4,lpNumberOfBytesRead);
-	if(check_float(f)){
-		*(float *)lpBuffer = f;
-		return ret;
-	} else {
-		return FALSE;
+	if(nSize != 4) {
+		return false;
 	}
+	const BOOL result = ReadProcessMemory(hProcess, lpBaseAddress, &f, 4, lpNumberOfBytesRead);
+	if(result == FALSE || !CheckFloat(f)) {
+		return false;
+	}
+	*lpBuffer = f;
+	return true;
 }
 
-void set_clipboard(char *s){
+void set_clipboard(char *s) {
 	HGLOBAL mem;
 	char *str;
 

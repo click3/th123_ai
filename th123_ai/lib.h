@@ -3,8 +3,7 @@
 
 int atoi2(const char *str, int def);
 float atof2(const char *str, float def);
-int check_float(float f);
-BOOL ReadProcessMemoryFloat(HANDLE hProcess, LPCVOID lpBaseAddress, LPVOID lpBuffer, DWORD nSize, LPDWORD lpNumberOfBytesRead);
+bool ReadProcessMemoryFloat(HANDLE hProcess, LPCVOID lpBaseAddress, float *lpBuffer, DWORD nSize, LPDWORD lpNumberOfBytesRead);
 void set_clipboard(char *s);
 void to_lowstring(char *s);
 void SetConsoleTitle2(char *str);
