@@ -14,6 +14,7 @@
 
 #include <string>
 #include <vector>
+#include <list>
 
 #include <boost/version.hpp>
 #include <boost/static_assert.hpp>
@@ -24,6 +25,7 @@
 #include <boost/tuple/tuple.hpp>
 #include <boost/utility.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/foreach.hpp>
 
 #include <org/click3/utility.h>
 
