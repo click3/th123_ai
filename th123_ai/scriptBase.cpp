@@ -33,8 +33,8 @@ void scriptEngine::convertFilePath(char *path) const {
 
 
 //public
-bool scriptEngine::loadFile(const char *fileName){
-	if(fileName==NULL || fileName[0]=='\0' || strlen(fileName)>255){
+bool scriptEngine::loadFile(const char *fileName) {
+	if(fileName==NULL || fileName[0]=='\0' || strlen(fileName)>255) {
 		return false;
 	}
 	char fullPath[256];
@@ -47,30 +47,30 @@ bool scriptEngine::loadFile(const char *fileName){
 		char dir[256],*s;
 		strncpy(dir, fullPath, sizeof(dir));
 		s = &dir[strlen(dir)];
-		while(s>=dir && s[0]!='\\' && s[0]!='/'){
+		while(s>=dir && s[0]!='\\' && s[0]!='/') {
 			s--;
 		}
-		if(s >= dir){
+		if(s >= dir) {
 			s[0] = '\0';
 			SetCurrentDirectoryA(dir);
 		}
 		strncpy(fn,&s[1],sizeof(fn));
 	}
 	FILE *fp = fopen(fn, "rb");
-	if(fp == NULL){
+	if(fp == NULL) {
 		SetCurrentDirectoryA(prevDir);
 		return false;
 	}
 	bool ret = loadFile(fp, fullPath);
 	fclose(fp);
-	if(ret){
+	if(ret) {
 		strncpy(scriptName, fullPath, sizeof(scriptName));
 	}
 	SetCurrentDirectoryA(prevDir);
 	return ret;
 }
-bool scriptEngine::loadFile(FILE *fp, const char *name){
-	if(fp == NULL){
+bool scriptEngine::loadFile(FILE *fp, const char *name) {
+	if(fp == NULL) {
 		return false;
 	}
 	int start = ftell(fp);
@@ -78,7 +78,7 @@ bool scriptEngine::loadFile(FILE *fp, const char *name){
 	int size = ftell(fp) - start;
 	fseek(fp,start,SEEK_SET);
 	char *data = (char *)malloc(size);
-	if(data == NULL){
+	if(data == NULL) {
 		return false;
 	}
 	fread(data,1,size,fp);
@@ -87,10 +87,10 @@ bool scriptEngine::loadFile(FILE *fp, const char *name){
 	free(data);
 	return ret;
 }
-bool scriptEngine::loadFile(FILE *fp){
+bool scriptEngine::loadFile(FILE *fp) {
 	return loadFile(fp, SCRIPT_NAME_EMPTY);
 }
-bool scriptEngine::loadDialog(){
+bool scriptEngine::loadDialog() {
 	OPENFILENAME ofn;
 	char fileName[256] = "";
 	std::string dir_str;
@@ -107,12 +107,12 @@ bool scriptEngine::loadDialog(){
 	ofn.lpstrTitle = "ファイルを開く";
 	ofn.lpstrDefExt = "ai";
 
-	if(!GetOpenFileName(&ofn)){
+	if(!GetOpenFileName(&ofn)) {
 		return false;
 	}
 	return loadFile(fileName);
 }
-bool scriptEngine::loadResource(int id){
+bool scriptEngine::loadResource(int id) {
 	char *buffer;
 	int size;
 	{
@@ -122,33 +122,33 @@ bool scriptEngine::loadResource(int id){
 		HRSRC hr = FindResource(hm, name, "RT_RCDATA");
 		size = SizeofResource(hm, hr);
 		buffer = static_cast<char*>(LockResource(LoadResource(hm, hr)));
-		if(hm==NULL || hr==NULL || size==0 || buffer==NULL){
+		if(hm==NULL || hr==NULL || size==0 || buffer==NULL) {
 			return false;
 		}
 	}
 	return loadBuffer(buffer, size, "Resource");
 }
-bool scriptEngine::loadBuffer(const char *buffer, int size, const char *name){
-	if(buffer == NULL){
+bool scriptEngine::loadBuffer(const char *buffer, int size, const char *name) {
+	if(buffer == NULL) {
 		return false;
 	}
-	if(!loadable){
+	if(!loadable) {
 		yield();
 	}
 	bool ret = execBuffer(buffer, size, name);
 	return ret;
 }
-bool scriptEngine::loadBuffer(const char *buffer, int size){
+bool scriptEngine::loadBuffer(const char *buffer, int size) {
 	return loadBuffer(buffer, size, SCRIPT_NAME_EMPTY);
 }
-bool scriptEngine::loadBuffer(const char *buffer, const char *name){
+bool scriptEngine::loadBuffer(const char *buffer, const char *name) {
 	return loadBuffer(buffer, strlen(buffer),name);
 }
-bool scriptEngine::loadBuffer(const char *buffer){
+bool scriptEngine::loadBuffer(const char *buffer) {
 	return loadBuffer(buffer, strlen(buffer));
 }
-bool scriptEngine::reload(){
-	if(scriptName[0] == '\0'){
+bool scriptEngine::reload() {
+	if(scriptName[0] == '\0') {
 		return false;
 	}
 	char fileName[256];
@@ -156,22 +156,22 @@ bool scriptEngine::reload(){
 	end();
 	init();
 	bool ret = loadFile(fileName);
-	if(ret){
+	if(ret) {
 		start();
 	}
 	return ret;
 }
 
-void scriptEngine::init(){
+void scriptEngine::init() {
 	th105_active();
-	if(! initScript()){
+	if(! initScript()) {
 		printf("ERROR:scriptEngine init error(initScript return is false)\n");
 		getchar();
 		exit(0);
 	}
 }
-void scriptEngine::start(){
-	if(! loadable){
+void scriptEngine::start() {
+	if(! loadable) {
 		printf("ERROR:scriptEngine start error(non load script)\n");
 		getchar();
 		exit(0);
@@ -179,8 +179,8 @@ void scriptEngine::start(){
 	th105_active();
 	startScript();
 }
-void scriptEngine::end(){
-	if(! loadable){
+void scriptEngine::end() {
+	if(! loadable) {
 		return;
 	}
 	endScript();

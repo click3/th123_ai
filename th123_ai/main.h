@@ -102,10 +102,10 @@ public:
 	unsigned int fflags;
 	unsigned int aflags;
 
-	obj_base(){
+	obj_base() {
 		initialize();
 	}
-	obj_base(HANDLE h){
+	obj_base(HANDLE h) {
 		initialize();
 		SetProcessHandle(h);
 	}
@@ -113,15 +113,15 @@ public:
 	virtual void ReloadBaseAddr(int) = 0;
 	virtual void ReloadVal(int) = 0;
 
-	HANDLE SetProcessHandle(HANDLE handle){
+	HANDLE SetProcessHandle(HANDLE handle) {
 		HANDLE temp;
 		temp = ph;
 		ph = handle;
 		return ph;
 	}
-	void Reload(int param){
+	void Reload(int param) {
 		ReloadBaseAddr(param);
-		if(base_addr == 0){
+		if(base_addr == 0) {
 			return;
 		}
 		int temp;
@@ -156,7 +156,7 @@ public:
 			ReadProcessMemory(ph, (void *)(p+ADDR_HITAREAOFS), &p, 4, NULL);
 			int i = 0;
 			BOX *a = hitarea;
-			while(i < 10){
+			while(i < 10) {
 				if(i < hitarea_n) {
 					ReadProcessMemory(ph, (void *)(p + i*16), a, sizeof(*a), NULL);
 					a->left = (int)x+a->left;
@@ -174,12 +174,12 @@ public:
 		} else {
 			int i = 0;
 			BOX *a = hitarea;
-			while(i < 16){
+			while(i < 16) {
 				if(i < hitarea_n) {
 					DWORD flag;
 					ReadProcessMemory(ph, (void *)(base_addr + ADDR_HITAREAFLAGOFS + i*sizeof(flag)), &flag,sizeof(flag),NULL);
 					ReadProcessMemory(ph, (void *)(base_addr + ADDR_HITAREA2OFS + i*sizeof(*a)), a, sizeof(*a),NULL);
-					if(flag!=0){//相対座標
+					if(flag!=0) {//相対座標
 						a->left = (int)x+a->left;
 						a->top = -(int)y+a->top;
 						a->right = (int)x+a->right;
@@ -198,10 +198,10 @@ public:
 			int p;
 			int i = 0;
 			BOX *a = attackarea;
-			while(i < 16){
-				if(i < attackarea_n){
+			while(i < 16) {
+				if(i < attackarea_n) {
 					ReadProcessMemory(ph,(void *)(base_addr+ADDR_ATTACKAREAOFS + i*4),&p,4,NULL);
-					if(p == 0){
+					if(p == 0) {
 						//当たり判定矩形を取得して表示する(地面最左下端からの相対)
 						ReadProcessMemory(ph,(void *)(base_addr+ADDR_ATTACKAREA2OFS + i*sizeof(*a)),a,sizeof(*a),NULL);
 					} else {
@@ -232,16 +232,16 @@ public:
 		FFLAG_STAND,	FFLAG_CROUCHI,	FFLAG_AIR,	FFLAG_GUARD,
 		FFLAG_CANCEL
 	};
-	bool CheckFFlags(int n){
+	bool CheckFFlags(int n) {
 		return fflags&n;
 	}
-	bool CheckAFlags(int n){
+	bool CheckAFlags(int n) {
 		return aflags&n;
 	}
 protected:
 	HANDLE ph;
 
-	void initialize(){
+	void initialize() {
 		attackarea_n = hitarea_n = 0;
 		base_addr = 0;
 	}
@@ -250,15 +250,15 @@ protected:
 class obj : public obj_base
 {
 public:
-	obj(HANDLE h,int addr){
+	obj(HANDLE h,int addr) {
 		ph = h;
 		base_addr = addr;
 	}
 
-	void ReloadBaseAddr(int){
+	void ReloadBaseAddr(int) {
 	}
 
-	void ReloadVal(int){
+	void ReloadVal(int) {
 	}
 };
 
@@ -273,7 +273,7 @@ public:
 	enum TYPE{
 		MY,ENEMY
 	};
-	player(TYPE a){
+	player(TYPE a) {
 		type = a;
 	}
 
@@ -311,27 +311,27 @@ public:
 	int sp_data[SPECIALDATA_MAX];
 	int keyState[8];
 
-	TYPE SetType(TYPE a){
+	TYPE SetType(TYPE a) {
 		TYPE temp;
 		temp = type;
 		type = a;
 		return temp;
 	}
-	int SetRootAddress(int addr){
+	int SetRootAddress(int addr) {
 		int temp;
 		temp = root;
 		root = addr;
 		return temp;
 	}
-	int GetSpecialData(int n){
+	int GetSpecialData(int n) {
 		int data,i;
 		short mini;
 		float f;
 
 		data = 0;
-		switch(n){
+		switch(n) {
 			case 0://「咲夜の世界」
-				if(char_id!=CHAR_SAKUYA){
+				if(char_id!=CHAR_SAKUYA) {
 					return -1;
 				}
 				ReadProcessMemory(ph,(void*)(base_addr+ADDR_SAKUYAWORLDOFS),&mini,2,NULL);
@@ -339,7 +339,7 @@ public:
 				else data = mini;
 				break;
 			case 1://時符「プライベートスクウェア」
-				if(char_id!=CHAR_SAKUYA){
+				if(char_id!=CHAR_SAKUYA) {
 					return -1;
 				}
 				ReadProcessMemory(ph,(void*)(base_addr+ADDR_PRIVATESQOFS),&mini,2,NULL);
@@ -347,7 +347,7 @@ public:
 				else data = mini;
 				break;
 			case 2://「夢想天生」
-				if(char_id!=CHAR_REIMU){
+				if(char_id!=CHAR_REIMU) {
 					return -1;
 				}
 				ReadProcessMemory(ph,(void*)(base_addr+ADDR_TENSEITIMEOFS),&mini,2,NULL);
@@ -355,7 +355,7 @@ public:
 				else data = mini;
 				break;
 			case 3://魂符「幽明の苦輪」//魂魄「幽明求聞持聡明の法」
-				if(char_id!=CHAR_YOUMU){
+				if(char_id!=CHAR_YOUMU) {
 					return -1;
 				}
 				ReadProcessMemory(ph,(void*)(base_addr+ADDR_TEKETENOFS),&mini,2,NULL);
@@ -368,7 +368,7 @@ public:
 				else data = mini;
 				break;
 			case 5://儀符「オーレリーズサン」
-				if(char_id!=CHAR_MARISA){
+				if(char_id!=CHAR_MARISA) {
 					return -1;
 				}
 				ReadProcessMemory(ph,(void*)(base_addr+ADDR_ORRERYOFS),&mini,2,NULL);
@@ -376,7 +376,7 @@ public:
 				else data = mini;
 				break;
 			case 6://火水木金土符「賢者の石」
-				if(char_id!=CHAR_PATCHOULI){
+				if(char_id!=CHAR_PATCHOULI) {
 					return -1;
 				}
 				ReadProcessMemory(ph,(void*)(base_addr+ADDR_PHILOSOPHEROFS),&mini,2,NULL);
@@ -384,28 +384,28 @@ public:
 				else data = mini;
 				break;
 			case 7://生薬「国士無双の薬」
-				if(char_id!=CHAR_UDONGE){
+				if(char_id!=CHAR_UDONGE) {
 					return -1;
 				}
 				if(is_swr) {
 					ReadProcessMemoryFloat(ph,(void*)(base_addr+0x4BC),&f,4,NULL);
 					data = (int)floor((f-1.05)/0.05+0.5);
-					if(data<0){
+					if(data<0) {
 						data = 0;
 					}
 				} else {
 					ReadProcessMemory(ph,(void*)(base_addr+ADDR_KOKUSHIOFS),&data,4,NULL);
-					if(data < 0 || data > 3){
+					if(data < 0 || data > 3) {
 						ReadProcessMemoryFloat(ph,(void*)(base_addr+ADDR_KOKUSHIOFS),&f,4,NULL);
 						data = (int)f;
-						if(data < 0 || data > 3){
+						if(data < 0 || data > 3) {
 							data = 0;
 						}
 					}
 				}
 				break;
 			case 8://「夢想天生」点灯数
-				if(char_id!=CHAR_REIMU){
+				if(char_id!=CHAR_REIMU) {
 					return -1;
 				}
 				ReadProcessMemory(ph,(void*)(base_addr+ADDR_TENSEINUMOFS),&mini,2,NULL);
@@ -418,7 +418,7 @@ public:
 				else data = mini;
 				break;
 			case 10://気符「無念無想の境地」
-				if(char_id!=CHAR_TENSHI){
+				if(char_id!=CHAR_TENSHI) {
 					return -1;
 				}
 				ReadProcessMemory(ph,(void*)(base_addr+ADDR_MUNENOFS),&mini,2,NULL);
@@ -426,7 +426,7 @@ public:
 				else data = mini;
 				break;
 			case 11://フィールドウルトラレッド
-				if(char_id!=CHAR_UDONGE){
+				if(char_id!=CHAR_UDONGE) {
 					return -1;
 				}
 				ReadProcessMemory(ph,(void*)(base_addr+ADDR_FIELDREDOFS),&mini,2,NULL);
@@ -434,7 +434,7 @@ public:
 				else data = mini;
 				break;
 			case 12://フィールドウルトラバイオレット
-				if(char_id!=CHAR_UDONGE){
+				if(char_id!=CHAR_UDONGE) {
 					return -1;
 				}
 				ReadProcessMemory(ph,(void*)(base_addr+ADDR_FIELDPURPLEOFS),&mini,2,NULL);
@@ -443,17 +443,17 @@ public:
 				break;
 			case 13://水符「ジェリーフィッシュプリンセス」残り時間
 			case 14://同、残りHP
-				if(char_id!=CHAR_PATCHOULI){
+				if(char_id!=CHAR_PATCHOULI) {
 					return -1;
 				}
 				i = 0;
-				while(i<object.size()  && (object[i].action!=0x358 || (object[i].img_no!=0x154 && object[i].img_no!=0x1B3))){
+				while(i<object.size()  && (object[i].action!=0x358 || (object[i].img_no!=0x154 && object[i].img_no!=0x1B3))) {
 					i++;
 				}
-				if(i == object.size()){
+				if(i == object.size()) {
 					data = 0;
 				} else {
-					if(n==13){
+					if(n==13) {
 						data = 361 - object[i].frame;
 					} else {
 						data = 3001+object[i].hp;
@@ -461,7 +461,7 @@ public:
 				}
 				break;
 			case 15://鬼神「ミッシングパープルパワー」
-				if(char_id!=CHAR_SUIKA){
+				if(char_id!=CHAR_SUIKA) {
 					return -1;
 				}
 				ReadProcessMemory(ph,(void*)(base_addr+ADDR_MPPOFS),&mini,2,NULL);
@@ -469,14 +469,14 @@ public:
 				else data = mini;
 				break;
 			case 16://毒煙幕「瓦斯織物の玉」
-				if(char_id!=CHAR_UDONGE){
+				if(char_id!=CHAR_UDONGE) {
 					return -1;
 				}
 				i = 0;
-				while(i<object.size() && (object[i].action!=0x35A || (object[i].img_no!=0xF0 && object[i].img_no!=0x15F))){
+				while(i<object.size() && (object[i].action!=0x35A || (object[i].img_no!=0xF0 && object[i].img_no!=0x15F))) {
 					i++;
 				}
-				if(i==object.size()){
+				if(i==object.size()) {
 					data = 0;
 				} else {
 					data = 601 - object[i].frame;
@@ -485,67 +485,67 @@ public:
 			case 17://制御棒使用個数
 				ReadProcessMemory(ph,(void*)(base_addr+ADDR_ATTACKSTICKOFS),&f,4,NULL);
 				data = (int)f;
-				if(data < 0 || data > 4){
+				if(data < 0 || data > 4) {
 					data = 0;
 				}
 				break;
 			case 18://身代わり人形使用個数
 				ReadProcessMemory(ph,(void*)(base_addr+ADDR_DEFENSEDOLLOFS),&f,4,NULL);
 				data = (int)f;
-				if(data < 0 || data > 4){
+				if(data < 0 || data > 4) {
 					data = 0;
 				}
 				break;
 			case 19://天狗団扇使用個数
 				ReadProcessMemory(ph,(void*)(base_addr+ADDR_UTHIWAOFS),&data,2,NULL);
-				if(data < 0 || data > 4){
+				if(data < 0 || data > 4) {
 					data = 0;
 				}
 				break;
 			case 20://グリモワール使用個数
 				ReadProcessMemory(ph,(void*)(base_addr+ADDR_GRIMOREOFS),&data,2,NULL);
-				if(data < 0 || data > 4){
+				if(data < 0 || data > 4) {
 					data = 0;
 				}
 				break;
 			case 21://三粒の水滴使用個数
 				ReadProcessMemory(ph,(void*)(base_addr+ADDR_DROPWATEROFS),&data,2,NULL);
-				if(data < 0 || data > 3){
+				if(data < 0 || data > 3) {
 					data = 0;
 				}
 				break;
 			case 22://三粒の水滴無敵時間残りフレーム数
 				ReadProcessMemory(ph,(void*)(base_addr+ADDR_DROPWATERTIMEOFS),&data,2,NULL);
-				if(data < 0){
+				if(data < 0) {
 					data = 0;
 				}
 				break;
 			case 23://竜星無敵時間残りフレーム数
 				ReadProcessMemory(ph,(void*)(base_addr+ADDR_RYUUSEIOFS),&data,2,NULL);
-				if(data < 0){
+				if(data < 0) {
 					data = 0;
 				}
 				break;
 			case 24://神奈子ゲージ
-				if(char_id!=CHAR_SANAE){
+				if(char_id!=CHAR_SANAE) {
 					return -1;
 				}
 				ReadProcessMemory(ph,(void*)(base_addr+ADDR_KANAKOOFS),&data,4,NULL);
-				if(data < 0){
+				if(data < 0) {
 					data = 0;
 				}
 				break;
 			case 25://諏訪子ゲージ
-				if(char_id!=CHAR_SANAE){
+				if(char_id!=CHAR_SANAE) {
 					return -1;
 				}
 				ReadProcessMemory(ph,(void*)(base_addr+ADDR_SUWAKOOFS),&data,4,NULL);
-				if(data < 0){
+				if(data < 0) {
 					data = 0;
 				}
 				break;
 			case 26://インフレアドムーン
-				if(char_id!=CHAR_UDONGE){
+				if(char_id!=CHAR_UDONGE) {
 					return -1;
 				}
 				ReadProcessMemory(ph,(void*)(base_addr+ADDR_FIELDRED2OFS),&mini,2,NULL);
@@ -553,11 +553,11 @@ public:
 				else data = mini;
 				break;
 			case 27://ダイアモンドハードネス
-				if(char_id!=CHAR_PATCHOULI){
+				if(char_id!=CHAR_PATCHOULI) {
 					return -1;
 				}
 				ReadProcessMemory(ph, (void*)(base_addr+ADDR_DIAHARDOFS),&mini,2,NULL);
-				if(mini==-1){
+				if(mini==-1) {
 					data = 0;
 				} else {
 					data = mini;
@@ -569,8 +569,8 @@ public:
 		}
 		return data;
 	}
-	virtual void ReloadBaseAddr(int mode){
-		if( (mode==1 && type==MY) || (mode==2 && type==ENEMY)){
+	virtual void ReloadBaseAddr(int mode) {
+		if( (mode==1 && type==MY) || (mode==2 && type==ENEMY)) {
 			ReadProcessMemory(ph,(void *)(root+ADDR_LCHAROFS),&base_addr,4,NULL);
 			ReadProcessMemory(ph,(void *)ADDR_LCHARID,&char_id,4,NULL);
 		} else {
@@ -578,7 +578,7 @@ public:
 			ReadProcessMemory(ph,(void *)ADDR_RCHARID,&char_id,4,NULL);
 		}
 	}
-	virtual void ReloadVal(int mode){
+	virtual void ReloadVal(int mode) {
 		ReadProcessMemory(ph,(void *)(base_addr+ADDR_AIRDASHCOUNTOFS),&air_dash_count,2,NULL);
 		ReadProcessMemory(ph,(void *)(base_addr+ADDR_REIPOWEROFS),&rei,2,NULL);
 		ReadProcessMemory(ph,(void *)(base_addr+ADDR_REISTOPROFS),&rei_stop,2,NULL);
@@ -592,7 +592,7 @@ public:
 		ReadProcessMemoryFloat(ph,(void *)(base_addr+ADDR_ATTACKPOWEROFS),&status.attack,4,NULL);
 		ReadProcessMemoryFloat(ph,(void *)(base_addr+ADDR_DEFENSEPOWEROFS),&status.defense,4,NULL);
 		ReadProcessMemoryFloat(ph,(void *)(base_addr+ADDR_SPEEDPOWEROFS),&status.speed,4,NULL);
-		if(weather==11){
+		if(weather==11) {
 			gauge = 0;
 			card_id = -1;
 		} else {
@@ -612,13 +612,13 @@ public:
 			int max;
 			int p;
 			ReadProcessMemory(ph,(void *)(base_addr+ADDR_CARDCOUNT2OFS),&count,4,NULL);
-			if(!(count<0 || count>5)){
+			if(!(count<0 || count>5)) {
 				ReadProcessMemory(ph,(void *)(base_addr+ADDR_SELECTCARDOFS),&point,4,NULL);
 				ReadProcessMemory(ph,(void *)(base_addr+ADDR_HANDCARDBASEOFS),&base,4,NULL);
 				ReadProcessMemory(ph,(void *)(base_addr+ADDR_HANDCARDMAXOFS),&max,4,NULL);
 				int i = 0;
-				while(i < 5){
-					if(weather!=11 && max>0 && i<gauge/500){
+				while(i < 5) {
+					if(weather!=11 && max>0 && i<gauge/500) {
 						ReadProcessMemory(ph,(void *)(base+((point+i)%max)*4),&p,4,NULL);
 						ReadProcessMemory(ph,(void *)p,&card[i],4,NULL);
 					} else {
@@ -633,7 +633,7 @@ public:
 		ReadProcessMemory(ph,(void *)(base_addr+ADDR_SKILLLEVELMAPOFS),skill,sizeof(skill),NULL);
 		{
 			int i = 0;
-			while(i < SPECIALDATA_MAX){
+			while(i < SPECIALDATA_MAX) {
 				sp_data[i] = GetSpecialData(i);
 				i++;
 			}
@@ -643,7 +643,7 @@ public:
 			ReadProcessMemory(ph,(void *)(base_addr+ADDR_KEYMGROFS),&p,4,NULL);
 			ReadProcessMemory(ph,(void *)p,&p,4,NULL);
 			int i = 0;
-			while(i < 8){
+			while(i < 8) {
 				ReadProcessMemory(ph,(void *)(p+ADDR_KEYMAPOFS+i*4),&keyState[i],4,NULL);
 				i++;
 			}
@@ -665,7 +665,7 @@ public:
 		int prev;
 		int val;
 	}NODE;
-	void ReloadObject(int mode){
+	void ReloadObject(int mode) {
 		int sysObj;
 		DWORD readSize;
 		int objCharHead;
@@ -690,12 +690,12 @@ public:
 		ReadProcessMemory(ph,(void *)(sysObj + ADDR_CHAROBJTAILOFS),&objCharTail,4,&readSize);
 		if(readSize != 4)return;
 		objCharNum = (objCharTail - objCharHead) / 4;
-		if(objCharNum!=2){
+		if(objCharNum!=2) {
 			return;
 		}
 
 		int p;
-		if( (mode==1 && type==MY) || (mode==2 && type==ENEMY)){
+		if( (mode==1 && type==MY) || (mode==2 && type==ENEMY)) {
 			p = 0;
 		} else {
 			p = 1;
@@ -715,9 +715,9 @@ public:
 		ReadProcessMemory(ph,(void *)objProjList.head,&objProjIter,12,&readSize);
 		if(readSize != 12)return;
 		int k = 0;
-		while(objProjList.head != objProjIter.next && objProjIter.next != 0 && objProjList.size > k){
+		while(objProjList.head != objProjIter.next && objProjIter.next != 0 && objProjList.size > k) {
 			ReadProcessMemory(ph,(void *)objProjIter.next,&objProjIter,12,&readSize);
-			if(readSize!=12){
+			if(readSize!=12) {
 				return;
 			}
 			obj a(ph,objProjIter.val);
@@ -727,12 +727,12 @@ public:
 		}
 	}
 
-	void ReloadLuaValue(int mode){
+	void ReloadLuaValue(int mode) {
 		char name[32],*s;
 
 #define setValue(k,v)	strcpy(s,k);engine->setScriptValue(name,v)
 
-		if(type==MY){
+		if(type==MY) {
 			strcpy(name,"my_");
 		} else {
 			strcpy(name,"enemy_");
@@ -768,7 +768,7 @@ public:
 		setValue("speed_power",status.speed);
 		setValue("win_count",win_count);
 
-		if(type==MY){
+		if(type==MY) {
 			strcpy(name,"");
 		} else {
 			strcpy(name,"e");
@@ -779,62 +779,62 @@ public:
 #undef setValue
 	}
 
-	obj * GetObject(int n){
-		if(n<0 || object.size()<=n){
+	obj * GetObject(int n) {
+		if(n<0 || object.size()<=n) {
 			return NULL;
 		}
 		return &object[n];
 	}
 
-	obj *GetOptionObject(int n){
-		if(n<0 || object.size()<=n){
+	obj *GetOptionObject(int n) {
+		if(n<0 || object.size()<=n) {
 			return NULL;
 		}
 		n++;
 		int i = 0;
-		while(n>0 && i < object.size()){
-			if(char_id==CHAR_ALICE){
+		while(n>0 && i < object.size()) {
+			if(char_id==CHAR_ALICE) {
 				if(object[i].attackarea_n==0 && object[i].action == 805 && object[i].img_no!=221)n--;
-			} else if(char_id==CHAR_YOUMU){
-				if(n!=1){
+			} else if(char_id==CHAR_YOUMU) {
+				if(n!=1) {
 					return NULL;
 				}
-				if(object[i].action == 899){
+				if(object[i].action == 899) {
 					n--;
 				}
-			} else if(char_id==CHAR_KOMACHI){
+			} else if(char_id==CHAR_KOMACHI) {
 				if(object[i].action==855)n--;
 				if(object[i].action==801 || object[i].action==852)n--;
 			} else return NULL;
-			if(n<=0){
+			if(n<=0) {
 				break;
 			}
 			i++;
 		}
-		if(n==0){
+		if(n==0) {
 			return &object[i];
 		}
 		return NULL;
 	}
-	int GetKeyState(int n){
-		switch(n){
+	int GetKeyState(int n) {
+		switch(n) {
 			case ACT_LEFT:
-				if(keyState[0] > 0){
+				if(keyState[0] > 0) {
 					return 0;
 				}
 				return -keyState[0];
 			case ACT_RIGHT:
-				if(keyState[0] < 0){
+				if(keyState[0] < 0) {
 					return 0;
 				}
 				return keyState[0];
 			case ACT_UP:
-				if(keyState[1] > 0){
+				if(keyState[1] > 0) {
 					return 0;
 				}
 				return -keyState[1];
 			case ACT_DOWN:
-				if(keyState[1] < 0){
+				if(keyState[1] < 0) {
 					return 0;
 				}
 				return keyState[1];

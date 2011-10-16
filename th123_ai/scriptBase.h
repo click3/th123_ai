@@ -3,17 +3,17 @@
 
 class scriptEngine {
 private:
-	void convertFilePath(char *path)const;
+	void convertFilePath(char *path) const;
 public:
 	char scriptName[256];
 	bool loadable;
 
-	scriptEngine(){
+	scriptEngine() {
 		scriptName[0] = '\0';
 		loadable = false;
 	}
-	~scriptEngine(){
-		if(loadable){
+	~scriptEngine() {
+		if(loadable) {
 			end();
 		}
 		scriptName[0] = '\0';
@@ -36,7 +36,7 @@ public:
 
 	virtual int getScriptValue(const char *name)const = 0;
 	virtual void setScriptValue(const char *name, double value) = 0;
-	virtual void setScriptValueBool(const char *name, bool value){
+	virtual void setScriptValueBool(const char *name, bool value) {
 		setScriptValue(name, value ? 1 : 0);
 	}
 	virtual void call(const char *name) = 0;

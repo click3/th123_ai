@@ -19,7 +19,7 @@ int weather_delay = 300;
 int get_delay = 0;
 
 char on[10] = {0,0,0,0,0,0,0,0,0,0};
-char get_key_stat(int n){
+char get_key_stat(int n) {
 	BOOST_ASSERT(n >= 0);
 	BOOST_ASSERT(n <= 9);
 	return on[n];
@@ -46,18 +46,18 @@ int __argc__;
 char **__argv__;
 int main2(int argc,char *argv[]);
 
-void mj(void){
+void mj(void) {
 	exit(main2(__argc__,__argv__));
 }
 
-long WINAPI main_jump(EXCEPTION_POINTERS *pep){
+long WINAPI main_jump(EXCEPTION_POINTERS *pep) {
 	pep->ContextRecord->Eip = (int)mj;
 	return EXCEPTION_CONTINUE_EXECUTION;
 }
 #ifdef DEBUG
-int main2(int argc,char *argv[]){
+int main2(int argc,char *argv[]) {
 #else
-int main(int argc,char *argv[]){
+int main(int argc,char *argv[]) {
 #endif
 	int a;
 #ifdef __BORLANDC__
@@ -78,7 +78,7 @@ int main(int argc,char *argv[]){
 }
 
 
-long WINAPI exep(EXCEPTION_POINTERS *pep){
+long WINAPI exep(EXCEPTION_POINTERS *pep) {
 	PEXCEPTION_RECORD per = pep->ExceptionRecord;
 	PCONTEXT pctx = pep->ContextRecord;
 	HANDLE ph = OpenProcess(PROCESS_VM_READ,FALSE,GetCurrentProcessId());
@@ -92,7 +92,7 @@ long WINAPI exep(EXCEPTION_POINTERS *pep){
 	static int flag = 0;
 	static int ftol = 0;
 
-	if(ftol==0 && per->ExceptionCode == 0xC0000090){
+	if(ftol==0 && per->ExceptionCode == 0xC0000090) {
 		ftol = 1;
 		pctx->FloatSave.StatusWord = 0x0020;
 		pctx->FloatSave.ControlWord = 0x027F;
@@ -120,15 +120,15 @@ long WINAPI exep(EXCEPTION_POINTERS *pep){
 	sprintf(&s[strlen(s)],"CloseVersion: %d\n",GetTH123AIVersion());
 	sprintf(&s[strlen(s)],"Code: %08X\n", per->ExceptionCode );
 	sprintf(&s[strlen(s)],"Address: %08X\n", per->ExceptionAddress );
-	if(ph==0){
+	if(ph==0) {
 		sprintf(&s[strlen(s)],"fixdata: failed(%d)\n",GetLastError());
 	}
 
 	sprintf(&s[strlen(s)],"--Register--\n" );
 	i = 0;
-	while(i < 10){
+	while(i < 10) {
 		sprintf(&s[strlen(s)],"%s %08x",name[i],list[i]);
-		if(ph!=0 && ReadProcessMemory(ph,(void *)list[i],&a,4,NULL)){
+		if(ph!=0 && ReadProcessMemory(ph,(void *)list[i],&a,4,NULL)) {
 			sprintf(&s[strlen(s)],"=>%08x",a);
 		}
 		sprintf(&s[strlen(s)],"\n");
@@ -137,31 +137,31 @@ long WINAPI exep(EXCEPTION_POINTERS *pep){
 
 	sprintf(&s[strlen(s)],"--Stack--\n");
 	i = 0;
-	while(i < 20){
-		if(!ReadProcessMemory(ph,(void *)(list[4]+i*4),&a,4,NULL)){
+	while(i < 20) {
+		if(!ReadProcessMemory(ph,(void *)(list[4]+i*4),&a,4,NULL)) {
 			break;
 		}
 		sprintf(&s[strlen(s)],"%08x %08x\n",list[4]+i*4,a);
 		i++;
 	}
 	sprintf(&s[strlen(s)],"\n\n");
-	if(flag == 0){
+	if(flag == 0) {
 		printf("%s",s);
 		printf("以上の内容が作者あてにバグ報告として送信可能です。\n");
-		while(flag == 0){
+		while(flag == 0) {
 			printf("送信しますか？Y/N ");
 			fgets(str,256,stdin);
 			a = toupper(str[0]);
-			if(a == 'Y'){
+			if(a == 'Y') {
 				flag = 1;
 				printf("送信しました\n");
-			} else if(a == 'N'){
+			} else if(a == 'N') {
 				flag = -1;
 				printf("送信を中止しました\n");
 			}
 		}
 	}
-	if(flag == 1){
+	if(flag == 1) {
 		ErrorPost(URL_AI_ERROR_CGI,s);
 	}
 	if(ph!=NULL)CloseHandle(ph);
@@ -174,10 +174,10 @@ long WINAPI exep(EXCEPTION_POINTERS *pep){
 */
 #define is_th105_active()	(wh==GetForegroundWindow())
 
-void th105_active(void){
+void th105_active(void) {
 	SetActiveWindow2(wh);
 }
-void SetActiveWindow2(HWND hWnd){
+void SetActiveWindow2(HWND hWnd) {
 	DWORD pid;
 	HANDLE p;
 	HWND w;
@@ -185,11 +185,11 @@ void SetActiveWindow2(HWND hWnd){
 	LPTHREAD_START_ROUTINE proc;
 
 	w = GetForegroundWindow();
-	if(w != NULL){
+	if(w != NULL) {
 		GetWindowThreadProcessId(w,&pid);
-		if(pid != 0){
+		if(pid != 0) {
 			p = OpenProcess(PROCESS_ALL_ACCESS,FALSE,pid);
-			if(p!=NULL){
+			if(p!=NULL) {
 				hm = GetModuleHandle("user32.dll");
 				proc = (LPTHREAD_START_ROUTINE)GetProcAddress(hm,"SetForegroundWindow");
 				CreateRemoteThread(p,NULL,0,proc,hWnd,0,NULL);
@@ -204,12 +204,12 @@ void SetActiveWindow2(HWND hWnd){
 	Sleep(50);
 }
 //flag==TRUEで強制最前窓、FALSEでフルスクリーンでないときのみ最前窓
-void MyWndActive(int flag){
+void MyWndActive(int flag) {
 	int a;
-	if(flag==FALSE){
+	if(flag==FALSE) {
 		if(ini_int2("MyWindowActive",1)==0)return;
 		ReadProcessMemory(ph,(void*)ADDR_ACTIVEFLAG,&a,4,NULL);
-		if(a==0){
+		if(a==0) {
 			return;
 		}
 	}
@@ -217,7 +217,7 @@ void MyWndActive(int flag){
 }
 
 
-void change_ini(char *fn,char *name,char *param){
+void change_ini(char *fn,char *name,char *param) {
 	FILE *rfp,*wfp;
 	char temp_file[] = "th105_ai.tmp0123";
 	char temp[256];
@@ -228,12 +228,12 @@ void change_ini(char *fn,char *name,char *param){
 	const bool set_dir_result = org::click3::Utility::SetAppDir();
 	BOOST_ASSERT(set_dir_result);
 	rfp = fopen(fn,"r");
-	if((rfp==NULL) || (wfp=fopen(temp_file,"w"))==NULL){
+	if((rfp==NULL) || (wfp=fopen(temp_file,"w"))==NULL) {
 		SetCurrentDirectoryA(dir);
 		return;
 	}
-	while(fgets(temp,256,rfp)!=NULL){
-		if(flag == FALSE && strncmp(temp,name,strlen(name))==0){
+	while(fgets(temp,256,rfp)!=NULL) {
+		if(flag == FALSE && strncmp(temp,name,strlen(name))==0) {
 			fprintf(wfp,"%s=\"%s\"\n",name,param);
 			flag = TRUE;
 		} else {
@@ -241,7 +241,7 @@ void change_ini(char *fn,char *name,char *param){
 		}
 	}
 	fclose(rfp);
-	if(flag==FALSE){
+	if(flag==FALSE) {
 		fprintf(wfp,"%s=\"%s\"\n",name,param);
 	}
 	fclose(wfp);
@@ -250,7 +250,7 @@ void change_ini(char *fn,char *name,char *param){
 	SetCurrentDirectoryA(dir);
 }
 
-char *GetTouhouPath(const char *regkey, const char *name, const char *exe_name,char *ini_name){
+char *GetTouhouPath(const char *regkey, const char *name, const char *exe_name,char *ini_name) {
 	HKEY hKey;
 	static char str[256]="";
 	char temp[256];
@@ -260,22 +260,22 @@ char *GetTouhouPath(const char *regkey, const char *name, const char *exe_name,c
 	int i;
 	int ret;
 
-	if(ini_value(ini_name) != NULL){
+	if(ini_value(ini_name) != NULL) {
 		strcpy(str,ini_value("StartupTH105"));
 		fp = fopen(str,"rb");
-		if(fp!=NULL){
+		if(fp!=NULL) {
 			fclose(fp);
 			return str;
 		}
 		str[0] = '\0';
 	}
 
-	if(ERROR_SUCCESS==RegOpenKeyEx(HKEY_LOCAL_MACHINE,regkey,0,KEY_READ,&hKey)){
-		if(ERROR_SUCCESS==RegQueryValueEx(hKey,"Inno Setup: App Path",NULL,NULL,reinterpret_cast<LPBYTE>(temp),&size)){
+	if(ERROR_SUCCESS==RegOpenKeyEx(HKEY_LOCAL_MACHINE,regkey,0,KEY_READ,&hKey)) {
+		if(ERROR_SUCCESS==RegQueryValueEx(hKey,"Inno Setup: App Path",NULL,NULL,reinterpret_cast<LPBYTE>(temp),&size)) {
 			RegCloseKey(hKey);
 			snprintf(str, sizeof(str), "%s\\%s",temp,exe_name);
 			fp = fopen(str,"rb");
-			if(fp!=NULL){
+			if(fp!=NULL) {
 				fclose(fp);
 				return str;
 			}
@@ -291,8 +291,8 @@ char *GetTouhouPath(const char *regkey, const char *name, const char *exe_name,c
 	ofn.lStructSize = sizeof(OPENFILENAME);
 	snprintf(temp, sizeof(temp), "%s実行ファイル(%s)\n%s\nAll files(*.*)\n*.*\n\n",name, exe_name, exe_name);
 	i = strlen(temp)-1;
-	while(i > 0){
-		if(temp[i]=='\n'){
+	while(i > 0) {
+		if(temp[i]=='\n') {
 			temp[i] = '\0';
 		}
 		i--;
@@ -308,85 +308,85 @@ char *GetTouhouPath(const char *regkey, const char *name, const char *exe_name,c
 	changeLoadLibraryExW(1);
 	ret = GetOpenFileName(&ofn);
 	changeLoadLibraryExW(0);
-	if(ret == 0){
+	if(ret == 0) {
 		return NULL;
 	}
 	return str;
 }
-char *GetTh105Path(void){
+char *GetTh105Path(void) {
 	return GetTouhouPath("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{F9942587-59C1-43CC-8B6A-A5DB09CBA735}_is1", "緋想天", "th105.exe","StartupTH105");
 }
-char *GetTh123Path(void){
+char *GetTh123Path(void) {
 	return GetTouhouPath("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{8E5CFA2B-8CC5-4C8D-88CB-C4A1D4AD9790}_is1", "非想天則", "th123.exe","StartupTH123");
 }
 
-HANDLE WindowName2Handle(const char *name, const char *text){
+HANDLE WindowName2Handle(const char *name, const char *text) {
 	DWORD pid;
 	HANDLE ph;
 
 	wh = FindWindow(name, text);
-	if(wh == NULL){
+	if(wh == NULL) {
 		return NULL;
 	}
 	pid = 0;
 	GetWindowThreadProcessId(wh,&pid);
-	if(pid == 0){
+	if(pid == 0) {
 		return NULL;
 	}
 	ph = OpenProcess(PROCESS_ALL_ACCESS,FALSE,pid);
-	if(ph == 0){
+	if(ph == 0) {
 		return NULL;
 	}
 	return ph;
 }
 
-HANDLE GetSWRHandle(void){
+HANDLE GetSWRHandle(void) {
 	HANDLE ph;
 
 	ph = WindowName2Handle(ini_value("SWR_WINDOW_CLASS"),ini_value("SWR_WINDOW_TEXT"));
-	if(ph == NULL){
+	if(ph == NULL) {
 		return NULL;
 	}
 	return ph;
 }
 
-HANDLE GetSOKUHandle(void){
+HANDLE GetSOKUHandle(void) {
 	HANDLE ph;
 
 	ph = WindowName2Handle(ini_value("SWRS_WINDOW_CLASS"),ini_value("SWRS_WINDOW_TEXT"));
-	if(ph == NULL){
+	if(ph == NULL) {
 		return NULL;
 	}
 	return ph;
 }
 
-void AutoStartTouhouExe(bool swr, bool soku){
+void AutoStartTouhouExe(bool swr, bool soku) {
 	STARTUPINFO si;
 	PROCESS_INFORMATION pi;
 	char *s = NULL;
 
 	changeLoadLibraryExW(1);
-	if(soku){
+	if(soku) {
 		s = GetTh123Path();
 	}
-	if(s==NULL && swr){
+	if(s==NULL && swr) {
 		s = GetTh105Path();
 		soku = false;
 	}
 	changeLoadLibraryExW(0);
-	if(s == NULL){
+	if(s == NULL) {
 		printf("自動起動に失敗しました\n");
 	} else {
-		if(soku){
+		if(soku) {
 			printf("非想天則を自動起動します(%s)\n",s);
-		} else if(swr){
+		} else if(swr) {
 			printf("緋想天を自動起動します(%s)\n",s);
 		}
 		memset(&si,0,sizeof(si));
 		memset(&pi,0,sizeof(pi));
 		si.cb = sizeof(si);
 		changeLoadLibraryExW(1);
-		if(CreateProcess(s,NULL,NULL,NULL,FALSE,NORMAL_PRIORITY_CLASS,NULL,NULL,&si,&pi)){
+		if(CreateProcess(s,NULL,NULL,NULL,FALSE,NORMAL_PRIORITY_CLASS,NULL,NULL,&si,&pi)) {
 			CloseHandle(pi.hProcess);
 			CloseHandle(pi.hThread);
 			//change_ini("th105_ai.ini","StartupTH105",s);
@@ -399,13 +399,13 @@ void AutoStartTouhouExe(bool swr, bool soku){
 	}
 } 
 
-HANDLE GetProcessHandle(void){
+HANDLE GetProcessHandle(void) {
 	HANDLE hToken;
 	TOKEN_PRIVILEGES tkp;
 	
 	static bool is_first_run = true;
 	//終了時を検出する
-	if(!is_first_run && ini_int2("AppDownExit", 0) == 0){
+	if(!is_first_run && ini_int2("AppDownExit", 0) == 0) {
 		::exit(0);
 	}
 	addr.reset();
@@ -454,7 +454,7 @@ HANDLE GetProcessHandle(void){
 	return ph;
 }
 
-int EnumProcess(char *name){
+int EnumProcess(char *name) {
 	int i = 0;
 	// スナップショットハンドル
 	HANDLE hSnapShot;
@@ -463,7 +463,7 @@ int EnumProcess(char *name){
 
 	// スナップショットの作成
 	hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPALL, 0);
-	if(INVALID_HANDLE_VALUE != hSnapShot){
+	if(INVALID_HANDLE_VALUE != hSnapShot) {
 		// スナップショットの先頭からエントリの取得
 		Process32First(hSnapShot, &p32);
 		do{
@@ -473,7 +473,7 @@ int EnumProcess(char *name){
 	return i;
 }
 
-void load_inis(void){
+void load_inis(void) {
 	load_ini("SwrAddr.ini");
 	load_ini("SWRSAddr.ini");
 	load_ini("th105_ai.ini");
@@ -481,22 +481,22 @@ void load_inis(void){
 	load_ini("dev.ini");
 }
 
-void change_player(void){
+void change_player(void) {
 	static HANDLE h = NULL;
 	int n = ini_int2("Player",1);
 
-	if(h){
+	if(h) {
 		ReleaseMutex(h);
 		CloseHandle(h);
 		h = NULL;
 	}
-	if(n!=2){
+	if(n!=2) {
 		h = CreateMutex(NULL,FALSE,"TH105AI_1P");
 	} else {
 		h = CreateMutex(NULL,FALSE,"TH105AI_2P");
 	}
-	if(WAIT_OBJECT_0 != WaitForSingleObject(h,0)){
-		if(n!=2){
+	if(WAIT_OBJECT_0 != WaitForSingleObject(h,0)) {
+		if(n!=2) {
 			ini_add("default","Player","2");
 			n = 2;
 		} else {
@@ -505,12 +505,12 @@ void change_player(void){
 		}
 		CloseHandle(h);
 		h = NULL;
-		if(n!=2){
+		if(n!=2) {
 			h = CreateMutex(NULL,FALSE,"TH105AI_1P");
 		} else {
 			h = CreateMutex(NULL,FALSE,"TH105AI_2P");
 		}
-		if(WAIT_OBJECT_0 != WaitForSingleObject(h,0)){
+		if(WAIT_OBJECT_0 != WaitForSingleObject(h,0)) {
 			CloseHandle(h);
 			h = NULL;
 			exit(0);
@@ -518,7 +518,7 @@ void change_player(void){
 	}
 }
 
-void init(void){
+void init(void) {
 	const bool set_dir_result = org::click3::Utility::SetAppDir();
 	BOOST_ASSERT(set_dir_result);
 	create_ini();
@@ -570,11 +570,11 @@ const char *ID2Char2(CHAR_ID id) {
 	}
 	return db[id];
 }
-void title_message(void){
+void title_message(void) {
 	unsigned int root;
 	char str[256] = "",s[256];
 
-	switch(seen){
+	switch(seen) {
 		case 0xFF:
 		case 0x00:
 			SetConsoleTitle2("starting");
@@ -636,7 +636,7 @@ void title_message(void){
 int key[10] = {DIK_UP,DIK_DOWN,DIK_LEFT,DIK_RIGHT,DIK_Z,DIK_X,DIK_C,DIK_A,DIK_S,DIK_D};
 int muki,gyaku,dis,dfront,dback,ufront,uback,dis_y,dis2,is_dir_front;
 
-void search_key(void){
+void search_key(void) {
 	int map[2][10];
 	int i;
 	int p;
@@ -646,50 +646,50 @@ void search_key(void){
 	//ゲームパッドがいるなら逆側を使う
 	ReadProcessMemory(ph,(void *)ADDR_1PKEYMAP,map[0],10*4,NULL);
 	ReadProcessMemory(ph,(void *)ADDR_2PKEYMAP,map[1],10*4,NULL);
-	if(map[0][0]==map[0][1] && map[0][1]==map[0][2] && map[0][2]==map[0][3]){
+	if(map[0][0]==map[0][1] && map[0][1]==map[0][2] && map[0][2]==map[0][3]) {
 		p = 2;
-	} else if(map[1][0]==map[1][1] && map[1][1]==map[1][2] && map[1][2]==map[1][3]){
+	} else if(map[1][0]==map[1][1] && map[1][1]==map[1][2] && map[1][2]==map[1][3]) {
 		p = 1;
 	}
 
 	//AIManager指定キャラがいるならそちらを使う
-	if(p==0){
+	if(p==0) {
 		int char_id[2];
 		ReadProcessMemory(ph,(void *)ADDR_LCHARID,&char_id[0],4,NULL);
 		ReadProcessMemory(ph,(void *)ADDR_RCHARID,&char_id[1],4,NULL);
-		if(char_id[0]==operation_char && char_id[1]!=operation_char){
+		if(char_id[0]==operation_char && char_id[1]!=operation_char) {
 			p = 1;
-		} else if(char_id[1]==operation_char && char_id[0]!=operation_char){
+		} else if(char_id[1]==operation_char && char_id[0]!=operation_char) {
 			p = 2;
 		}
 	}
 
 	//キーコンフィグがデフォルトに近いか、最後に入力されたキーをキーコンフィグに含んでいるなら逆側を使う
-	if(p==0){
+	if(p==0) {
 		const unsigned char def[10] = {DIK_UP,DIK_DOWN,DIK_LEFT,DIK_RIGHT,DIK_Z,DIK_X,DIK_C,DIK_A,DIK_S,DIK_D};
 		int count[2];
 		int i = 0;
-		while(i < 2){
+		while(i < 2) {
 			int l = 0;
 			count[i] = 0;
-			while(l < 10){
-				if(map[i][l] == last_on_key){
+			while(l < 10) {
+				if(map[i][l] == last_on_key) {
 					count[i] += 10;
 				}
-				if(map[i][l] == def[l]){
+				if(map[i][l] == def[l]) {
 					count[i]++;
 				}
 				l++;
 			}
 			i++;
 		}
-		if(count[0] < count[1]){
+		if(count[0] < count[1]) {
 			i = 1;
 		} else {
 			i = 0;
 		}
-		if(count[i] > 5){
-			if(i==0){
+		if(count[i] > 5) {
+			if(i==0) {
 				p = 2;
 			} else {
 				p = 1;
@@ -698,18 +698,18 @@ void search_key(void){
 	}
 
 	//全ての条件で検出できなかったらINIの設定を使用する。
-	if(p==0){
+	if(p==0) {
 		p = ini_int2("Player",1);
-		if(p!=2){
+		if(p!=2) {
 			p = 1;
 		}
 	}
 	i = ini_int2("Player",1);
-	if(i!=2){
+	if(i!=2) {
 		i = 1;
 	}
-	if(p!=i){
-		if(p==1){
+	if(p!=i) {
+		if(p==1) {
 			ini_add("default","Player","1");
 		} else {
 			ini_add("default","Player","2");
@@ -718,23 +718,23 @@ void search_key(void){
 	}
 
 	p = ini_int2("Player",1);
-	if(p!=2){
+	if(p!=2) {
 		p = 1;
 	}
 	i = 0;
-	while(i < 10){
+	while(i < 10) {
 		key[i] = map[p-1][i];
-		if(key[i]==0x90){
+		if(key[i]==0x90) {
 			key[i] = MapVirtualKey(0xDE,0);
-		} else if(key[i]==0x91){
+		} else if(key[i]==0x91) {
 			key[i] = MapVirtualKey(0xC0,0);
-		} else if(key[i]==0x1A){
+		} else if(key[i]==0x1A) {
 			key[i] = MapVirtualKey(0xDB,0);
-		} else if(key[i]==0x1B){
+		} else if(key[i]==0x1B) {
 			key[i] = MapVirtualKey(0xDD,0);
-		} else if(key[i]==0x92){
+		} else if(key[i]==0x92) {
 			key[i] = MapVirtualKey(0xBA,0);
-		} else if(key[i]==0x2B){
+		} else if(key[i]==0x2B) {
 			key[i] = MapVirtualKey(0xE2,0);
 		}
 		i++;
@@ -742,29 +742,29 @@ void search_key(void){
 }
 
 //ACT_DLEFT以降に対応していないため、key_onとkey_off以外から呼ばないこと
-void on_check(int n){
-	if(on[n]){
+void on_check(int n) {
+	if(on[n]) {
 		keyboard.AddEvent(key[n],KEYEVENTF_KEYUP);
 		on[n] = 0;
 	}
-	if(n == 2 && on[3]){
+	if(n == 2 && on[3]) {
 		keyboard.AddEvent(key[3],KEYEVENTF_KEYUP);
 		on[3] = 0;
-	} else if(n == 3 && on[2]){
+	} else if(n == 3 && on[2]) {
 		keyboard.AddEvent(key[2],KEYEVENTF_KEYUP);
 		on[2] = 0;
-	} else if(n == 0 && on[1]){
+	} else if(n == 0 && on[1]) {
 		keyboard.AddEvent(key[1],KEYEVENTF_KEYUP);
 		on[1] = 0;
-	} else if(n == 1 && on[0]){
+	} else if(n == 1 && on[0]) {
 		keyboard.AddEvent(key[0],KEYEVENTF_KEYUP);
 		on[0] = 0;
 	}
 }
 
-void key_on(int n){
-	if(n >= ACT_DLEFT){
-		switch(n){
+void key_on(int n) {
+	if(n >= ACT_DLEFT) {
+		switch(n) {
 			case ACT_DLEFT:
 				key_on(ACT_DOWN);
 				key_on(ACT_LEFT);
@@ -782,32 +782,32 @@ void key_on(int n){
 				key_on(ACT_RIGHT);
 				break;
 		}
-	} else if(!on[n]){
+	} else if(!on[n]) {
 		on_check(n);
 		keyboard.AddEvent(key[n], 0);
 		on[n] = 1;
 	}
 }
-void key_off(int n){
-	if(n >= ACT_DLEFT){//実質的に十字キー全OFFと同義なので
+void key_off(int n) {
+	if(n >= ACT_DLEFT) {//実質的に十字キー全OFFと同義なので
 		key_off(ACT_DOWN);
 		key_off(ACT_LEFT);
 	} else {
 		on_check(n);
 	}
 }
-void key_reset(void){
+void key_reset(void) {
 	int i;
 	i = 0;
-	while(i < 10){
+	while(i < 10) {
 		key_off(i);
 		i++;
 	}
 }
-int key_check(int n){
+int key_check(int n) {
 	int a,b;
-	if(n >= ACT_DLEFT){
-		switch(n){
+	if(n >= ACT_DLEFT) {
+		switch(n) {
 			case ACT_DLEFT:
 				a=key_check(ACT_DOWN);
 				b=key_check(ACT_LEFT);
@@ -828,22 +828,22 @@ int key_check(int n){
 		if(a&&b)return 1;
 		if(a)return 2;
 		if(b)return 3;
-	} else if(on[n]){
+	} else if(on[n]) {
 		return 1;
 	}
 	return 0;
 }
-int is_CardUse(void){
+int is_CardUse(void) {
 	int p,temp,temp2,temp3;
 	short a;
 
-	if(weather==11){
+	if(weather==11) {
 		return FALSE;
 	}
 
 	p = GetPlayerAddr(0);
 	ReadProcessMemory(ph,(void *)(p+ADDR_CARDCOUNT2OFS),&temp,4,NULL);
-	if(temp<1){
+	if(temp<1) {
 		return FALSE;
 	}
 
@@ -856,36 +856,36 @@ int is_CardUse(void){
 	else return FALSE;
 }
 
-void set_key_delay(int delay){
+void set_key_delay(int delay) {
 	keyboard.SetKeyDelay(delay);
 	engine->setScriptValue("key_delay", keyboard.GetKeyDelay());
 }
 
-void set_data_delay(int delay){
+void set_data_delay(int delay) {
 	get_delay = delay;
 	engine->setScriptValue("data_delay",get_delay);
 }
-void set_weather_delay(int n){
+void set_weather_delay(int n) {
 	weather_delay = n;
 	engine->setScriptValue("weather_delay",weather_delay);
 }
 
 
-void check_th105(void){
+void check_th105(void) {
 	HMODULE mh;
 	DWORD m_num;
 
-	while(TRUE){
-		while(0 == ReadProcessMemory(ph,(void *)ADDR_SCENEID,&seen,1,NULL)){
+	while(TRUE) {
+		while(0 == ReadProcessMemory(ph,(void *)ADDR_SCENEID,&seen,1,NULL)) {
 			CloseHandle(ph);
 			ph = GetProcessHandle();
-			if(!EnumProcessModules(ph,&mh,sizeof(HMODULE),&m_num)){
+			if(!EnumProcessModules(ph,&mh,sizeof(HMODULE),&m_num)) {
 				//printf("Error:EnumProcessModules\n");
 			} else {
 				GetModuleFileNameEx(ph,mh,exe_path,256);
 			}
 		}
-		if(seen!=0x08 && seen!=0x09 && seen!=0x0E && seen!=0x0D){
+		if(seen!=0x08 && seen!=0x09 && seen!=0x0E && seen!=0x0D) {
 			break;
 		}
 		title_message();
@@ -893,15 +893,15 @@ void check_th105(void){
 	}
 }
 
-void check_lastkey(){
-	if(seen==0x05 || seen==0x0D || seen==0x0E){
+void check_lastkey() {
+	if(seen==0x05 || seen==0x0D || seen==0x0E) {
 		return;
 	}
 	int i=0;
 	short t;
-	while(i < 224){
+	while(i < 224) {
 		t = GetAsyncKeyState(i);
-		if(t<0 && MapVirtualKey(i,0)!=0){
+		if(t<0 && MapVirtualKey(i,0)!=0) {
 			last_on_key = MapVirtualKey(i,0);
 			break;
 		}
@@ -909,20 +909,20 @@ void check_lastkey(){
 	}
 }
 
-void get_th105param(void){
+void get_th105param(void) {
 	unsigned int root,l,r,temp=0,temp2,temp3;
 	float ftemp,ftemp2;
 	int time,time2;
 	char s[256];
 
 	check_th105();
-	switch(seen){
+	switch(seen) {
 		case 0x03:
 		case 0x06:
 		case 0x0a:
 		case 0x0b:
 		case 0x0c:
-			if(mode != seen){
+			if(mode != seen) {
 				change_icon(DOLL_ICON);
 				key_reset();
 				keyboard.Clear();
@@ -937,10 +937,10 @@ void get_th105param(void){
 		case 0x05:
 		case 0x0d:
 		case 0x0e:
-			if(mode != seen){
+			if(mode != seen) {
 				change_icon(GEAR_ICON);
 				search_key();
-				if(engine->scriptName[0] != '\0'){
+				if(engine->scriptName[0] != '\0') {
 					mode = seen;
 					reload();
 				}
@@ -958,7 +958,7 @@ void get_th105param(void){
 			my_data.Reload(ini_int2("Player",1));
 			enemy_data.Reload(ini_int2("Player",1));
 			is_bullethit();
-			if(my_data.x<enemy_data.x || (my_data.x==enemy_data.x && my_data.dir==1)){
+			if(my_data.x<enemy_data.x || (my_data.x==enemy_data.x && my_data.dir==1)) {
 				muki = ACT_RIGHT;
 				gyaku = ACT_LEFT;
 				dfront = ACT_DRIGHT;
@@ -966,7 +966,7 @@ void get_th105param(void){
 				ufront = ACT_URIGHT;
 				uback = ACT_ULEFT;
 				is_dir_front = (my_data.dir==1);
-			} else if(my_data.x>enemy_data.x  || (my_data.x==enemy_data.x && my_data.dir==-1)){
+			} else if(my_data.x>enemy_data.x  || (my_data.x==enemy_data.x && my_data.dir==-1)) {
 				muki = ACT_LEFT;
 				gyaku = ACT_RIGHT;
 				dfront = ACT_DLEFT;
@@ -991,7 +991,7 @@ void get_th105param(void){
 メイン
 */
 
-void reload_check(void){
+void reload_check(void) {
 	int a;
 	char b;
 	HMODULE hm;
@@ -999,21 +999,21 @@ void reload_check(void){
 	static BOOL (WINAPI *ReadProcessMemory)(HANDLE,LPCVOID,LPVOID,DWORD,LPDWORD) = NULL;
 
 	//不正対策
-	if(ReadProcessMemory==NULL){
+	if(ReadProcessMemory==NULL) {
 		a = 1;
 		hm = GetModuleHandle(&"\0Kernel32.dll"[a]);
 		ReadProcessMemory = GetProcAddress(hm,&"\0ReadProcessMemory"[a]);
 	}
 	a = 0x006ECE7C*2;
 	ReadProcessMemory(ph,(void*)(a/2),&b,1,NULL);
-	if(b==0x0E || b==0x0D || b==0x08 || b==0x09){
+	if(b==0x0E || b==0x0D || b==0x08 || b==0x09) {
 		__asm int 3
 	}
 */
 
-	if(GetAsyncKeyState(VK_F12)<0){
+	if(GetAsyncKeyState(VK_F12)<0) {
 		a = VK_F12;
-	} else if(GetAsyncKeyState(VK_F11)<0){
+	} else if(GetAsyncKeyState(VK_F11)<0) {
 		a = VK_F11;
 	} else {
 		return;
@@ -1024,7 +1024,7 @@ void reload_check(void){
 	if(a==VK_F12)reload();
 	else reload2();
 }
-void yield(void){
+void yield(void) {
 	static unsigned int t1 = 0;
 	unsigned int t2;
 	static short *act = NULL;
@@ -1041,7 +1041,7 @@ void yield(void){
 		ph = GetProcessHandle();
 	}
 
-	while(wh && !is_th105_active()){
+	while(wh && !is_th105_active()) {
 		reload_check();
 		check_th105();
 		Sleep(50);
@@ -1054,7 +1054,7 @@ void yield(void){
 			mov a,EAX
 			pop EAX
 		}
-		if(a){
+		if(a) {
 			a = (int)malloc(1024)+512;
 			__asm{
 				mov ESP,a
@@ -1067,10 +1067,10 @@ void yield(void){
 #endif
 	}
 
-	while(bt==battle_time){
+	while(bt==battle_time) {
 		Sleep(1);
 		get_th105param();
-		if(timeGetTime()-t1>320){
+		if(timeGetTime()-t1>320) {
 			key_reset();
 			keyboard.Clear();
 			break;
@@ -1079,8 +1079,8 @@ void yield(void){
 	keyboard.ProcessEvent();
 	bt = battle_time;
 
-	if(get_delay != delay){
-		if(act != NULL){
+	if(get_delay != delay) {
+		if(act != NULL) {
 			free(act);
 			free(act_block);
 			free(frame);
@@ -1088,7 +1088,7 @@ void yield(void){
 			act_block = NULL;
 			frame = NULL;
 		}
-		if(get_delay == 0){
+		if(get_delay == 0) {
 			act = NULL;
 			act_block = NULL;
 			frame = NULL;
@@ -1103,8 +1103,8 @@ void yield(void){
 		delay = get_delay;
 	}
 
-	while(1){
-		if(seen != 0x05){
+	while(1) {
+		if(seen != 0x05) {
 			reload_check();
 			Sleep(50);
 		} else {
@@ -1112,10 +1112,10 @@ void yield(void){
 		}
 		get_th105param();
 	}
-	if(t1 == 0){
+	if(t1 == 0) {
 		//Sleep(16);
 		t1 = battle_time;//同期ズレし難くなる様に
-		while(t1 == battle_time){
+		while(t1 == battle_time) {
 			get_th105param();
 		}
 		t1 = timeGetTime();
@@ -1148,7 +1148,7 @@ void yield(void){
 	engine->setScriptValue("battle_time",battle_time);
 
 	engine->setScriptValue("weather2",weather2);
-	if(((is_swr && weather2 == 14) || (!is_swr && weather2==19)) && 1000-weather_delay<weather_time){
+	if(((is_swr && weather2 == 14) || (!is_swr && weather2==19)) && 1000-weather_delay<weather_time) {
 		engine->setScriptValue("weather",weather2);
 	} else {
 		engine->setScriptValue("weather",weather);
@@ -1160,7 +1160,7 @@ void yield(void){
 	engine->setScriptValue("my_frame",my_data.frame);
 	engine->setScriptValue("my_act",my_data.action);
 	engine->setScriptValue("my_act_block",my_data.act_block);
-	if(delay == 0){
+	if(delay == 0) {
 		engine->setScriptValue("enemy_act",enemy_data.action);
 		engine->setScriptValue("enemy_act_block",enemy_data.act_block);
 		engine->setScriptValue("enemy_frame",enemy_data.frame);
@@ -1181,9 +1181,9 @@ void yield(void){
 	engine->loadable = true;
 }
 
-int GetPlayerAddr(int player){
+int GetPlayerAddr(int player) {
 	int p;
-	if(player == MY){
+	if(player == MY) {
 		p = my_data.base_addr;
 	} else {
 		p = enemy_data.base_addr;
@@ -1191,49 +1191,49 @@ int GetPlayerAddr(int player){
 	return p;
 }
 
-char GetSkillLv(int player,int n){
+char GetSkillLv(int player,int n) {
 	if(n < 0 || n > 14 || (player!=MY && player!=ENEMY))return -1;
-	if(player==MY){
+	if(player==MY) {
 		return my_data.skill[n];
 	} else {
 		return enemy_data.skill[n];
 	}
 }
 
-short GetCardId(int player,int n){
+short GetCardId(int player,int n) {
 	int p,temp,temp2,temp3;
 	int a;
 
 	if(weather==11 || (player!=MY && player!=ENEMY) || n<0 || n>5)return -1;
-	if(player==MY){
+	if(player==MY) {
 		return my_data.card[n].id;
 	} else {
 		return enemy_data.card[n].id;
 	}
 }
-int GetCardCost(int player,int n){
+int GetCardCost(int player,int n) {
 	int p,temp,temp2,temp3;
 	short a;
 
 	if(weather==11 || (player!=MY && player!=ENEMY) || n<0 || n>5)return -1;
-	if(player==MY){
+	if(player==MY) {
 		return my_data.card[n].cost;
 	} else {
 		return enemy_data.card[n].cost;
 	}
 }
-int GetCardCost2(int player,int n){
+int GetCardCost2(int player,int n) {
 	int a;
 
 	a = GetCardCost(player,n);
-	if(a==-1){
+	if(a==-1) {
 		return -1;
 	}
 	if(weather==2 && a>1)a--;
 	return a;
 }
 
-short *GetDeckList(int player){
+short *GetDeckList(int player) {
 	static short deck[256];
 	int c;
 	FILE *fp;
@@ -1241,7 +1241,7 @@ short *GetDeckList(int player){
 	int i;
 	unsigned char n;
 
-	if(player==0){
+	if(player==0) {
 		c = my_data.char_id;
 		ReadProcessMemory(ph,(void *)ADDR_LPROFNAME,s,20,NULL);
 	} else {
@@ -1255,7 +1255,7 @@ short *GetDeckList(int player){
 	fn[i] = '\0';
 	sprintf(path,"%s/Profile/%s.dat",fn,s);
 	fp = fopen(path,"r");
-	if(fp==NULL){
+	if(fp==NULL) {
 		i = *(int *)s;
 		ReadProcessMemory(ph,(void *)i,s,256,NULL);
 		sprintf(path,"%s/Profile/%s.dat",fn,s);
@@ -1264,9 +1264,9 @@ short *GetDeckList(int player){
 	}
 	fseek(fp,106,SEEK_SET);
 	i = 0;
-	while(i <= c){
+	while(i <= c) {
 		fread(&n,1,1,fp);
-		if(i==c){
+		if(i==c) {
 			fread(deck,2,n,fp);
 			deck[n] = -1;
 			break;
@@ -1279,31 +1279,31 @@ short *GetDeckList(int player){
 }
 
 
-void is_bullethit(void){
+void is_bullethit(void) {
 	int i,min,temp,l;
 
 	obj_dis = 10000;
 	obj_dis2 = 10000;
 
 	l = 0;
-	while(l < enemy_data.object.size()){
+	while(l < enemy_data.object.size()) {
 		obj *a = enemy_data.GetObject(l);
 		temp = abs(my_data.x - a->x);
-		if(temp<obj_dis2){
+		if(temp<obj_dis2) {
 			obj_dis2 = temp;
 		}
 
-		if(a->attackarea_n < 16){
+		if(a->attackarea_n < 16) {
 			i = 0;
-			while(i < a->attackarea_n){
-				if(a->attackarea[i].left<my_data.x && a->attackarea[i].right>my_data.x){
+			while(i < a->attackarea_n) {
+				if(a->attackarea[i].left<my_data.x && a->attackarea[i].right>my_data.x) {
 					obj_dis = 1;
 				} else {
 					min = abs(a->attackarea[i].left - my_data.x);
-					if(min > abs(a->attackarea[i].right - my_data.x)){
+					if(min > abs(a->attackarea[i].right - my_data.x)) {
 						min = abs(a->attackarea[i].right - my_data.x);
 					}
-					if(min < obj_dis){
+					if(min < obj_dis) {
 						obj_dis = min;
 					}
 				}
@@ -1314,30 +1314,30 @@ void is_bullethit(void){
 	}
 }
 
-BOX *get_hitarea(int player,int n){
-	if((player!=MY && player!=ENEMY) || n<0 || (player==MY && n>=my_data.hitarea_n) || (player==ENEMY && n>=enemy_data.hitarea_n)){
+BOX *get_hitarea(int player,int n) {
+	if((player!=MY && player!=ENEMY) || n<0 || (player==MY && n>=my_data.hitarea_n) || (player==ENEMY && n>=enemy_data.hitarea_n)) {
 		return NULL;
 	}
-	if(player==MY){
+	if(player==MY) {
 		return &my_data.hitarea[n];
 	} else {
 		return &enemy_data.hitarea[n];
 	}
 }
-BOX *get_attackarea(int player,int n){
-	if((player!=MY && player!=ENEMY) || n<0 || (player==MY && n>=my_data.attackarea_n) || (player==ENEMY && n>=enemy_data.attackarea_n)){
+BOX *get_attackarea(int player,int n) {
+	if((player!=MY && player!=ENEMY) || n<0 || (player==MY && n>=my_data.attackarea_n) || (player==ENEMY && n>=enemy_data.attackarea_n)) {
 		return NULL;
 	}
-	if(player==MY){
+	if(player==MY) {
 		return &my_data.attackarea[n];
 	} else {
 		return &enemy_data.attackarea[n];
 	}
 }
 
-int get_correction(int player,int flag){
+int get_correction(int player,int flag) {
 	int a;
-	if(player==0){
+	if(player==0) {
 		a = my_data.correction;
 	} else {
 		a = enemy_data.correction;
@@ -1345,20 +1345,20 @@ int get_correction(int player,int flag){
 	return a&flag;
 }
 
-int GetSpecialData(int player,int n){
+int GetSpecialData(int player,int n) {
 	int data;
-	if((player!=MY && player!=ENEMY) || n<0 || n>SPECIALDATA_MAX){
+	if((player!=MY && player!=ENEMY) || n<0 || n>SPECIALDATA_MAX) {
 		return -1;
 	}
 	//緋想緋緋想だけ逆
-	if(n==9){
-		if(player==MY){
+	if(n==9) {
+		if(player==MY) {
 			player = ENEMY;
 		} else {
 			player = MY;
 		}
 	}
-	if(player==MY){
+	if(player==MY) {
 		data = my_data.sp_data[n];
 	} else {
 		data = enemy_data.sp_data[n];
@@ -1366,7 +1366,7 @@ int GetSpecialData(int player,int n){
 	return data;
 }
 
-void changeDbgBreakPoint(void){
+void changeDbgBreakPoint(void) {
 	HMODULE hm;
 	DWORD old;
 	int paddr,a=1;
@@ -1376,16 +1376,16 @@ void changeDbgBreakPoint(void){
 
 	hm = GetModuleHandle(&"\0ntdll.dll"[a]);
 	paddr = (int)GetProcAddress(hm,&"\0DbgBreakPoint"[a]);
-	if(*(unsigned char *)paddr != 0xCC){
+	if(*(unsigned char *)paddr != 0xCC) {
 //		printf("Error\n");//機械語が想定しているものと違うため中断
 		return;
 	}
-	if(VirtualProtect((void *)hm,(int)paddr-(int)hm+1,PAGE_EXECUTE_READWRITE,&old)){//勝手に範囲を決めてくれるのでアバウドでよい
+	if(VirtualProtect((void *)hm,(int)paddr-(int)hm+1,PAGE_EXECUTE_READWRITE,&old)) {//勝手に範囲を決めてくれるのでアバウドでよい
 		*(char *)paddr = 0xC3;
 		VirtualProtect((void *)hm,paddr-(int)hm+1,old,&old);//変更前の権限に戻す
 	}
 }
-void changeLoadLibraryExW(int flag){
+void changeLoadLibraryExW(int flag) {
 	HMODULE hm;
 	DWORD old;
 	static unsigned char code[15];
@@ -1395,7 +1395,7 @@ void changeLoadLibraryExW(int flag){
 #endif
 	hm = GetModuleHandle("Kernel32.dll");
 	paddr = (int)GetProcAddress(hm,&"\0LoadLibraryExW"[a]);
-	if(flag == 0){
+	if(flag == 0) {
 		code[0] = 0x6A;//code[0]~code[6]まで上書きで消してしまう機械語の代わり
 		code[1] = 0x34;
 		code[2] = 0x68;
@@ -1407,12 +1407,12 @@ void changeLoadLibraryExW(int flag){
 		code[5] = 0xc2;
 		*(short*)&code[6] = 0x000c;
 	}
-	if(*(int *)code != *(int *)paddr || *(int *)&code[4] != *(int *)(paddr+4)){
+	if(*(int *)code != *(int *)paddr || *(int *)&code[4] != *(int *)(paddr+4)) {
 		//printf("Error\n");//機械語が想定しているものと違うため中断
 		return;
 	}
-	if(VirtualProtect((void *)hm,(int)paddr-(int)hm+7,PAGE_EXECUTE_READWRITE,&old)){//勝手に範囲を決めてくれるのでアバウドでよい
-		if(flag == 0){
+	if(VirtualProtect((void *)hm,(int)paddr-(int)hm+7,PAGE_EXECUTE_READWRITE,&old)) {//勝手に範囲を決めてくれるのでアバウドでよい
+		if(flag == 0) {
 			((char*)paddr)[0] = 0xb8;
 			*(int*)&((char*)paddr)[1] = 0x00000000;
 			((char*)paddr)[5] = 0xc2;
@@ -1427,7 +1427,7 @@ void changeLoadLibraryExW(int flag){
 		VirtualProtect((void *)hm,paddr-(int)hm+5,old,&old);//変更前の権限に戻す
 	}
 /*
-	if(LoadLibraryA("user32.dll") == NULL){//成功していれば必ず存在するdll相手でも失敗するはず
+	if(LoadLibraryA("user32.dll") == NULL) {//成功していれば必ず存在するdll相手でも失敗するはず
 		printf("OK\n");
 	} else {
 		printf("NG\n");
@@ -1436,9 +1436,9 @@ void changeLoadLibraryExW(int flag){
 }
 
 #ifdef DEBUG
-int main(int argc,char *_argv[]){
+int main(int argc,char *_argv[]) {
 #else
-int main2(int argc,char *_argv[]){
+int main2(int argc,char *_argv[]) {
 #endif
 	char s[256],script[8192];
 	hInst = GetModuleHandle(NULL);
@@ -1455,20 +1455,20 @@ int main2(int argc,char *_argv[]){
 	char *argv[64];
 	{
 		int i = 0;
-		while(i < argc){
+		while(i < argc) {
 			argv[i] = _argv[i];
 			i++;
 		}
 		i = 0;
-		while(i < argc){
-			if(argv[i][0]=='-'){
-				if(strcmp(argv[i],"-signature")==0){
+		while(i < argc) {
+			if(argv[i][0]=='-') {
+				if(strcmp(argv[i],"-signature")==0) {
 					strcpy(aimanager_signature,argv[i+1]);
 					memmove(&argv[i],&argv[i+2],sizeof(char*)*(argc-i-2));
 					argc -= 2;
-				} else if(strcmp(argv[i],"-char")==0){
+				} else if(strcmp(argv[i],"-char")==0) {
 					int n = atoi2(argv[i+1],-1);
-					if(n==-1){
+					if(n==-1) {
 						printf("オプション -char の使用方法が間違っています。\n");
 					} else {
 						operation_char = n;
@@ -1486,9 +1486,9 @@ int main2(int argc,char *_argv[]){
 		}
 	}
 
-	if(argc == 2){
+	if(argc == 2) {
 		OpenAI(argv[1]);
-	} else if(ini_value("StartupAI") != NULL){
+	} else if(ini_value("StartupAI") != NULL) {
 		strcpy(s,ini_value("StartupAI"));
 		to_lowstring(s);
 		OpenAI(s);

@@ -4,13 +4,13 @@
 scriptEngine *engine;
 
 
-void reload(void){
+void reload(void) {
 	MyWndActive(FALSE);
 	engine->reload();
 	timeEndPeriod(1);
 	exit(0);
 }
-void reload2(void){
+void reload2(void) {
 	engine->end();
 	engine->init();
 	engine->loadDialog();

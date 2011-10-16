@@ -151,7 +151,7 @@ public:
 	char *name_list[ADDR_MAX];
 	int list[ADDR_MAX];
 
-	void init(){
+	void init() {
 		char *temp[ADDR_MAX] = {
 			"ADDR_PBATTLEMGR",	"ADDR_PNETOBJECT",	"ADDR_COMMMODE",
 			"ADDR_LCHARID",		"ADDR_RCHARID",		"ADDR_SCENEID",
@@ -306,18 +306,18 @@ public:
 		set_default(MUNENOFS,		0x838,		0x924);		//
 	}
 
-	int & operator [](int n){
-		if(list[n] == 0){
+	int & operator [](int n) {
+		if(list[n] == 0) {
 			list[n] = g_ini.GetInt(name_list[n]);
 		}
 		return list[n];
 	}
 
-	void reset(){
+	void reset() {
 		memset(list, 0, sizeof(list));
 	}
 private:
-	void set_default(int n,int swr_addr,int swrs_addr){
+	void set_default(int n,int swr_addr,int swrs_addr) {
 		char addr[256],name[256];
 		snprintf(name, sizeof(name), "SWR_%s", name_list[n]);
 		snprintf(addr, sizeof(addr), "0x%x", swr_addr);

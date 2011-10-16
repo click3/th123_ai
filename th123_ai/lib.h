@@ -13,14 +13,14 @@ void change_icon(int id);
 class ini
 {
 public:
-	ini(){
+	ini() {
 		head = NULL;
 	}
-	~ini(){
+	~ini() {
 		LIST *a,*b;
 
 		a = head;
-		while(a != NULL){
+		while(a != NULL) {
 			b = a;
 			a = a->next;
 			free(b);
@@ -42,7 +42,7 @@ public:
 		return atof2(GetValue(name), def);
 	}
 
-	int LoadFile(const char *fn){
+	int LoadFile(const char *fn) {
 		FILE *fp;
 		char section[256] = "root";
 		char s[256],*value;
@@ -51,15 +51,15 @@ public:
 		fp = fopen(fn,"r");
 		if(fp == NULL)return 0;
 		count = 0;
-		while(fgets(s,256,fp) != NULL){
+		while(fgets(s,256,fp) != NULL) {
 			if(s[strlen(s)-1] == '\n')s[strlen(s)-1] = '\0';
 			if(strcmp(section,"SwrName") != 0 && strcmp(section,"SWRSName") != 0)del_space(s);//SwrNameÇÃèÍçáÇÕãÛîíçÌèúÇ»Çµ
-			if(*s == ';' || *s == '\0' || strncmp(s,"//",2)==0 || *s == '#'){
+			if(*s == ';' || *s == '\0' || strncmp(s,"//",2)==0 || *s == '#') {
 				continue;
-			} else if(*s == '['){
+			} else if(*s == '[') {
 				i = 1;
-				while(s[i] != ']'){
-					if(s[i] == '\0'){
+				while(s[i] != ']') {
+					if(s[i] == '\0') {
 						fclose(fp);
 						return -1;
 					}
@@ -69,8 +69,8 @@ public:
 				strcpy(section,&s[1]);
 			} else {
 				i = 0;
-				while(s[i] != '='){
-					if(s[i] == '\0'){
+				while(s[i] != '=') {
+					if(s[i] == '\0') {
 						fclose(fp);
 						return -2;
 					}
@@ -86,13 +86,13 @@ public:
 		return count;
 	}
 
-	virtual void Add(const char *section,const char *name,const char *value){
+	virtual void Add(const char *section,const char *name,const char *value) {
 		LIST *a;
 
 		a = get_list(name);
-		if(a == NULL){
+		if(a == NULL) {
 			a = static_cast<LIST*>(malloc(sizeof(LIST)));
-			if(head == NULL){
+			if(head == NULL) {
 				head = a;
 			} else {
 				tail->next = a;
@@ -118,8 +118,8 @@ protected:
 
 	static unsigned int del_space(char *s) {
 		int count = 0;
-		while(*s != '\0'){
-			if(*s == ' ' || *s == '\t'){
+		while(*s != '\0') {
+			if(*s == ' ' || *s == '\t') {
 				memmove(s, &s[1], strlen(&s[1])+1);
 				count++;
 			} else {
@@ -140,8 +140,8 @@ protected:
 		LIST *a;
 
 		a = head;
-		while(a != NULL){
-			if(strcmp(a->name,name)==0){
+		while(a != NULL) {
+			if(strcmp(a->name,name)==0) {
 				return a;
 			}
 			a = a->next;
@@ -172,7 +172,7 @@ public:
 	~th_ini() { }
 
 	bool SetType(TYPE a) {
-		if(a!=TYPE_NONE && a!=TYPE_TH105_SWR && a!=TYPE_TH123_SOKU){
+		if(a!=TYPE_NONE && a!=TYPE_TH105_SWR && a!=TYPE_TH123_SOKU) {
 			printf("Error ini::SetType param error( type = %d)\n",a);
 			BOOST_ASSERT(false);
 			return false;
@@ -195,13 +195,13 @@ protected:
 	TYPE type;
 
 	static const char *GetTypeName(const char *name, TYPE type) {
-		if(strncmp(name, "ADDR_", 4) != 0){
+		if(strncmp(name, "ADDR_", 4) != 0) {
 			return name;
 		}
 		static char temp[256];
-		if(type == TYPE_TH105_SWR){
+		if(type == TYPE_TH105_SWR) {
 			::strcpy(temp, "SWR_");
-		} else if(type == TYPE_TH123_SOKU){
+		} else if(type == TYPE_TH123_SOKU) {
 			::strcpy(temp, "SWRS_");
 		} else {
 			printf("Error ini::GetValue type error(name = %s, type = %d)\n", name, type);

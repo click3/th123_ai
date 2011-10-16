@@ -7,7 +7,7 @@ int protect_flag = 0;
 struct fopen_struct *fopen_struct_head=NULL;
 struct fopen_struct *fopen_struct_current=NULL;
 
-FILE *fopen2(const char *fn,char *flag){
+FILE *fopen2(const char *fn,char *flag) {
 	FILE *fp;
 	struct fopen_struct *a;
 
@@ -15,7 +15,7 @@ FILE *fopen2(const char *fn,char *flag){
 	if(fp==NULL)return NULL;
 
 	a = (struct fopen_struct *)malloc(sizeof(struct fopen_struct));
-	if(fopen_struct_head==NULL){
+	if(fopen_struct_head==NULL) {
 		fopen_struct_head = a;
 		a->prev = NULL;
 	} else {
@@ -29,22 +29,22 @@ FILE *fopen2(const char *fn,char *flag){
 	return fp;
 }
 
-int fclose2(FILE *fp){
+int fclose2(FILE *fp) {
 	struct fopen_struct *a;
 
 	a = fopen_struct_head;
-	while(a!=NULL){
-		if(a->fp==fp){
-			if(a->prev!=NULL){
+	while(a!=NULL) {
+		if(a->fp==fp) {
+			if(a->prev!=NULL) {
 				a->prev->next = a->next;
 			}
-			if(a->next!=NULL){
+			if(a->next!=NULL) {
 				a->next->prev = a->prev;
 			}
-			if(a==fopen_struct_head){
+			if(a==fopen_struct_head) {
 				fopen_struct_head = a->next;
 			}
-			if(a==fopen_struct_current){
+			if(a==fopen_struct_current) {
 				fopen_struct_current = a->prev;
 			}
 			free(a);
@@ -55,11 +55,11 @@ int fclose2(FILE *fp){
 	return fclose(fp);
 }
 
-void ffree(void){
+void ffree(void) {
 	struct fopen_struct *a,*b;
 
 	a = fopen_struct_head;
-	while(a!=NULL){
+	while(a!=NULL) {
 		fclose(a->fp);
 		b = a;
 		a = a->next;

@@ -203,10 +203,10 @@ static FILE *getiofile (lua_State *L, int findex) {
 
 static int g_iofile (lua_State *L, int f, const char *mode) {
   if (!lua_isnoneornil(L, 1)) {
-    if(lua_type(L,1) == LUA_TUSERDATA){
+    if(lua_type(L,1) == LUA_TUSERDATA) {
       tofile(L);  /* check that it's a valid file handle */
       lua_pushvalue(L, 1);
-    } else if(lua_type(L,1) == LUA_TNUMBER){
+    } else if(lua_type(L,1) == LUA_TNUMBER) {
       char filename[256];
       int n = lua_tonumber(L, 1);
       FILE **pf = newfile(L);

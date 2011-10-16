@@ -96,8 +96,8 @@ void luaD_throw (lua_State *L, int errcode) {
 //コルーチンが勝手に保護モードにしてエラー取れないため
   if (L->errorJmp && protect_flag) {
     L->errorJmp->status = errcode;
-    while(n>1){
-      if(lua_tostring(L,n)!=NULL){
+    while(n>1) {
+      if(lua_tostring(L,n)!=NULL) {
         FILE *fp = fopen("error_tmp.tmp147258369","a");
         fprintf(fp,"Error: %s\n",lua_tostring(L,n));
         fclose(fp);

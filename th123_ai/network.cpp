@@ -71,12 +71,12 @@ HINTERNET_PTR OpenRequest(HINTERNET_PTR connection,
 HINTERNET_PTR CreateSession(const std::wstring &user_agent) {
 	WINHTTP_CURRENT_USER_IE_PROXY_CONFIG ieProxyConfig = { 0 };
 
-	if (!::WinHttpGetIEProxyConfigForCurrentUser(&ieProxyConfig)){
+	if (!::WinHttpGetIEProxyConfigForCurrentUser(&ieProxyConfig)) {
 		ErrorPrint("ProxyConfigGet", ::GetLastError());
 		return HINTERNET_PTR();
 	}
 	HINTERNET_PTR session;
-	if(ieProxyConfig.lpszProxy!=NULL){
+	if(ieProxyConfig.lpszProxy!=NULL) {
 		session = OpenSession(
 			user_agent,
 			WINHTTP_ACCESS_TYPE_NAMED_PROXY,
@@ -91,13 +91,13 @@ HINTERNET_PTR CreateSession(const std::wstring &user_agent) {
 			WINHTTP_NO_PROXY_BYPASS,
 			0);
 	}
-	if(ieProxyConfig.lpszAutoConfigUrl!=NULL){
+	if(ieProxyConfig.lpszAutoConfigUrl!=NULL) {
 		GlobalFree(ieProxyConfig.lpszAutoConfigUrl);
 	}
-	if(ieProxyConfig.lpszProxy!=NULL){
+	if(ieProxyConfig.lpszProxy!=NULL) {
 		GlobalFree(ieProxyConfig.lpszProxy);
 	}
-	if(ieProxyConfig.lpszProxyBypass!=NULL){
+	if(ieProxyConfig.lpszProxyBypass!=NULL) {
 		GlobalFree(ieProxyConfig.lpszProxyBypass);
 	}
 
@@ -125,7 +125,7 @@ boost::optional<boost::tuple<HINTERNET_PTR, HINTERNET_PTR, HINTERNET_PTR> > Send
 	url_components.dwHostNameLength  = -1;
 	url_components.dwUrlPathLength   = -1;
 	url_components.dwExtraInfoLength = -1;
-	if(::WinHttpCrackUrl(url.c_str(), url.size(), 0, &url_components) == FALSE){
+	if(::WinHttpCrackUrl(url.c_str(), url.size(), 0, &url_components) == FALSE) {
 		ErrorPrint("WinHttpCrackUrl", ::GetLastError());
 		return boost::none;
 	}
@@ -144,24 +144,24 @@ boost::optional<boost::tuple<HINTERNET_PTR, HINTERNET_PTR, HINTERNET_PTR> > Send
 
 	DWORD flag = (scheme == L"https") ? WINHTTP_FLAG_SECURE : 0;
 	HINTERNET_PTR request = OpenRequest(connection, method, path, boost::none, boost::none, boost::none, flag);
-	if(!request){
+	if(!request) {
 		return boost::none;
 	}
 
 	{
 		BOOL result = ::WinHttpAddRequestHeaders(ToHINTERNET(request), L"Accept-Language: ja", -1L, WINHTTP_ADDREQ_FLAG_ADD);
-		if(!result){
+		if(!result) {
 			ErrorPrint("AddRequestHeaders", ::GetLastError());
 			return boost::none;
 		}
 	}
 
-	if(is_post){
+	if(is_post) {
 		BOOL result = ::WinHttpAddRequestHeaders(ToHINTERNET(request),
 			L"Content-Type: multipart/form-data; boundary=---------------------------12672135622879",
 			-1L,
 			WINHTTP_ADDREQ_FLAG_ADD);
-		if(!result){
+		if(!result) {
 			ErrorPrint("AddRequestHeaders", ::GetLastError());
 			return boost::none;
 		}
@@ -170,7 +170,7 @@ boost::optional<boost::tuple<HINTERNET_PTR, HINTERNET_PTR, HINTERNET_PTR> > Send
 	{
 		const char *data;
 		unsigned int size;
-		if(!is_post){
+		if(!is_post) {
 			data = WINHTTP_NO_REQUEST_DATA;
 			size = 0;
 		} else {
@@ -182,7 +182,7 @@ boost::optional<boost::tuple<HINTERNET_PTR, HINTERNET_PTR, HINTERNET_PTR> > Send
 			0, static_cast<void *>(const_cast<char *>(data)),
 			size, size,
 			NULL);//コールバック先に渡される
-		if(!result){
+		if(!result) {
 			ErrorPrint("WinHttpSendRequest", ::GetLastError());
 			return boost::none;
 		}
@@ -191,7 +191,7 @@ boost::optional<boost::tuple<HINTERNET_PTR, HINTERNET_PTR, HINTERNET_PTR> > Send
 	{
 		BOOL result = ::WinHttpReceiveResponse(ToHINTERNET(request), NULL);
 
-		if(!result){
+		if(!result) {
 			ErrorPrint("WinHttpReceiveResponse", ::GetLastError());
 			return boost::none;
 		}
@@ -230,7 +230,7 @@ bool GetResponseHeaderSelect(HINTERNET_PTR request, std::wstring *ptr, DWORD typ
 		&data.front(),
 		&size,
 		WINHTTP_NO_HEADER_INDEX);
-	if(result != TRUE){
+	if(result != TRUE) {
 		return false;
 	}
 	*ptr = std::wstring(&data.front());
@@ -241,7 +241,7 @@ bool GetContentLength(HINTERNET_PTR request, int *ptr) {
 	std::wstring str;
 	bool ret;
 	ret = GetResponseHeaderSelect(request, &str, WINHTTP_QUERY_CONTENT_LENGTH);
-	if(ret){
+	if(ret) {
 		*ptr = boost::lexical_cast<int>(str);
 	} else {
 		*ptr = -1;
@@ -281,7 +281,7 @@ public:
 	boost::optional<std::vector<char> > SimplePost(const std::wstring &url, const char *post_data, unsigned int post_data_size, DWORD *code) {
 		return HttpRequest(L"POST", true, url, post_data, post_data_size, code);
 	}
-	boost::optional<std::vector<char> > HttpRequest(const std::wstring &method, bool is_post, const std::wstring &url, const char *post_data, unsigned int post_data_size, DWORD *code){
+	boost::optional<std::vector<char> > HttpRequest(const std::wstring &method, bool is_post, const std::wstring &url, const char *post_data, unsigned int post_data_size, DWORD *code) {
 		boost::optional<boost::tuple<HINTERNET_PTR, HINTERNET_PTR, HINTERNET_PTR> > handle_list = SendRequest(user_agent, method, is_post, url, post_data, post_data_size, code);
 		if(!handle_list) {
 			return boost::none;
@@ -297,9 +297,9 @@ public:
 		//printf("ContentLength: %d\n",size);
 
 		std::vector<char> result;
-		if(size == -1){		//可変長データ
+		if(size == -1) {		//可変長データ
 			size = 0;
-			while(true){
+			while(true) {
 				DWORD t_size;
 				if (::WinHttpQueryDataAvailable(ToHINTERNET(request), &t_size) == FALSE) {
 					ErrorPrint("WinHttpQueryDataAvailable", ::GetLastError());
@@ -315,7 +315,7 @@ public:
 		} else {		//固定長データ
 			result.resize(size);
 			char *s = &result.front();
-			while(s <= &result.back()){
+			while(s <= &result.back()) {
 				DWORD t_size;
 				if(::WinHttpQueryDataAvailable(ToHINTERNET(request), &t_size) == FALSE) {
 					ErrorPrint("WinHttpQueryDataAvailable", GetLastError());
@@ -341,32 +341,32 @@ protected:
 
 
 
-boost::optional<std::vector<char> > post(const std::wstring &uri, const char *data, int data_size=-1){
-	if(data_size==-1){
+boost::optional<std::vector<char> > post(const std::wstring &uri, const char *data, int data_size=-1) {
+	if(data_size==-1) {
 		data_size = strlen(data);
 	}
 	HttpClient http;
 	DWORD code;
 	boost::optional<std::vector<char> > result = http.SimplePost(uri, data, data_size, &code);
-	if(result && code/100==2){
+	if(result && code/100==2) {
 		return result;
 	} else {
 		return boost::none;
 	}
 }
 
-boost::optional<std::vector<char> > get(const std::wstring &uri){
+boost::optional<std::vector<char> > get(const std::wstring &uri) {
 	HttpClient http;
 	DWORD code;
 	boost::optional<std::vector<char> > result = http.SimpleGet(uri, &code);
-	if(result && code/100==2){
+	if(result && code/100==2) {
 		return result;
 	} else {
 		return boost::none;
 	}
 }
 
-void add_param(char *data, const char *name, const char *value){
+void add_param(char *data, const char *name, const char *value) {
 	::strcat(data, "-----------------------------12672135622879\r\n");
 	::strcat(data, "Content-Disposition: form-data; name=\"");
 	::strcat(data, name);
@@ -375,7 +375,7 @@ void add_param(char *data, const char *name, const char *value){
 	::strcat(data, "\r\n");
 }
 
-void add_param(char *data,const char *name, int value){
+void add_param(char *data,const char *name, int value) {
 	char temp[256];
 	::sprintf(temp,"%d",value);
 	add_param(data,name,temp);
@@ -393,24 +393,24 @@ std::wstring A2W(const char *str) {
 }
 
 bool ResultCheck(const boost::optional<std::vector<char> >& result) {
-	if(!result){
+	if(!result) {
 		return false;
 	}
-	if(strstr(&result.get().front(),"OK")==NULL){
+	if(strstr(&result.get().front(),"OK")==NULL) {
 		return false;
 	} else {
 		return true;
 	}
 }
 
-void ErrorPost(const char *url,const char *s){
+void ErrorPost(const char *url,const char *s) {
 	char data[4096]="";
 	add_param(data,"error",s);
 	::strcat(data,"-----------------------------12672135622879--\r\n\r\n");
 	post(A2W(url), data);
 }
 
-bool AIZipPost(const char *url, const char *fn, int char_id, const char *signature, const char *name, const char *description, const char *root){
+bool AIZipPost(const char *url, const char *fn, int char_id, const char *signature, const char *name, const char *description, const char *root) {
 	boost::shared_ptr<FILE> fp = MyFOpen(fn,"rb");
 	if(!fp) {
 		return false;
@@ -447,7 +447,7 @@ bool AIZipPost(const char *url, const char *fn, int char_id, const char *signatu
 	return ResultCheck(result);
 }
 
-bool PostDeleteMethod(const char *url,int char_id,const char *signature,const char *name,const char *description,const char *root){
+bool PostDeleteMethod(const char *url,int char_id,const char *signature,const char *name,const char *description,const char *root) {
 	char data[2048]="";
 	bool ret;
 
@@ -460,7 +460,7 @@ bool PostDeleteMethod(const char *url,int char_id,const char *signature,const ch
 	return ResultCheck(result);
 }
 
-bool PostScriptError(const char *url,const char *signature, const char *e){
+bool PostScriptError(const char *url,const char *signature, const char *e) {
 	char data[4096]="",*s;
 	bool ret;
 

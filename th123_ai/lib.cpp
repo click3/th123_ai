@@ -6,7 +6,7 @@ using namespace std;
 namespace {
 
 //IEEE754形式小数点演算だと仮定して、不正なfloatではないかチェックする
-bool CheckFloat(float f){
+bool CheckFloat(float f) {
 	const unsigned int * const to_int = reinterpret_cast<const unsigned int *>(&f);
 	const unsigned int exponent = (*to_int >> 23)&0xFF;
 	if(exponent > 254 || (*to_int != 0 && exponent < 108)) {
@@ -18,7 +18,7 @@ bool CheckFloat(float f){
 } // anonymous
 
 //デフォルト指定可能、16進数なども可能版atoi
-int atoi2(const char *str,int def){
+int atoi2(const char *str,int def) {
 	int i;
 	char *s = NULL;
 
@@ -67,17 +67,17 @@ void set_clipboard(char *s) {
 	return;
 }
 
-void to_lowstring(char *s){
-	while(*s != '\0'){
+void to_lowstring(char *s) {
+	while(*s != '\0') {
 		*s = tolower(*s);
 		s++;
 	}
 }
 
-void SetConsoleTitle2(char *str){
+void SetConsoleTitle2(char *str) {
 	static char *s = NULL;
 
-	if(s != NULL){
+	if(s != NULL) {
 		if(strncmp(s,str,strlen(str)) == 0)return;
 		free(s);
 	}
@@ -88,22 +88,22 @@ void SetConsoleTitle2(char *str){
 	SetConsoleTitle(s);
 }
 
-void change_icon(int id){
+void change_icon(int id) {
 	static int id_list[10] = {0};
 	static long icon_list[10][2] = {0};
 	int i;
 
-	if(id_list[0] == 0){
+	if(id_list[0] == 0) {
 		memset(id_list,0,sizeof(int)*10);
 	}
 	i = 0;
-	while(i < 10){
-		if(id_list[i] == id){
+	while(i < 10) {
+		if(id_list[i] == id) {
 			break;
 		}
 		i++;
 	}
-	if(i==10){
+	if(i==10) {
 		i = 0;
 		while(id_list[i]!=0)i++;
 		id_list[i] = id;
@@ -117,23 +117,23 @@ void change_icon(int id){
 th_ini g_ini;
 
 
-char *ini_value(const char *name){
+char *ini_value(const char *name) {
 	return g_ini.GetValue(name);
 }
-int ini_int(const char *name){
+int ini_int(const char *name) {
 	return g_ini.GetInt(name);
 }
-int ini_int2(const char *name, int def){
+int ini_int2(const char *name, int def) {
 	return g_ini.GetInt(name, def);
 }
-float ini_float(const char *name){
+float ini_float(const char *name) {
 	return g_ini.GetFloat(name);
 }
-int load_ini(const char *fn){
+int load_ini(const char *fn) {
 	return g_ini.LoadFile(fn);
 }
-void ini_add(const char *section,const char *name,const char *value){
+void ini_add(const char *section,const char *name,const char *value) {
 	g_ini.Add(section, name, value);
 }
-void create_ini(void){
+void create_ini(void) {
 }
