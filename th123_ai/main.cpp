@@ -17,7 +17,6 @@ bool is_swr = false;
 
 
 int weather_delay = 300;
-int key_delay = 0;
 int get_delay = 0;
 
 char on[10] = {0,0,0,0,0,0,0,0,0,0};

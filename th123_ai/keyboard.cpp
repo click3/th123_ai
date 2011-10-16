@@ -10,6 +10,7 @@ struct KeyAction{
 };
 
 int key_frame = 0;
+int key_delay = 0;
 std::list<KeyAction> action_list;
 
 void keybd_event3(int code, DWORD dwFlags) {
