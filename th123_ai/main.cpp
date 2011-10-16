@@ -537,28 +537,36 @@ void init(void){
 	change_player();
 }
 
-char *id2char(int id){
-	static char db[][11] = {
-		{"—ì–²"},{"–‚—¹"},{"ç–é"},{"ƒAƒŠƒX"},
-		{"ƒpƒ`ƒ…ƒŠ["},{"—d–²"},{"ƒŒƒ~ƒŠƒA"},{"—HXŽq"},
-		{"Ž‡"},{"äÂ"},{"—D“Ü‰Ø"},{"•¶"},
-		{"¬’¬"},{"ˆß‹è"},{"“VŽq"},{"‘•c"},
-		{"ƒ`ƒ‹ƒm"},{"”ü—é"},{"‹ó"},{"z–KŽq"}};
-	if( (is_swr && id>15) || id>20){
+bool CharIDvalidate(unsigned int id) {
+	if(is_swr) {
+		return SWR_CHAR_ID_MIN <= id && id <= SWR_CHAR_ID_MAX;
+	} else {
+		return SWRS_CHAR_ID_MIN <= id && id <= SWRS_CHAR_ID_MAX;
+	}
+}
+
+const char *id2char(unsigned int id) {
+	static const char * const db[] = {
+		"—ì–²",	"–‚—¹",	"ç–é",	"ƒAƒŠƒX",
+		"ƒpƒ`ƒ…ƒŠ[",	"—d–²",	"ƒŒƒ~ƒŠƒA",	"—HXŽq",
+		"Ž‡",		"äÂ",	"—D“Ü‰Ø",	"•¶",
+		"¬’¬",	"ˆß‹è",	"“VŽq",	"‘•c",
+		"ƒ`ƒ‹ƒm",	"”ü—é",	"‹ó",		"z–KŽq"};
+	if(!CharIDvalidate(id)) {
 		printf("Error:id2char ”ÍˆÍŠO‚ÌID\n");
 		BOOST_ASSERT(false);
 		return db[0];
 	}
 	return db[id];
 }
-char *id2char2(int id){
-	static char db[][11] = {
-		{"reimu"},{"marisa"},{"sakuya"},{"alice"},
-		{"patchouli"},{"youmu"},{"remilia"},{"yuyuko"},
-		{"yukari"},{"suika"},{"udonge"},{"aya"},
-		{"komachi"},{"iku"},{"tenshi"},{"sanae"},
-		{"chirno"},{"meirin"},{"utsuho"},{"suwako"}};
-	if( (is_swr && id>15) || id>20){
+const char *id2char2(unsigned int id) {
+	static const char * const db[] = {
+		"reimu",	"marisa",	"sakuya",	"alice",
+		"patchouli",	"youmu",	"remilia",	"yuyuko",
+		"yukari",	"suika",	"udonge",	"aya",
+		"komachi",	"iku",		"tenshi",	"sanae",
+		"chirno",	"meirin",	"utsuho",	"suwako"};
+	if(!CharIDvalidate(id)) {
 		printf("Error:id2char ”ÍˆÍŠO‚ÌID\n");
 		BOOST_ASSERT(false);
 		return db[0];

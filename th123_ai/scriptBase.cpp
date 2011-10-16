@@ -23,7 +23,7 @@ void scriptEngine::convertFilePath(char *path) const {
 			continue;
 		}
 		const unsigned int char_id = getScriptValue(s[2]=='1' ? "my_char" : "enemy_char");
-		const char * const char_name = (s[1]=='c' ? ::id2char2(char_id) : id2char(char_id));
+		const char * const char_name = (s[1]=='c' ? ::id2char2(char_id) : ::id2char(char_id));
 		char temp[256];
 		SPRINTF(temp, "%s%s%s", path, char_name, s);
 		::strcpy(path, ss);

@@ -1,7 +1,21 @@
 
 #pragma once
 
+enum{ACT_UP,ACT_DOWN,ACT_LEFT,ACT_RIGHT,ACT_A,ACT_B,ACT_C,ACT_D,ACT_AB,ACT_BC,ACT_DLEFT,ACT_DRIGHT,ACT_ULEFT,ACT_URIGHT};
+enum{MY,ENEMY};
 
+
+#define SPECIALDATA_MAX	28
+
+enum CHAR_ID {
+	CHAR_REIMU=0,		CHAR_MARISA,	CHAR_SAKUYA,	CHAR_ALICE,
+	CHAR_PATCHOULI,	CHAR_YOUMU,	CHAR_REMILIA,	CHAR_YUYUKO,
+	CHAR_YUKARI,		CHAR_SUIKA,	CHAR_UDONGE,	CHAR_AYA,
+	CHAR_KOMACHI,		CHAR_IKU,	CHAR_TENSHI,	CHAR_SANAE,
+	CHAR_CHIRNO,		CHAR_MEIRIN,	CHAR_UTSUHO,	CHAR_SUWAKO,
+	SWR_CHAR_ID_MIN = CHAR_REIMU,	SWR_CHAR_ID_MAX = CHAR_TENSHI,
+	SWRS_CHAR_ID_MIN = CHAR_REIMU,	SWRS_CHAR_ID_MAX = CHAR_SUWAKO,
+};
 
 void th105_active(void);
 void MyWndActive(int flag);
@@ -16,8 +30,8 @@ typedef struct{
 	int bottom;
 }BOX;
 
-char *id2char(int id);
-char *id2char2(int id);
+const char *id2char(unsigned int id);
+const char *id2char2(unsigned int id);
 
 void yield(void);
 void key_reset(void);
@@ -50,22 +64,6 @@ void changeLoadLibraryExW(int flag);
 void load_inis(void);
 
 char get_key_stat(int n);
-
-
-
-enum{ACT_UP,ACT_DOWN,ACT_LEFT,ACT_RIGHT,ACT_A,ACT_B,ACT_C,ACT_D,ACT_AB,ACT_BC,ACT_DLEFT,ACT_DRIGHT,ACT_ULEFT,ACT_URIGHT};
-enum{MY,ENEMY};
-
-
-#define SPECIALDATA_MAX	28
-
-enum{
-	CHAR_REIMU=0,	CHAR_MARISA,	CHAR_SAKUYA,	CHAR_ALICE,
-	CHAR_PATCHOULI,	CHAR_YOUMU,	CHAR_REMILIA,	CHAR_YUYUKO,
-	CHAR_YUKARI,	CHAR_SUIKA,	CHAR_UDONGE,	CHAR_AYA,
-	CHAR_KOMACHI,	CHAR_IKU,	CHAR_TENSHI,	CHAR_SANAE,
-	CHAR_CHIRNO,	CHAR_MEIRIN,	CHAR_UTSUHO,	CHAR_SUWAKO
-};
 
 
 extern bool is_soku;
