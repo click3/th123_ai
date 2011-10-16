@@ -39,9 +39,29 @@
 #define	VK_Y	89
 #define	VK_Z	90
 
-void keybd_event2(int code, DWORD dwFlags);
-void kev_call(void);
-void kev_clear(void);
 
-extern int key_delay;
-extern int key_frame;
+class KeybdEvent {
+protected:
+	struct KeyAction{
+		int code;
+		int flag;
+		int frame;
+	};
+	std::list<KeyAction> action_list;
+
+	void ExecEvent(int code, DWORD dwFlags);
+public:
+	KeybdEvent() : key_frame(0), key_delay(0) { }
+	unsigned int GetKeyDelay(void) const {
+		return key_delay;
+	}
+	void SetKeyDelay(unsigned int key_delay) {
+		this->key_delay = key_delay;
+	}
+	void AddEvent(int code, DWORD dwFlags);
+	void ProcessEvent(void);
+	void Clear(void);
+protected:
+	int key_frame;
+	int key_delay;
+};

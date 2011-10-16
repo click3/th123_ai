@@ -34,6 +34,8 @@ char stage_num,bgm_num,last_on_key;
 player my_data(player::MY);
 player enemy_data(player::ENEMY);
 
+KeybdEvent keyboard;
+
 #pragma	comment(lib,"advapi32.lib")
 #pragma	comment(lib,"psapi.lib")
 #pragma	comment(lib,"gdi32.lib")
@@ -737,20 +739,20 @@ void search_key(void){
 //ACT_DLEFTˆÈ~‚É‘Î‰ž‚µ‚Ä‚¢‚È‚¢‚½‚ßAkey_on‚Ækey_offˆÈŠO‚©‚çŒÄ‚Î‚È‚¢‚±‚Æ
 void on_check(int n){
 	if(on[n]){
-		keybd_event2(key[n],KEYEVENTF_KEYUP);
+		keyboard.AddEvent(key[n],KEYEVENTF_KEYUP);
 		on[n] = 0;
 	}
 	if(n == 2 && on[3]){
-		keybd_event2(key[3],KEYEVENTF_KEYUP);
+		keyboard.AddEvent(key[3],KEYEVENTF_KEYUP);
 		on[3] = 0;
 	} else if(n == 3 && on[2]){
-		keybd_event2(key[2],KEYEVENTF_KEYUP);
+		keyboard.AddEvent(key[2],KEYEVENTF_KEYUP);
 		on[2] = 0;
 	} else if(n == 0 && on[1]){
-		keybd_event2(key[1],KEYEVENTF_KEYUP);
+		keyboard.AddEvent(key[1],KEYEVENTF_KEYUP);
 		on[1] = 0;
 	} else if(n == 1 && on[0]){
-		keybd_event2(key[0],KEYEVENTF_KEYUP);
+		keyboard.AddEvent(key[0],KEYEVENTF_KEYUP);
 		on[0] = 0;
 	}
 }
@@ -777,7 +779,7 @@ void key_on(int n){
 		}
 	} else if(!on[n]){
 		on_check(n);
-		keybd_event2(key[n],0);
+		keyboard.AddEvent(key[n], 0);
 		on[n] = 1;
 	}
 }
@@ -850,8 +852,8 @@ int is_CardUse(void){
 }
 
 void set_key_delay(int delay){
-	key_delay = delay;
-	engine->setScriptValue("key_delay",key_delay);
+	keyboard.SetKeyDelay(delay);
+	engine->setScriptValue("key_delay", keyboard.GetKeyDelay());
 }
 
 void set_data_delay(int delay){
@@ -918,7 +920,7 @@ void get_th105param(void){
 			if(mode != seen){
 				change_icon(DOLL_ICON);
 				key_reset();
-				kev_clear();
+				keyboard.Clear();
 			}
 			break;
 		case 0x08:
@@ -1026,7 +1028,7 @@ void yield(void){
 	static int delay = 0;
 	static int bt=0;
 	int a;
-	key_delay = engine->getScriptValue("key_delay");
+	keyboard.SetKeyDelay(engine->getScriptValue("key_delay"));
 	get_delay = engine->getScriptValue("data_delay");
 	weather_delay = engine->getScriptValue("weather_delay");
 
@@ -1065,12 +1067,11 @@ void yield(void){
 		get_th105param();
 		if(timeGetTime()-t1>320){
 			key_reset();
-			kev_clear();
+			keyboard.Clear();
 			break;
 		}
 	}
-	kev_call();
-	key_frame++;
+	keyboard.ProcessEvent();
 	bt = battle_time;
 
 	if(get_delay != delay){

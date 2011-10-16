@@ -3,28 +3,12 @@
 
 #pragma comment (lib,"winmm.lib")
 
-//ÉOÉçÅ[ÉoÉãïœêî
-int key_frame = 0;
-int key_delay = 0;
-
-namespace {
-
-struct KeyAction{
-	int code;
-	int flag;
-	int frame;
-};
-
-std::list<KeyAction> action_list;
-
-void keybd_event3(int code, DWORD dwFlags) {
+void KeybdEvent::ExecEvent(int code, DWORD dwFlags) {
 	if((dwFlags&KEYEVENTF_KEYUP) == 0)code += 768;
 	keybd_event(0, static_cast<BYTE>(code), dwFlags, 0);
 }
 
-} // anonymous
-
-void keybd_event2(int code, DWORD dwFlags) {
+void KeybdEvent::AddEvent(int code, DWORD dwFlags) {
 	KeyAction action;
 	action.frame = key_frame+key_delay;
 	action.code = code;
@@ -32,20 +16,21 @@ void keybd_event2(int code, DWORD dwFlags) {
 	action_list.push_back(action);
 }
 
-void kev_call(void) {
+void KeybdEvent::ProcessEvent(void) {
 	for(std::list<KeyAction>::iterator it = action_list.begin(); it != action_list.end(); ) {
 		if(it->frame <= key_frame) {
-			keybd_event3(it->code, it->flag);
+			ExecEvent(it->code, it->flag);
 			it = action_list.erase(it);
 			continue;
 		}
 		++it;
 	}
+	key_frame++;
 }
 
-void kev_clear(void) {
+void KeybdEvent::Clear(void) {
 	BOOST_FOREACH(const KeyAction &act, action_list) {
-		keybd_event3(act.code, act.flag);
+		ExecEvent(act.code, act.flag);
 	}
 	action_list.clear();
 }
