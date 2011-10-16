@@ -3,16 +3,12 @@
 
 #pragma comment (lib,"winmm.lib")
 
-void KeybdEvent::ExecEvent(int code, DWORD dwFlags) {
-	if((dwFlags&KEYEVENTF_KEYUP) == 0)code += 768;
-	keybd_event(0, static_cast<BYTE>(code), dwFlags, 0);
+void KeybdEvent::ExecEvent(BYTE code, DWORD flags) {
+	::keybd_event(0, static_cast<BYTE>(code), flags, 0);
 }
 
-void KeybdEvent::AddEvent(int code, DWORD dwFlags) {
-	KeyAction action;
-	action.frame = key_frame+key_delay;
-	action.code = code;
-	action.flag = dwFlags;
+void KeybdEvent::AddEvent(BYTE code, DWORD flags) {
+	const KeyAction action(code, flags, key_frame + key_delay);
 	action_list.push_back(action);
 }
 

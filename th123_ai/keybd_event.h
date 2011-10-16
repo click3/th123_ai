@@ -42,14 +42,15 @@
 
 class KeybdEvent {
 protected:
-	struct KeyAction{
-		int code;
-		int flag;
-		int frame;
+	struct KeyAction {
+		KeyAction(BYTE code, DWORD flag, unsigned int frame) : code(code), flag(flag), frame(frame) { }
+		const BYTE code;
+		const DWORD flag;
+		const unsigned int frame;
 	};
 	std::list<KeyAction> action_list;
 
-	void ExecEvent(int code, DWORD dwFlags);
+	void ExecEvent(BYTE code, DWORD flags);
 public:
 	KeybdEvent() : key_frame(0), key_delay(0) { }
 	unsigned int GetKeyDelay(void) const {
@@ -58,10 +59,10 @@ public:
 	void SetKeyDelay(unsigned int key_delay) {
 		this->key_delay = key_delay;
 	}
-	void AddEvent(int code, DWORD dwFlags);
+	void AddEvent(BYTE code, DWORD flags);
 	void ProcessEvent(void);
 	void Clear(void);
 protected:
-	int key_frame;
-	int key_delay;
+	unsigned int key_frame;
+	unsigned int key_delay;
 };
