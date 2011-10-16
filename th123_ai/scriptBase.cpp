@@ -6,42 +6,27 @@
 #define SCRIPT_NAME_EMPTY	("memory")
 
 //private
-	void scriptEngine::convertFilePath(char *path)const {
-		if(!loadable){
+	void scriptEngine::convertFilePath(char *path) const {
+		if(!loadable) {
 			yield();
 		}
-		while(TRUE){
-			char ss[256],*s = strstr(path,"%");
-			if(s!=NULL){
-				if(strlen(s)<4){
-					s[0] = '\0';
-					break;
-				} else if((s[1]!='c' && s[1]!='C') || (s[2]!='1' && s[2]!='2')){
-					s[0] = '\0';
-					s += 3;
-					snprintf(ss, sizeof(ss), "%s%s",path, s);
-					strncpy(path, ss, sizeof(path));
-					continue;
-				}
-				int char_id;
-				if(s[2]=='1'){
-					char_id = getScriptValue("my_char");
-				} else {
-					char_id = getScriptValue("enemy_char");
-				}
-				char *char_name;
-				if(s[1]=='c'){
-					char_name = id2char2(char_id);
-				} else {
-					char_name = id2char(char_id);
-				}
-				s[0] = '\0';
-				s += 3;
-				snprintf(ss, sizeof(ss), "%s%s%s", path, char_name, s);
-				strncpy(path, ss, sizeof(path));
-			} else {
+		while(true) {
+			char ss[256], *s = ::strstr(path,"%");
+			if(s == NULL) {
 				break;
 			}
+			if(strlen(s) < 4) {
+				s[0] = '\0';
+				break;
+			} else if((s[1]!='c' && s[1]!='C') || (s[2]!='1' && s[2]!='2')) {
+				::strmove(s, &s[3]);
+				continue;
+			}
+			const unsigned int char_id = getScriptValue(s[2]=='1' ? "my_char" : "enemy_char");
+			const char * const char_name = (s[1]=='c' ? ::id2char2(char_id) : id2char(char_id));
+			char temp[256];
+			SPRINTF(temp, "%s%s%s", path, char_name, s);
+			::strcpy(path, ss);
 		}
 	}
 

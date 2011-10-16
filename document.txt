@@ -114,10 +114,10 @@ require(filename)
 	相対パスを指定した場合、関数外に記述した場合はファイル位置から
 	関数内に記述した場合は定義ファイルを特定できないためexeファイルからの相対になります。
 	そのため、関数内での使用は非推奨です。
-	ver0.72より、iniのStartupAIの機能がdaialog以外使用可能になりました。
+	ver0.72より、iniのStartupAIの機能がdialog以外使用可能になりました。
 	これにより
 	require("対%c2ガード.ai")--相手がアリスなら対aliceガード.aiを読み込む
-	といったコードが使用可能です
+	といったコードが使用可能です。
 	置き換え文字一覧表:
 	id	%C		%c
 	0	霊夢		reimu
@@ -135,6 +135,7 @@ require(filename)
 	12	小町		komachi
 	13	衣玖		iku
 	14	天子		tenshi
+	(※詳細はth123_ai.iniを参照)
 get_skill_lv(player,skill_id)
 	player(0で自分、1で相手)の指定ID(0～14、skill.txtのカードID下二桁と同じ)のスキルのLvを取得します。
 	指定IDのスキルが存在しないもしくは使用不能時は-1、デフォルト技は0
