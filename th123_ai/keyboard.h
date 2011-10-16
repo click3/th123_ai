@@ -39,7 +39,6 @@
 #define	VK_Y	89
 #define	VK_Z	90
 
-void keybd_event3(int code, DWORD dwFlags);
 void keybd_event2(int code, DWORD dwFlags);
 void kev_call(void);
 void kev_clear(void);

@@ -3,20 +3,26 @@
 
 #pragma comment (lib,"winmm.lib")
 
+//ƒOƒ[ƒoƒ‹•Ï”
+int key_frame = 0;
+int key_delay = 0;
+
+namespace {
+
 struct KeyAction{
 	int code;
 	int flag;
 	int frame;
 };
 
-int key_frame = 0;
-int key_delay = 0;
 std::list<KeyAction> action_list;
 
 void keybd_event3(int code, DWORD dwFlags) {
 	if((dwFlags&KEYEVENTF_KEYUP) == 0)code += 768;
 	keybd_event(0, static_cast<BYTE>(code), dwFlags, 0);
 }
+
+} // anonymous
 
 void keybd_event2(int code, DWORD dwFlags) {
 	KeyAction action;
