@@ -9,8 +9,6 @@ void set_clipboard(char *s);
 void to_lowstring(char *s);
 void SetConsoleTitle2(char *str);
 void change_icon(int id);
-#define strmove(s1,s2)	memmove(s1,s2,strlen(s2)+1)
-# define snprintf _snprintf
 
 
 class ini
