@@ -254,7 +254,6 @@ char *GetTouhouPath(const char *regkey, const char *name, const char *exe_name,c
 	static char str[256]="";
 	char temp[256];
 	DWORD size = 256;
-	char dir[256];
 	OPENFILENAME ofn;
 	FILE *fp;
 	int i;
@@ -284,7 +283,9 @@ char *GetTouhouPath(const char *regkey, const char *name, const char *exe_name,c
 		RegCloseKey(hKey);
 	}
 
-	GetAppDir(dir);
+	std::string dir_str;
+	org::click3::Utility::GetAppDir(dir_str);
+	const boost::filesystem::path dir(dir_str);
 	memset(&ofn,0,sizeof(OPENFILENAME));
 	ofn.lStructSize = sizeof(OPENFILENAME);
 	snprintf(temp, sizeof(temp), "%s実行ファイル(%s)\n%s\nAll files(*.*)\n*.*\n\n",name, exe_name, exe_name);
@@ -298,7 +299,7 @@ char *GetTouhouPath(const char *regkey, const char *name, const char *exe_name,c
 	ofn.lpstrFilter = temp;
 	ofn.lpstrFile = str;
 	ofn.nMaxFile = 256;
-	ofn.lpstrInitialDir = dir;
+	ofn.lpstrInitialDir = dir.string().c_str();
 	ofn.Flags = OFN_FILEMUSTEXIST;
 	ofn.lpstrTitle = "ファイルを開く";
 	ofn.lpstrDefExt = "exe";

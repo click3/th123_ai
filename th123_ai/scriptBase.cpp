@@ -106,17 +106,17 @@
 	}
 	bool scriptEngine::loadDialog(){
 		OPENFILENAME ofn;
-		char dir[256];
 		char fileName[256] = "";
-		GetAppDir(dir);
-		strcat(dir,"\\script\\");
+		std::string dir_str;
+		org::click3::Utility::GetAppDir(dir_str);
+		const boost::filesystem::path dir = boost::filesystem::path(dir_str) / "script";
 		memset(&ofn,0,sizeof(OPENFILENAME));
 
 		ofn.lStructSize = sizeof(OPENFILENAME);
 		ofn.lpstrFilter = "AIファイル(*.ai)\0*.ai\0All files(*.*)\0*.*\0\0";
 		ofn.lpstrFile = fileName;
 		ofn.nMaxFile = sizeof(fileName);
-		ofn.lpstrInitialDir = dir;
+		ofn.lpstrInitialDir = dir.string().c_str();
 		ofn.Flags = OFN_FILEMUSTEXIST;
 		ofn.lpstrTitle = "ファイルを開く";
 		ofn.lpstrDefExt = "ai";

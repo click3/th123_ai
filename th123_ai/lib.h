@@ -1,7 +1,6 @@
 
 #pragma once
 
-void GetAppDir(char *str);
 int atoi2(const char *str,int def);
 float atof2(const char *str,float def);
 int check_float(float f);

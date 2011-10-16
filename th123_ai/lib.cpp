@@ -3,14 +3,6 @@
 
 using namespace std;
 
-void GetAppDir(char *str){
-	int i;
-
-	GetModuleFileNameA(NULL,str,256);
-	i = strlen(str)-1;
-	while(str[i] != '\\' && str[i] != '/' && i > 0)i--;
-	str[i] = '\0';
-}
 //デフォルト指定可能、16進数なども可能版atoi
 int atoi2(const char *str,int def){
 	int i;

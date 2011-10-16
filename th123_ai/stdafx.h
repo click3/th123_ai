@@ -23,6 +23,7 @@
 #include <boost/optional.hpp>
 #include <boost/tuple/tuple.hpp>
 #include <boost/utility.hpp>
+#include <boost/filesystem.hpp>
 
 #include <org/click3/utility.h>
 
