@@ -30,8 +30,8 @@ typedef struct{
 	int bottom;
 }BOX;
 
-const char *id2char(unsigned int id);
-const char *id2char2(unsigned int id);
+const char *ID2Char(CHAR_ID id);
+const char *ID2Char2(CHAR_ID id);
 
 void yield(void);
 void key_reset(void);
@@ -281,7 +281,7 @@ public:
 	char prof[20];
 	char correction;
 	int win_count;
-	int char_id;
+	CHAR_ID char_id;
 	int rei;
 	int rei_max;
 	int rei_stop;

@@ -537,7 +537,7 @@ void init(void){
 	change_player();
 }
 
-bool CharIDvalidate(unsigned int id) {
+bool CharIDvalidate(CHAR_ID id) {
 	if(is_swr) {
 		return SWR_CHAR_ID_MIN <= id && id <= SWR_CHAR_ID_MAX;
 	} else {
@@ -545,7 +545,7 @@ bool CharIDvalidate(unsigned int id) {
 	}
 }
 
-const char *id2char(unsigned int id) {
+const char *ID2Char(CHAR_ID id) {
 	static const char * const db[] = {
 		"霊夢",	"魔理沙",	"咲夜",	"アリス",
 		"パチュリー",	"妖夢",	"レミリア",	"幽々子",
@@ -559,7 +559,7 @@ const char *id2char(unsigned int id) {
 	}
 	return db[id];
 }
-const char *id2char2(unsigned int id) {
+const char *ID2Char2(CHAR_ID id) {
 	static const char * const db[] = {
 		"reimu",	"marisa",	"sakuya",	"alice",
 		"patchouli",	"youmu",	"remilia",	"yuyuko",
@@ -609,7 +609,7 @@ void title_message(void){
 			ReadProcessMemory(ph,(void *)ADDR_PNETOBJECT,&root,4,NULL);
 			ReadProcessMemory(ph,(void *)(root+ADDR_LPROFOFS),my_data.prof,20,NULL);
 			ReadProcessMemory(ph,(void *)(root+ADDR_RPROFOFS),enemy_data.prof,20,NULL);
-			sprintf(str,"Net %s(%s:%d) VS %s(%s:%d)",my_data.prof,id2char(my_data.char_id),my_data.win_count,enemy_data.prof,id2char(enemy_data.char_id),enemy_data.win_count);
+			sprintf(str, "Net %s(%s:%d) VS %s(%s:%d)", my_data.prof, ::ID2Char(my_data.char_id), my_data.win_count, enemy_data.prof, ::ID2Char(enemy_data.char_id), enemy_data.win_count);
 			SetConsoleTitle2(str);
 			break;
 		case 0x08:

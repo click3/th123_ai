@@ -30,7 +30,7 @@ bool OpenAI(const char *s) {
 		engine->loadDialog();
 	} else if(strcmp(s, "auto")==0) {
 		char fn[256];
-		snprintf(fn, sizeof(fn), "script/%s.ai", ::id2char2(my_data.char_id));
+		snprintf(fn, sizeof(fn), "script/%s.ai", ::ID2Char2(my_data.char_id));
 		engine->loadFile(fn);
 	} else {
 		engine->loadFile(s);
