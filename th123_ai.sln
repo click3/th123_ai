@@ -12,6 +12,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lua_engine", "lua_engine\lu
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "deploy", "deploy\deploy.vcxproj", "{35BE9CE8-1FAD-447F-9C05-46455C360DD9}"
 	ProjectSection(ProjectDependencies) = postProject
+		{B6996FDA-0967-41CC-9080-A57F45F81971} = {B6996FDA-0967-41CC-9080-A57F45F81971}
 		{9A8FC7F9-F713-4BA4-A71D-49824E4DA9DD} = {9A8FC7F9-F713-4BA4-A71D-49824E4DA9DD}
 	EndProjectSection
 EndProject
