@@ -12,7 +12,6 @@ char exe_path[256] = "";
 char aimanager_signature[14]="";
 int operation_char = -1;
 
-bool is_soku = false;
 bool is_swr = false;
 
 
@@ -401,13 +400,13 @@ void AutoStartTouhouExe(bool swr, bool soku){
 } 
 
 HANDLE GetProcessHandle(void){
-	static bool flag = true;
 	HANDLE hToken;
 	TOKEN_PRIVILEGES tkp;
-
+	
+	static bool is_first_run = true;
 	//終了時を検出する
-	if(ini_int2("AppDownExit",0)==0 && (is_soku || is_swr)){
-		exit(0);
+	if(!is_first_run && ini_int2("AppDownExit", 0) == 0){
+		::exit(0);
 	}
 	addr.reset();
 
@@ -421,12 +420,11 @@ HANDLE GetProcessHandle(void){
 	changeLoadLibraryExW(0);
 
 	SetConsoleTitle("緋想天もしくは非想天則を検索しています");
-	while(1){
+	while(1) {
 		changeLoadLibraryExW(1);
 		ph = GetSOKUHandle();
 		changeLoadLibraryExW(0);
-		if(ph!=NULL){
-			is_soku = true;
+		if(ph != NULL) {
 			is_swr = false;
 			g_ini.SetType(th_ini::TYPE_TH123_SOKU);
 			break;
@@ -434,24 +432,23 @@ HANDLE GetProcessHandle(void){
 		changeLoadLibraryExW(1);
 		ph = GetSWRHandle();
 		changeLoadLibraryExW(0);
-		if(ph!=NULL){
-			is_soku = false;
+		if(ph != NULL) {
 			is_swr = true;
 			g_ini.SetType(th_ini::TYPE_TH105_SWR);
 			break;
 		}
 		reload_check();
 		Sleep(50);
-		if(flag || GetKeyState(VK_F10)<0){
-			flag = false;
+		if(is_first_run || GetKeyState(VK_F10) < 0) {
+			is_first_run = false;
 			while(GetKeyState(VK_F10)<0)Sleep(100);
 			AutoStartTouhouExe(true,true);
-		} else if(GetKeyState(VK_F9)<0){
+		} else if(GetKeyState(VK_F9) < 0) {
 			while(GetKeyState(VK_F9)<0)Sleep(100);
 			AutoStartTouhouExe(true,false);
 		}
 	}
-	flag = false;
+	is_first_run = false;
 	my_data.SetProcessHandle(ph);
 	enemy_data.SetProcessHandle(ph);
 	return ph;
@@ -1151,7 +1148,7 @@ void yield(void){
 	engine->setScriptValue("battle_time",battle_time);
 
 	engine->setScriptValue("weather2",weather2);
-	if(((is_swr && weather2 == 14) || (is_soku && weather2==19)) && 1000-weather_delay<weather_time){
+	if(((is_swr && weather2 == 14) || (!is_swr && weather2==19)) && 1000-weather_delay<weather_time){
 		engine->setScriptValue("weather",weather2);
 	} else {
 		engine->setScriptValue("weather",weather);
@@ -1179,8 +1176,8 @@ void yield(void){
 		frame[delay-1] = enemy_data.frame;
 	}
 
-	engine->setScriptValueBool("is_th105",is_swr);
-	engine->setScriptValueBool("is_th123",is_soku);
+	engine->setScriptValueBool("is_th105", is_swr);
+	engine->setScriptValueBool("is_th123", !is_swr);
 	engine->loadable = true;
 }
 

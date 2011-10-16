@@ -66,7 +66,6 @@ void load_inis(void);
 char get_key_stat(int n);
 
 
-extern bool is_soku;
 extern bool is_swr;
 extern int seen,mode,weather,weather2;
 
@@ -151,14 +150,14 @@ public:
 		ReadProcessMemory(ph,(void *)(base_addr+ADDR_ATTACKAREACOUNTOFS),&attackarea_n,1,NULL);
 		ReadProcessMemory(ph,(void *)(base_addr+ADDR_HITAREACOUNTOFS),&hitarea_n,1,NULL);
 
-		if(is_swr){//êHÇÁÇ¢îªíËéÊìæ
+		if(is_swr) {//êHÇÁÇ¢îªíËéÊìæ
 			int p;
-			ReadProcessMemory(ph,(void *)(base_addr+ADDR_MOTIONSTRUCTOFS),&p,4,NULL);
-			ReadProcessMemory(ph,(void *)(p+ADDR_HITAREAOFS),&p,4,NULL);
+			ReadProcessMemory(ph, (void *)(base_addr+ADDR_MOTIONSTRUCTOFS), &p, 4, NULL);
+			ReadProcessMemory(ph, (void *)(p+ADDR_HITAREAOFS), &p, 4, NULL);
 			int i = 0;
 			BOX *a = hitarea;
 			while(i < 10){
-				if(i < hitarea_n){
+				if(i < hitarea_n) {
 					ReadProcessMemory(ph, (void *)(p + i*16), a, sizeof(*a), NULL);
 					a->left = (int)x+a->left;
 					a->top = -(int)y+a->top;
@@ -176,10 +175,10 @@ public:
 			int i = 0;
 			BOX *a = hitarea;
 			while(i < 16){
-				if(i < hitarea_n){
+				if(i < hitarea_n) {
 					DWORD flag;
-					ReadProcessMemory(ph,(void *)(base_addr + ADDR_HITAREAFLAGOFS + i*sizeof(flag)),&flag,sizeof(flag),NULL);
-					ReadProcessMemory(ph,(void *)(base_addr + ADDR_HITAREA2OFS + i*sizeof(*a)),a,sizeof(*a),NULL);
+					ReadProcessMemory(ph, (void *)(base_addr + ADDR_HITAREAFLAGOFS + i*sizeof(flag)), &flag,sizeof(flag),NULL);
+					ReadProcessMemory(ph, (void *)(base_addr + ADDR_HITAREA2OFS + i*sizeof(*a)), a, sizeof(*a),NULL);
 					if(flag!=0){//ëäëŒç¿ïW
 						a->left = (int)x+a->left;
 						a->top = -(int)y+a->top;
@@ -189,7 +188,7 @@ public:
 					a->top *= -1;
 					a->bottom *= -1;
 				} else {
-					memset(a,0,sizeof(*a));
+					memset(a, 0, sizeof(*a));
 				}
 				a++;
 				i++;
@@ -388,13 +387,13 @@ public:
 				if(char_id!=CHAR_UDONGE){
 					return -1;
 				}
-				if(is_swr){
+				if(is_swr) {
 					ReadProcessMemoryFloat(ph,(void*)(base_addr+0x4BC),&f,4,NULL);
 					data = (int)floor((f-1.05)/0.05+0.5);
 					if(data<0){
 						data = 0;
 					}
-				} else if(is_soku){
+				} else {
 					ReadProcessMemory(ph,(void*)(base_addr+ADDR_KOKUSHIOFS),&data,4,NULL);
 					if(data < 0 || data > 3){
 						ReadProcessMemoryFloat(ph,(void*)(base_addr+ADDR_KOKUSHIOFS),&f,4,NULL);
