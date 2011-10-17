@@ -38,18 +38,6 @@ float atof2(const char *str, float def) {
 
 	return i;
 }
-bool ReadProcessMemoryFloat(HANDLE hProcess, LPCVOID lpBaseAddress, float *lpBuffer, DWORD nSize, LPDWORD lpNumberOfBytesRead) {
-	float f;
-	if(nSize != 4) {
-		return false;
-	}
-	const BOOL result = ReadProcessMemory(hProcess, lpBaseAddress, &f, 4, lpNumberOfBytesRead);
-	if(result == FALSE || !CheckFloat(f)) {
-		return false;
-	}
-	*lpBuffer = f;
-	return true;
-}
 
 void set_clipboard(char *s) {
 	HGLOBAL mem;
@@ -112,6 +100,43 @@ void change_icon(int id) {
 	}
 	SendMessage(my_wh,WM_SETICON,0,icon_list[i][0]);
 	SendMessage(my_wh,WM_SETICON,1,icon_list[i][1]);
+}
+
+bool ReadProcessMemory(org::click3::Utility::SHARED_HANDLE ph, unsigned int base_addr, void *buffer, unsigned int buf_size, unsigned int *read_size) {
+	return ::ReadProcessMemory(ph.get(), reinterpret_cast<const void *>(base_addr), buffer, buf_size, reinterpret_cast<DWORD *>(read_size)) != FALSE;
+}
+bool ReadProcessMemory(org::click3::Utility::SHARED_HANDLE ph, unsigned int base_addr, int &buffer) {
+	return ReadProcessMemory(ph, base_addr, &buffer, 4, NULL);
+}
+bool ReadProcessMemory(org::click3::Utility::SHARED_HANDLE ph, unsigned int base_addr, unsigned int &buffer) {
+	return ReadProcessMemory(ph, base_addr, &buffer, 4, NULL);
+}
+bool ReadProcessMemory(org::click3::Utility::SHARED_HANDLE ph, unsigned int base_addr, long &buffer) {
+	return ReadProcessMemory(ph, base_addr, &buffer, 4, NULL);
+}
+bool ReadProcessMemory(org::click3::Utility::SHARED_HANDLE ph, unsigned int base_addr, unsigned long &buffer) {
+	return ReadProcessMemory(ph, base_addr, &buffer, 4, NULL);
+}
+bool ReadProcessMemory(org::click3::Utility::SHARED_HANDLE ph, unsigned int base_addr, short &buffer) {
+	return ReadProcessMemory(ph, base_addr, &buffer, 2, NULL);
+}
+bool ReadProcessMemory(org::click3::Utility::SHARED_HANDLE ph, unsigned int base_addr, unsigned short &buffer) {
+	return ReadProcessMemory(ph, base_addr, &buffer, 2, NULL);
+}
+bool ReadProcessMemory(org::click3::Utility::SHARED_HANDLE ph, unsigned int base_addr, char &buffer) {
+	return ReadProcessMemory(ph, base_addr, &buffer, 1, NULL);
+}
+bool ReadProcessMemory(org::click3::Utility::SHARED_HANDLE ph, unsigned int base_addr, unsigned char &buffer) {
+	return ReadProcessMemory(ph, base_addr, &buffer, 1, NULL);
+}
+bool ReadProcessMemory(org::click3::Utility::SHARED_HANDLE ph, unsigned int base_addr, float &buffer) {
+	float f;
+	const bool result = ReadProcessMemory(ph, base_addr, &f, 4, NULL);
+	if(!result || !CheckFloat(f)) {
+		return false;
+	}
+	buffer = f;
+	return true;
 }
 
 th_ini g_ini;

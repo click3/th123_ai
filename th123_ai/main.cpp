@@ -4,7 +4,7 @@
 //#define DEBUG
 #define DEBUG2
 
-HANDLE ph=NULL;
+org::click3::Utility::SHARED_HANDLE ph;
 HINSTANCE hInst =NULL;
 HWND wh=0;
 HWND my_wh;
@@ -78,7 +78,8 @@ int main(int argc,char *argv[]) {
 long WINAPI exep(EXCEPTION_POINTERS *pep) {
 	PEXCEPTION_RECORD per = pep->ExceptionRecord;
 	PCONTEXT pctx = pep->ContextRecord;
-	HANDLE ph = OpenProcess(PROCESS_VM_READ,FALSE,GetCurrentProcessId());
+	const HANDLE raw_ph = ::OpenProcess(PROCESS_VM_READ, FALSE, GetCurrentProcessId());
+	org::click3::Utility::SHARED_HANDLE ph = org::click3::Utility::ToSharedPtr(raw_ph);
 	char name[10][4] ={
 		"EAX",	"ECX",	"EDX",	"EBX",	"ESP",
 		"EBP",	"ESI",	"EDI",	"EIP",	"EFL"};
@@ -94,7 +95,6 @@ long WINAPI exep(EXCEPTION_POINTERS *pep) {
 		pctx->FloatSave.StatusWord = 0x0020;
 		pctx->FloatSave.ControlWord = 0x027F;
 		//memset(pctx->FloatSave.RegisterArea,0,80);
-		if(ph!=NULL)CloseHandle(ph);
 		//printf("ErrorCounter\n");
 		return EXCEPTION_CONTINUE_EXECUTION;
 	}
@@ -117,15 +117,15 @@ long WINAPI exep(EXCEPTION_POINTERS *pep) {
 	sprintf(&s[strlen(s)],"CloseVersion: %d\n",GetTH123AIVersion());
 	sprintf(&s[strlen(s)],"Code: %08X\n", per->ExceptionCode );
 	sprintf(&s[strlen(s)],"Address: %08X\n", per->ExceptionAddress );
-	if(ph==0) {
-		sprintf(&s[strlen(s)],"fixdata: failed(%d)\n",GetLastError());
+	if(!ph) {
+		sprintf(&s[strlen(s)],"fixdata: failed(%d)\n", ::GetLastError());
 	}
 
 	sprintf(&s[strlen(s)],"--Register--\n" );
 	i = 0;
 	while(i < 10) {
 		sprintf(&s[strlen(s)],"%s %08x",name[i],list[i]);
-		if(ph!=0 && ReadProcessMemory(ph,(void *)list[i],&a,4,NULL)) {
+		if(ph && ReadProcessMemory(ph, list[i], a)) {
 			sprintf(&s[strlen(s)],"=>%08x",a);
 		}
 		sprintf(&s[strlen(s)],"\n");
@@ -135,7 +135,7 @@ long WINAPI exep(EXCEPTION_POINTERS *pep) {
 	sprintf(&s[strlen(s)],"--Stack--\n");
 	i = 0;
 	while(i < 20) {
-		if(!ReadProcessMemory(ph,(void *)(list[4]+i*4),&a,4,NULL)) {
+		if(!ReadProcessMemory(ph, list[4] + i * 4, a)) {
 			break;
 		}
 		sprintf(&s[strlen(s)],"%08x %08x\n",list[4]+i*4,a);
@@ -161,7 +161,6 @@ long WINAPI exep(EXCEPTION_POINTERS *pep) {
 	if(flag == 1) {
 		ErrorPost(URL_AI_ERROR_CGI,s);
 	}
-	if(ph!=NULL)CloseHandle(ph);
 	return EXCEPTION_EXECUTE_HANDLER;
 }
 
@@ -205,7 +204,7 @@ void MyWndActive(int flag) {
 	int a;
 	if(flag==FALSE) {
 		if(ini_int2("MyWindowActive",1)==0)return;
-		ReadProcessMemory(ph,(void*)ADDR_ACTIVEFLAG,&a,4,NULL);
+		ReadProcessMemory(ph, ADDR_ACTIVEFLAG, a);
 		if(a==0) {
 			return;
 		}
@@ -317,44 +316,30 @@ char *GetTh123Path(void) {
 	return GetTouhouPath("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{8E5CFA2B-8CC5-4C8D-88CB-C4A1D4AD9790}_is1", "非想天則", "th123.exe","StartupTH123");
 }
 
-HANDLE WindowName2Handle(const char *name, const char *text) {
-	DWORD pid;
-	HANDLE ph;
-
-	wh = FindWindow(name, text);
+org::click3::Utility::SHARED_HANDLE WindowName2Handle(const char *name, const char *text) {
+	org::click3::Utility::SHARED_HANDLE ret;
+	wh = ::FindWindowA(name, text);
 	if(wh == NULL) {
-		return NULL;
+		return ret;
 	}
-	pid = 0;
-	GetWindowThreadProcessId(wh,&pid);
+	DWORD pid = 0;
+	::GetWindowThreadProcessId(wh,&pid);
 	if(pid == 0) {
-		return NULL;
+		return ret;
 	}
-	ph = OpenProcess(PROCESS_ALL_ACCESS,FALSE,pid);
-	if(ph == 0) {
-		return NULL;
+	HANDLE raw_ph = ::OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
+	if(raw_ph == NULL) {
+		return ret;
 	}
-	return ph;
+	return org::click3::Utility::ToSharedPtr(raw_ph);
 }
 
-HANDLE GetSWRHandle(void) {
-	HANDLE ph;
-
-	ph = WindowName2Handle(ini_value("SWR_WINDOW_CLASS"),ini_value("SWR_WINDOW_TEXT"));
-	if(ph == NULL) {
-		return NULL;
-	}
-	return ph;
+org::click3::Utility::SHARED_HANDLE GetSWRHandle(void) {
+	return WindowName2Handle(ini_value("SWR_WINDOW_CLASS"),ini_value("SWR_WINDOW_TEXT"));
 }
 
-HANDLE GetSOKUHandle(void) {
-	HANDLE ph;
-
-	ph = WindowName2Handle(ini_value("SWRS_WINDOW_CLASS"),ini_value("SWRS_WINDOW_TEXT"));
-	if(ph == NULL) {
-		return NULL;
-	}
-	return ph;
+org::click3::Utility::SHARED_HANDLE GetSOKUHandle(void) {
+	return WindowName2Handle(ini_value("SWRS_WINDOW_CLASS"),ini_value("SWRS_WINDOW_TEXT"));
 }
 
 void AutoStartTouhouExe(bool swr, bool soku) {
@@ -396,7 +381,7 @@ void AutoStartTouhouExe(bool swr, bool soku) {
 	}
 } 
 
-HANDLE GetProcessHandle(void) {
+org::click3::Utility::SHARED_HANDLE GetProcessHandle(void) {
 	HANDLE hToken;
 	TOKEN_PRIVILEGES tkp;
 	
@@ -421,7 +406,7 @@ HANDLE GetProcessHandle(void) {
 		changeLoadLibraryExW(1);
 		ph = GetSOKUHandle();
 		changeLoadLibraryExW(0);
-		if(ph != NULL) {
+		if(ph) {
 			::AIModeSWRS();
 			g_ini.SetType(th_ini::TYPE_TH123_SOKU);
 			break;
@@ -429,7 +414,7 @@ HANDLE GetProcessHandle(void) {
 		changeLoadLibraryExW(1);
 		ph = GetSWRHandle();
 		changeLoadLibraryExW(0);
-		if(ph != NULL) {
+		if(ph) {
 			::AIModeSWR();
 			g_ini.SetType(th_ini::TYPE_TH105_SWR);
 			break;
@@ -564,17 +549,17 @@ void title_message(void) {
 			break;
 		case 0x0d:
 		case 0x0e:
-			ReadProcessMemory(ph,(void *)ADDR_PNETOBJECT,&root,4,NULL);
-			ReadProcessMemory(ph,(void *)(root+ADDR_LPROFOFS),my_data.prof,20,NULL);
-			ReadProcessMemory(ph,(void *)(root+ADDR_RPROFOFS),enemy_data.prof,20,NULL);
+			ReadProcessMemory(ph, ADDR_PNETOBJECT, root);
+			ReadProcessMemory(ph, root+ADDR_LPROFOFS, my_data.prof, sizeof(my_data.prof));
+			ReadProcessMemory(ph, root+ADDR_RPROFOFS, enemy_data.prof, sizeof(enemy_data.prof));
 			sprintf(str, "Net %s(%s:%d) VS %s(%s:%d)", my_data.prof, ::ID2Char(my_data.char_id), my_data.win_count, enemy_data.prof, ::ID2Char(enemy_data.char_id), enemy_data.win_count);
 			SetConsoleTitle2(str);
 			break;
 		case 0x08:
 		case 0x09:
-			ReadProcessMemory(ph,(void *)ADDR_PNETOBJECT,&root,4,NULL);
-			ReadProcessMemory(ph,(void *)(root+ADDR_LPROFOFS),my_data.prof,20,NULL);
-			ReadProcessMemory(ph,(void *)(root+ADDR_RPROFOFS),enemy_data.prof,20,NULL);
+			ReadProcessMemory(ph, ADDR_PNETOBJECT, root);
+			ReadProcessMemory(ph, root+ADDR_LPROFOFS, my_data.prof, sizeof(my_data.prof));
+			ReadProcessMemory(ph, root+ADDR_RPROFOFS, enemy_data.prof, sizeof(enemy_data.prof));
 			strcpy(s,"Net %s VS %s ");
 			if(seen == 0x08)strcat(s,"(Server)");
 			if(seen == 0x09)strcat(s,"(Client)");
@@ -605,8 +590,8 @@ void search_key(void) {
 	p = 0;
 
 	//ゲームパッドがいるなら逆側を使う
-	ReadProcessMemory(ph,(void *)ADDR_1PKEYMAP,map[0],10*4,NULL);
-	ReadProcessMemory(ph,(void *)ADDR_2PKEYMAP,map[1],10*4,NULL);
+	ReadProcessMemory(ph, ADDR_1PKEYMAP, map[0], 10*4);
+	ReadProcessMemory(ph, ADDR_2PKEYMAP, map[1], 10*4);
 	if(map[0][0]==map[0][1] && map[0][1]==map[0][2] && map[0][2]==map[0][3]) {
 		p = 2;
 	} else if(map[1][0]==map[1][1] && map[1][1]==map[1][2] && map[1][2]==map[1][3]) {
@@ -616,8 +601,8 @@ void search_key(void) {
 	//AIManager指定キャラがいるならそちらを使う
 	if(p==0) {
 		int char_id[2];
-		ReadProcessMemory(ph,(void *)ADDR_LCHARID,&char_id[0],4,NULL);
-		ReadProcessMemory(ph,(void *)ADDR_RCHARID,&char_id[1],4,NULL);
+		ReadProcessMemory(ph, ADDR_LCHARID, char_id[0]);
+		ReadProcessMemory(ph, ADDR_RCHARID, char_id[1]);
 		if(char_id[0]==operation_char && char_id[1]!=operation_char) {
 			p = 1;
 		} else if(char_id[1]==operation_char && char_id[0]!=operation_char) {
@@ -803,15 +788,15 @@ int is_CardUse(void) {
 	}
 
 	p = GetPlayerAddr(0);
-	ReadProcessMemory(ph,(void *)(p+ADDR_CARDCOUNT2OFS),&temp,4,NULL);
+	ReadProcessMemory(ph, p+ADDR_CARDCOUNT2OFS, temp);
 	if(temp<1) {
 		return FALSE;
 	}
 
-	ReadProcessMemory(ph,(void *)(p+ADDR_SELECTCARDOFS),&temp,4,NULL);
-	ReadProcessMemory(ph,(void *)(p+ADDR_HANDCARDBASEOFS),&temp2,4,NULL);
-	ReadProcessMemory(ph,(void *)(temp2+temp*4),&temp3,4,NULL);
-	ReadProcessMemory(ph,(void *)(temp3+2),&a,2,NULL);
+	ReadProcessMemory(ph, p+ADDR_SELECTCARDOFS, temp);
+	ReadProcessMemory(ph, p+ADDR_HANDCARDBASEOFS, temp2);
+	ReadProcessMemory(ph, temp2+temp*4, temp3);
+	ReadProcessMemory(ph, temp3+2, a);
 	if(weather==2 && a>1)a--;
 	if(a <= my_data.gauge/500 && a>=1)return TRUE;
 	else return FALSE;
@@ -837,13 +822,13 @@ void check_th105(void) {
 	DWORD m_num;
 
 	while(TRUE) {
-		while(0 == ReadProcessMemory(ph,(void *)ADDR_SCENEID,&seen,1,NULL)) {
-			CloseHandle(ph);
+		seen = 0;
+		while(0 == ReadProcessMemory(ph, ADDR_SCENEID, &seen, 1)) {
 			ph = GetProcessHandle();
-			if(!EnumProcessModules(ph,&mh,sizeof(HMODULE),&m_num)) {
+			if(!::EnumProcessModules(ph.get(), &mh, sizeof(HMODULE), &m_num)) {
 				//printf("Error:EnumProcessModules\n");
 			} else {
-				GetModuleFileNameEx(ph,mh,exe_path,256);
+				::GetModuleFileNameEx(ph.get(), mh, exe_path, 256);
 			}
 		}
 		if(seen!=0x08 && seen!=0x09 && seen!=0x0E && seen!=0x0D) {
@@ -906,14 +891,14 @@ void get_th105param(void) {
 					reload();
 				}
 			}
-			ReadProcessMemory(ph,(void *)ADDR_STAGENUMBER,&stage_num,1,NULL);
-			ReadProcessMemory(ph,(void *)ADDR_BGMNUMBER,&bgm_num,1,NULL);
-			ReadProcessMemory(ph,(void *)ADDR_TIMECOUNT,&battle_time,4,NULL);
-			ReadProcessMemory(ph,(void *)ADDR_WEATHER,&weather,4,NULL);
-			ReadProcessMemory(ph,(void *)ADDR_DISPLAYWEATHER,&weather2,4,NULL);
-			ReadProcessMemory(ph,(void *)ADDR_WEATHERCOUNTER,&weather_time,2,NULL);
+			ReadProcessMemory(ph, ADDR_STAGENUMBER, stage_num);
+			ReadProcessMemory(ph, ADDR_BGMNUMBER, bgm_num);
+			ReadProcessMemory(ph, ADDR_TIMECOUNT, battle_time);
+			ReadProcessMemory(ph, ADDR_WEATHER, weather);
+			ReadProcessMemory(ph, ADDR_DISPLAYWEATHER, weather2);
+			ReadProcessMemory(ph, ADDR_WEATHERCOUNTER, weather_time);
 
-			ReadProcessMemory(ph,(void *)ADDR_PBATTLEMGR,&root,4,NULL);
+			ReadProcessMemory(ph, ADDR_PBATTLEMGR, root);
 			my_data.SetRootAddress(root);
 			enemy_data.SetRootAddress(root);
 			my_data.Reload(ini_int2("Player",1));
@@ -998,7 +983,7 @@ void yield(void) {
 	get_delay = engine->getScriptValue("data_delay");
 	weather_delay = engine->getScriptValue("weather_delay");
 
-	if(ph == NULL) {
+	if(!ph) {
 		ph = GetProcessHandle();
 	}
 
@@ -1204,10 +1189,10 @@ short *GetDeckList(int player) {
 
 	if(player==0) {
 		c = my_data.char_id;
-		ReadProcessMemory(ph,(void *)ADDR_LPROFNAME,s,20,NULL);
+		ReadProcessMemory(ph, ADDR_LPROFNAME, s, 20);
 	} else {
 		c = enemy_data.char_id;
-		ReadProcessMemory(ph,(void *)ADDR_RPROFNAME,s,20,NULL);
+		ReadProcessMemory(ph, ADDR_RPROFNAME, s, 20);
 	}
 
 	strcpy(fn,exe_path);
@@ -1218,7 +1203,7 @@ short *GetDeckList(int player) {
 	fp = fopen(path,"r");
 	if(fp==NULL) {
 		i = *(int *)s;
-		ReadProcessMemory(ph,(void *)i,s,256,NULL);
+		ReadProcessMemory(ph, i, s, 256);
 		sprintf(path,"%s/Profile/%s.dat",fn,s);
 		fp = fopen(path,"r");
 		if(fp==NULL)return NULL;

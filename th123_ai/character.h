@@ -9,7 +9,7 @@ public:
 		FFLAG_CANCEL
 	};
 
-	int base_addr;
+	unsigned int base_addr;
 	float x;
 	float y;
 	struct speed {
@@ -33,15 +33,15 @@ public:
 	obj_base() {
 		initialize();
 	}
-	obj_base(HANDLE h) {
+	obj_base(org::click3::Utility::SHARED_HANDLE h) {
 		initialize();
 		SetProcessHandle(h);
 	}
 
 	virtual void ReloadBaseAddr(int) = 0;
 	virtual void ReloadVal(int) = NULL;
-
-	HANDLE SetProcessHandle(HANDLE handle);
+	
+	void SetProcessHandle(org::click3::Utility::SHARED_HANDLE ph);
 	void Reload(int param);
 
 	bool CheckFFlags(int n) {
@@ -51,7 +51,7 @@ public:
 		return aflags&n;
 	}
 protected:
-	HANDLE ph;
+	org::click3::Utility::SHARED_HANDLE ph;
 
 	void initialize() {
 		attackarea_n = hitarea_n = 0;
@@ -62,8 +62,7 @@ protected:
 class obj : public obj_base
 {
 public:
-	obj(HANDLE h,int addr) {
-		ph = h;
+	obj(org::click3::Utility::SHARED_HANDLE ph, unsigned int addr) : obj_base(ph) {
 		base_addr = addr;
 	}
 
@@ -80,22 +79,22 @@ public:
 	enum TYPE{
 		MY, ENEMY
 	};
-	player(TYPE a) {
+	player(TYPE a) : obj_base() {
 		type = a;
 	}
 
 	char prof[20];
 	char correction;
-	int win_count;
+	unsigned char win_count;
 	CHAR_ID char_id;
-	int rei;
-	int rei_max;
-	int rei_stop;
+	unsigned short rei;
+	unsigned short rei_max;
+	unsigned short rei_stop;
 	int gauge;
 	struct combo{
-		int count;
-		int damage;
-		int limit;
+		unsigned short count;
+		unsigned short damage;
+		unsigned short limit;
 		float rate;
 	} combo;
 	short card_id;

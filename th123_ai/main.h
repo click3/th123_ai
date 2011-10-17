@@ -30,7 +30,7 @@ int get_correction(int player,int flag);
 
 void ai(void);
 void SWR_ScanProjectile(HANDLE proc);
-HANDLE GetProcessHandle(void);
+org::click3::Utility::SHARED_HANDLE GetProcessHandle(void);
 void get_th105param(void);
 void search_key(void);
 void is_bullethit(void);
@@ -43,7 +43,7 @@ char get_key_stat(int n);
 
 extern int seen,mode,weather,weather2;
 
-extern HANDLE ph;
+extern org::click3::Utility::SHARED_HANDLE ph;
 extern HINSTANCE hInst;
 extern HWND wh;
 extern HWND my_wh;

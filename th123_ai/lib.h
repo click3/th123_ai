@@ -3,11 +3,20 @@
 
 int atoi2(const char *str, int def);
 float atof2(const char *str, float def);
-bool ReadProcessMemoryFloat(HANDLE hProcess, LPCVOID lpBaseAddress, float *lpBuffer, DWORD nSize, LPDWORD lpNumberOfBytesRead);
 void set_clipboard(char *s);
 void to_lowstring(char *s);
 void SetConsoleTitle2(char *str);
 void change_icon(int id);
+bool ReadProcessMemory(org::click3::Utility::SHARED_HANDLE ph, unsigned int base_addr, void *buffer, unsigned int buf_size, unsigned int *read_size = NULL);
+bool ReadProcessMemory(org::click3::Utility::SHARED_HANDLE ph, unsigned int base_addr, int &buffer);
+bool ReadProcessMemory(org::click3::Utility::SHARED_HANDLE ph, unsigned int base_addr, unsigned int &buffer);
+bool ReadProcessMemory(org::click3::Utility::SHARED_HANDLE ph, unsigned int base_addr, long &buffer);
+bool ReadProcessMemory(org::click3::Utility::SHARED_HANDLE ph, unsigned int base_addr, unsigned long &buffer);
+bool ReadProcessMemory(org::click3::Utility::SHARED_HANDLE ph, unsigned int base_addr, short &buffer);
+bool ReadProcessMemory(org::click3::Utility::SHARED_HANDLE ph, unsigned int base_addr, unsigned short &buffer);
+bool ReadProcessMemory(org::click3::Utility::SHARED_HANDLE ph, unsigned int base_addr, char &buffer);
+bool ReadProcessMemory(org::click3::Utility::SHARED_HANDLE ph, unsigned int base_addr, unsigned char &buffer);
+bool ReadProcessMemory(org::click3::Utility::SHARED_HANDLE ph, unsigned int base_addr, float &buffer);
 
 
 class ini
