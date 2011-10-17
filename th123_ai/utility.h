@@ -1,4 +1,12 @@
 
+//“–‚½‚è”»’è‹éŒ`
+struct Box {
+	int left;
+	int top;
+	int right;
+	int bottom;
+};
+
 enum CHAR_ID {
 	CHAR_REIMU=0,		CHAR_MARISA,	CHAR_SAKUYA,	CHAR_ALICE,
 	CHAR_PATCHOULI,	CHAR_YOUMU,	CHAR_REMILIA,	CHAR_YUYUKO,

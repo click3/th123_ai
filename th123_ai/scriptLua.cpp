@@ -326,7 +326,7 @@ scriptLua *scriptLua::instance = NULL;
 			return 0;
 		}
 		int i = lua_tointeger(L,3);
-		BOX *b;
+		Box *b;
 		if(a->attackarea_n>i && i>=0) {
 			b = &a->attackarea[i];
 			lua_pushnumber(L,(lua_Number)b->left);
@@ -355,7 +355,7 @@ scriptLua *scriptLua::instance = NULL;
 			return 0;
 		}
 		int i = lua_tointeger(L,3);
-		BOX *b;
+		Box *b;
 		if(a->hitarea_n>i && i>=0) {
 			b = &a->hitarea[i];
 			lua_pushnumber(L,(lua_Number)b->left);
@@ -480,7 +480,7 @@ scriptLua *scriptLua::instance = NULL;
 	}
 	int scriptLua::lua_get_attackarea(lua_State *L) {
 		int n = lua_gettop(L);
-		BOX *a;
+		Box *a;
 
 		if(n!=2 || !lua_isnumber(L,1) || !lua_isnumber(L,2)) {
 			lua_pushstring(L,"ˆø”‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ");
@@ -498,7 +498,7 @@ scriptLua *scriptLua::instance = NULL;
 	}
 	int scriptLua::lua_get_hitarea(lua_State *L) {
 		int n = lua_gettop(L);
-		BOX *a;
+		Box *a;
 
 		if(n!=2 || !lua_isnumber(L,1) || !lua_isnumber(L,2)) {
 			lua_pushstring(L,"ˆø”‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ");

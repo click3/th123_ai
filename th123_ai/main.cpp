@@ -1278,7 +1278,7 @@ void is_bullethit(void) {
 	}
 }
 
-BOX *get_hitarea(int player,int n) {
+Box *get_hitarea(int player,int n) {
 	if((player!=MY && player!=ENEMY) || n<0 || (player==MY && n>=my_data.hitarea_n) || (player==ENEMY && n>=enemy_data.hitarea_n)) {
 		return NULL;
 	}
@@ -1288,7 +1288,7 @@ BOX *get_hitarea(int player,int n) {
 		return &enemy_data.hitarea[n];
 	}
 }
-BOX *get_attackarea(int player,int n) {
+Box *get_attackarea(int player,int n) {
 	if((player!=MY && player!=ENEMY) || n<0 || (player==MY && n>=my_data.attackarea_n) || (player==ENEMY && n>=enemy_data.attackarea_n)) {
 		return NULL;
 	}

@@ -11,15 +11,6 @@ void th105_active(void);
 void MyWndActive(int flag);
 void reload_check(void);
 
-
-//“–‚½‚è”»’è‹éŒ`
-typedef struct{
-	int left;
-	int top;
-	int right;
-	int bottom;
-}BOX;
-
 void yield(void);
 void key_reset(void);
 void key_off(int n);
@@ -33,8 +24,8 @@ char GetSkillLv(int player,int n);
 short GetCardId(int player,int n);
 int GetCardCost(int player,int n);
 int GetCardCost2(int player,int n);
-BOX *get_hitarea(int player,int n);
-BOX *get_attackarea(int player,int n);
+Box *get_hitarea(int player,int n);
+Box *get_attackarea(int player,int n);
 short *GetDeckList(int player);
 int GetSpecialData(int player,int n);
 int get_correction(int player,int flag);
@@ -84,8 +75,8 @@ public:
 	short hit_stop;
 	char attackarea_n;
 	char hitarea_n;
-	BOX hitarea[16];
-	BOX attackarea[16];
+	Box hitarea[16];
+	Box attackarea[16];
 	unsigned int fflags;
 	unsigned int aflags;
 
@@ -142,7 +133,7 @@ public:
 			ReadProcessMemory(ph, (void *)(base_addr+ADDR_MOTIONSTRUCTOFS), &p, 4, NULL);
 			ReadProcessMemory(ph, (void *)(p+ADDR_HITAREAOFS), &p, 4, NULL);
 			int i = 0;
-			BOX *a = hitarea;
+			Box *a = hitarea;
 			while(i < 10) {
 				if(i < hitarea_n) {
 					ReadProcessMemory(ph, (void *)(p + i*16), a, sizeof(*a), NULL);
@@ -160,7 +151,7 @@ public:
 			}
 		} else {
 			int i = 0;
-			BOX *a = hitarea;
+			Box *a = hitarea;
 			while(i < 16) {
 				if(i < hitarea_n) {
 					DWORD flag;
@@ -184,7 +175,7 @@ public:
 		{	//UŒ‚”»’èŽæ“¾
 			int p;
 			int i = 0;
-			BOX *a = attackarea;
+			Box *a = attackarea;
 			while(i < 16) {
 				if(i < attackarea_n) {
 					ReadProcessMemory(ph,(void *)(base_addr+ADDR_ATTACKAREAOFS + i*4),&p,4,NULL);
@@ -248,11 +239,6 @@ public:
 	void ReloadVal(int) {
 	}
 };
-
-
-#include "script.h"
-
-
 
 class player : public obj_base
 {
