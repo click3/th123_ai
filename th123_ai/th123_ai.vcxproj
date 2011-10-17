@@ -85,6 +85,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="address.cpp" />
+    <ClCompile Include="character.cpp" />
     <ClCompile Include="keybd_event.cpp" />
     <ClCompile Include="lib.cpp" />
     <ClCompile Include="main.cpp" />
@@ -104,6 +105,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="address.h" />
+    <ClInclude Include="character.h" />
     <ClInclude Include="consts.h" />
     <ClInclude Include="dik_list.h" />
     <ClInclude Include="keybd_event.h" />
