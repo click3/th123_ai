@@ -422,7 +422,7 @@ HANDLE GetProcessHandle(void) {
 		ph = GetSOKUHandle();
 		changeLoadLibraryExW(0);
 		if(ph != NULL) {
-			is_swr = false;
+			::AIModeSWRS();
 			g_ini.SetType(th_ini::TYPE_TH123_SOKU);
 			break;
 		}
@@ -430,7 +430,7 @@ HANDLE GetProcessHandle(void) {
 		ph = GetSWRHandle();
 		changeLoadLibraryExW(0);
 		if(ph != NULL) {
-			is_swr = true;
+			::AIModeSWR();
 			g_ini.SetType(th_ini::TYPE_TH105_SWR);
 			break;
 		}
@@ -1109,7 +1109,7 @@ void yield(void) {
 	engine->setScriptValue("battle_time",battle_time);
 
 	engine->setScriptValue("weather2",weather2);
-	if(((is_swr && weather2 == 14) || (!is_swr && weather2==19)) && 1000-weather_delay<weather_time) {
+	if(((::IsSWR() && weather2 == 14) || (!::IsSWR() && weather2==19)) && 1000-weather_delay<weather_time) {
 		engine->setScriptValue("weather",weather2);
 	} else {
 		engine->setScriptValue("weather",weather);
@@ -1137,8 +1137,8 @@ void yield(void) {
 		frame[delay-1] = enemy_data.frame;
 	}
 
-	engine->setScriptValueBool("is_th105", is_swr);
-	engine->setScriptValueBool("is_th123", !is_swr);
+	engine->setScriptValueBool("is_th105", ::IsSWR());
+	engine->setScriptValueBool("is_th123", !::IsSWR());
 	engine->loadable = true;
 }
 

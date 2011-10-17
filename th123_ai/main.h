@@ -126,7 +126,7 @@ public:
 		ReadProcessMemory(ph,(void *)(base_addr+ADDR_ATTACKAREACOUNTOFS),&attackarea_n,1,NULL);
 		ReadProcessMemory(ph,(void *)(base_addr+ADDR_HITAREACOUNTOFS),&hitarea_n,1,NULL);
 
-		if(is_swr) {//êHÇÁÇ¢îªíËéÊìæ
+		if(::IsSWR()) {//êHÇÁÇ¢îªíËéÊìæ
 			int p;
 			ReadProcessMemory(ph, (void *)(base_addr+ADDR_MOTIONSTRUCTOFS), &p, 4, NULL);
 			ReadProcessMemory(ph, (void *)(p+ADDR_HITAREAOFS), &p, 4, NULL);
@@ -358,7 +358,7 @@ public:
 				if(char_id!=CHAR_UDONGE) {
 					return -1;
 				}
-				if(is_swr) {
+				if(::IsSWR()) {
 					ReadProcessMemoryFloat(ph,(void*)(base_addr+0x4BC),&f,4,NULL);
 					data = (int)floor((f-1.05)/0.05+0.5);
 					if(data<0) {

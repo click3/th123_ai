@@ -17,7 +17,9 @@ enum CHAR_ID {
 	SWRS_CHAR_ID_MIN = CHAR_REIMU,	SWRS_CHAR_ID_MAX = CHAR_SUWAKO,
 };
 
+bool IsSWR(void);
+void AIModeSWR(void);
+void AIModeSWRS(void);
+
 const char *ID2Char(CHAR_ID id);
 const char *ID2Char2(CHAR_ID id);
-
-extern bool is_swr;
