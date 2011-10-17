@@ -43,8 +43,6 @@ void load_inis(void);
 
 char get_key_stat(int n);
 
-
-extern bool is_swr;
 extern int seen,mode,weather,weather2;
 
 extern HANDLE ph;

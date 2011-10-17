@@ -1,5 +1,8 @@
 #include "stdafx.h"
 
+// ƒOƒ[ƒoƒ‹•Ï”
+bool is_swr = false;
+
 namespace {
 
 bool CharIDvalidate(CHAR_ID id) {

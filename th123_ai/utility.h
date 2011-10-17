@@ -19,3 +19,5 @@ enum CHAR_ID {
 
 const char *ID2Char(CHAR_ID id);
 const char *ID2Char2(CHAR_ID id);
+
+extern bool is_swr;

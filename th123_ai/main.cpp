@@ -12,9 +12,6 @@ char exe_path[256] = "";
 char aimanager_signature[14]="";
 int operation_char = -1;
 
-bool is_swr = false;
-
-
 int weather_delay = 300;
 int get_delay = 0;
 
