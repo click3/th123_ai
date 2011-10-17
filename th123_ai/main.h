@@ -1,7 +1,9 @@
 
 #pragma once
 
-enum{MY,ENEMY};
+
+enum {ACT_UP,ACT_DOWN,ACT_LEFT,ACT_RIGHT,ACT_A,ACT_B,ACT_C,ACT_D,ACT_AB,ACT_BC,ACT_DLEFT,ACT_DRIGHT,ACT_ULEFT,ACT_URIGHT};
+enum {MY, ENEMY};
 
 void th105_active(void);
 void MyWndActive(int flag);
@@ -17,6 +19,7 @@ void set_weather_delay(int n);
 
 
 char GetSkillLv(int player,int n);
+short GetCardId(int player,int n);
 int GetCardCost(int player,int n);
 int GetCardCost2(int player,int n);
 Box *get_hitarea(int player,int n);
