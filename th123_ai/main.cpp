@@ -901,8 +901,9 @@ void get_th105param(void) {
 			ReadProcessMemory(ph, ADDR_PBATTLEMGR, root);
 			my_data.SetRootAddress(root);
 			enemy_data.SetRootAddress(root);
-			my_data.Reload(ini_int2("Player",1));
-			enemy_data.Reload(ini_int2("Player",1));
+			const player::AI_MODE ai_mode = (::ini_int2("Player",1) == 1 ? player::AI_MODE_1P : player::AI_MODE_2P);
+			my_data.Reload(ai_mode);
+			enemy_data.Reload(ai_mode);
 			is_bullethit();
 			if(my_data.x<enemy_data.x || (my_data.x==enemy_data.x && my_data.dir==1)) {
 				muki = ACT_RIGHT;
@@ -1239,9 +1240,9 @@ void is_bullethit(void) {
 			obj_dis2 = temp;
 		}
 
-		if(a->attackarea_n < 16) {
+		if(a->attackarea.size() < 16) {
 			i = 0;
-			while(i < a->attackarea_n) {
+			while(i < a->attackarea.size()) {
 				if(a->attackarea[i].left<my_data.x && a->attackarea[i].right>my_data.x) {
 					obj_dis = 1;
 				} else {
@@ -1261,7 +1262,7 @@ void is_bullethit(void) {
 }
 
 Box *get_hitarea(int player,int n) {
-	if((player!=MY && player!=ENEMY) || n<0 || (player==MY && n>=my_data.hitarea_n) || (player==ENEMY && n>=enemy_data.hitarea_n)) {
+	if((player!=MY && player!=ENEMY) || n<0 || (player==MY && n>=my_data.hitarea.size()) || (player==ENEMY && n>=enemy_data.hitarea.size())) {
 		return NULL;
 	}
 	if(player==MY) {
@@ -1271,7 +1272,7 @@ Box *get_hitarea(int player,int n) {
 	}
 }
 Box *get_attackarea(int player,int n) {
-	if((player!=MY && player!=ENEMY) || n<0 || (player==MY && n>=my_data.attackarea_n) || (player==ENEMY && n>=enemy_data.attackarea_n)) {
+	if((player!=MY && player!=ENEMY) || n<0 || (player==MY && n>=my_data.attackarea.size()) || (player==ENEMY && n>=enemy_data.attackarea.size())) {
 		return NULL;
 	}
 	if(player==MY) {

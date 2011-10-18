@@ -3,8 +3,8 @@
 void ObjBase::SetProcessHandle(org::click3::Utility::SHARED_HANDLE ph) {
 	this->ph = ph;
 }
-void ObjBase::Reload(int param) {
-	ReloadBaseAddr(param);
+void ObjBase::Reload(AI_MODE mode) {
+	ReloadBaseAddr(mode);
 	if(base_addr == 0) {
 		return;
 	}
@@ -31,83 +31,79 @@ void ObjBase::Reload(int param) {
 	//base+0x158	4	158byteの構造体(詳細不明)
 	ReadProcessMemory(ph, base_addr+ADDR_HPOFS, hp);
 	ReadProcessMemory(ph, base_addr+ADDR_HITSTOPOFS, hit_stop);
-	ReadProcessMemory(ph, base_addr+ADDR_ATTACKAREACOUNTOFS, attackarea_n);
-	ReadProcessMemory(ph, base_addr+ADDR_HITAREACOUNTOFS, hitarea_n);
+	unsigned char hitarea_count;
+	ReadProcessMemory(ph, base_addr+ADDR_HITAREACOUNTOFS,		hitarea_count);
 
 	if(::IsSWR()) {//食らい判定取得
-		int p;
-		ReadProcessMemory(ph,  base_addr+ADDR_MOTIONSTRUCTOFS, p);
-		ReadProcessMemory(ph,  p+ADDR_HITAREAOFS, p);
-		int i = 0;
-		Box *a = hitarea;
-		while(i < 10) {
-			if(i < hitarea_n) {
-				ReadProcessMemory(ph,  p + i*16, a, sizeof(*a), NULL);
-				a->left = (int)x+a->left;
-				a->top = -(int)y+a->top;
-				a->right = (int)x+a->right;
-				a->bottom = -(int)y+a->bottom;
-				a->top *= -1;
-				a->bottom *= -1;
-			} else {
-				memset(a, 0, sizeof(*a));
-			}
-			a++;
-			i++;
+		hitarea.clear();
+		if(hitarea_count > 10) { // メモリー配置上10個超はあり得ない
+			return;
+		}
+		unsigned int motion_struct_addr;
+		ReadProcessMemory(ph,  base_addr+ADDR_MOTIONSTRUCTOFS, motion_struct_addr);
+		unsigned int hitarea_base_addr;
+		ReadProcessMemory(ph,  motion_struct_addr+ADDR_HITAREAOFS, hitarea_base_addr);
+		for(unsigned int i = 0; i < hitarea_count; i++) {
+			Box box;
+			ReadProcessMemory(ph,  hitarea_base_addr + i*sizeof(box), &box, sizeof(box));
+			box.left = static_cast<int>(x) + box.left;
+			box.top = -static_cast<int>(y) + box.top;
+			box.right = static_cast<int>(x) + box.right;
+			box.bottom = -static_cast<int>(y)+ box.bottom;
+			box.top *= -1;
+			box.bottom *= -1;
+			hitarea.push_back(box);
 		}
 	} else {
-		int i = 0;
-		Box *a = hitarea;
-		while(i < 16) {
-			if(i < hitarea_n) {
-				DWORD flag;
-				ReadProcessMemory(ph,  base_addr + ADDR_HITAREAFLAGOFS + i * sizeof(flag), flag);
-				ReadProcessMemory(ph,  base_addr + ADDR_HITAREA2OFS + i * sizeof(*a), a, sizeof(*a));
-				if(flag!=0) {//相対座標
-					a->left = (int)x+a->left;
-					a->top = -(int)y+a->top;
-					a->right = (int)x+a->right;
-					a->bottom = -(int)y+a->bottom;
-				}
-				a->top *= -1;
-				a->bottom *= -1;
-			} else {
-				memset(a, 0, sizeof(*a));
+		hitarea.clear();
+		if(hitarea_count > 16) { // メモリー配置上16個超はあり得ない
+			return;
+		}
+		for(unsigned int i = 0; i < hitarea_count; i++) {
+			DWORD flag;
+			ReadProcessMemory(ph,  base_addr + ADDR_HITAREAFLAGOFS + i * sizeof(flag), flag);
+			Box box;
+			ReadProcessMemory(ph,  base_addr + ADDR_HITAREA2OFS + i * sizeof(box), &box, sizeof(box));
+			if(flag != 0) {//相対座標
+				box.left = static_cast<int>(x) + box.left;
+				box.top = -static_cast<int>(y) + box.top;
+				box.right = static_cast<int>(x) + box.right;
+				box.bottom = -static_cast<int>(y)+ box.bottom;
 			}
-			a++;
-			i++;
+			box.top *= -1;
+			box.bottom *= -1;
+			hitarea.push_back(box);
 		}
 	}
-	{	//攻撃判定取得
-		int p;
-		int i = 0;
-		Box *a = attackarea;
-		while(i < 16) {
-			if(i < attackarea_n) {
-				ReadProcessMemory(ph, base_addr+ADDR_ATTACKAREAOFS + i*4, p);
-				if(p == 0) {
-					//当たり判定矩形を取得して表示する(地面最左下端からの相対)
-					ReadProcessMemory(ph, base_addr+ADDR_ATTACKAREA2OFS + i * sizeof(*a), a, sizeof(*a));
-				} else {
-					//当たり判定矩形を取得して表示する(オブジェクト位置からの相対)
-					ReadProcessMemory(ph, p, a, sizeof(*a), NULL);
-					a->left = (int)x+a->left;
-					a->top = -(int)y+a->top;
-					a->right = (int)x+a->right;
-					a->bottom = -(int)y+a->bottom;
-				}
-				a->top *= -1;
-				a->bottom *= -1;
-			} else {
-				memset(a,0,sizeof(*a));
-			}
-			a++;
-			i++;
+	unsigned char attackarea_count;
+	ReadProcessMemory(ph, base_addr+ADDR_ATTACKAREACOUNTOFS,	attackarea_count);
+	attackarea.clear();
+	if(attackarea_count > 16) { // メモリー配置上16個超はあり得ない
+		return;
+	}
+	for(unsigned int i = 0; i < 16; i++) {
+		unsigned int attackarea_addr;
+		ReadProcessMemory(ph, base_addr+ADDR_ATTACKAREAOFS + i*4, attackarea_addr);
+		Box box;
+		if(attackarea_addr == 0) {
+			//当たり判定矩形を取得して表示する(地面最左下端からの相対)
+			ReadProcessMemory(ph, base_addr+ADDR_ATTACKAREA2OFS + i * sizeof(box), &box, sizeof(box));
+		} else {
+			//当たり判定矩形を取得して表示する(オブジェクト位置からの相対)
+			ReadProcessMemory(ph, attackarea_addr, &box, sizeof(box));
+			box.left = static_cast<int>(x) + box.left;
+			box.top = -static_cast<int>(y) + box.top;
+			box.right = static_cast<int>(x) + box.right;
+			box.bottom = -static_cast<int>(y)+ box.bottom;
 		}
-	}/*
+		box.top *= -1;
+		box.bottom *= -1;
+		attackarea.push_back(box);
+	}
+	/*
 	fflags =   0x003FFFFF;
 	fflags &= ~0x0007E7C4;
 	fflags |=  0x00000031;
 	WriteProcessMemory(ph,(void *)(temp + ADDR_FRAMEFLAGSOFS),&fflags,4,NULL);*/
-	ReloadVal(param);
+	ReloadVal(mode);
 }

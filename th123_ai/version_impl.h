@@ -1,2 +1,2 @@
-#define VERSION 1867
+#define VERSION 1874
 #define OPEN_VERSION "ver0.94a"

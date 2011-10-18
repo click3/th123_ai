@@ -296,17 +296,17 @@ scriptLua *scriptLua::instance = NULL;
 		if(a==NULL) {
 			return 0;
 		}
-		lua_pushnumber(L,(lua_Number)a->action);
-		lua_pushnumber(L,(lua_Number)a->x);
-		lua_pushnumber(L,(lua_Number)a->y);
-		lua_pushnumber(L,(lua_Number)a->hp);
-		lua_pushnumber(L,(lua_Number)a->img_no);
-		lua_pushnumber(L,(lua_Number)a->frame);
-		lua_pushnumber(L,(lua_Number)a->speed.x);
-		lua_pushnumber(L,(lua_Number)a->speed.y);
-		lua_pushnumber(L,(lua_Number)a->base_addr);
-		lua_pushnumber(L,(lua_Number)a->attackarea_n);
-		lua_pushnumber(L,(lua_Number)a->hitarea_n);
+		lua_pushnumber(L, static_cast<lua_Number>(a->action));
+		lua_pushnumber(L, static_cast<lua_Number>(a->x));
+		lua_pushnumber(L, static_cast<lua_Number>(a->y));
+		lua_pushnumber(L, static_cast<lua_Number>(a->hp));
+		lua_pushnumber(L, static_cast<lua_Number>(a->img_no));
+		lua_pushnumber(L, static_cast<lua_Number>(a->frame));
+		lua_pushnumber(L, static_cast<lua_Number>(a->speed.x));
+		lua_pushnumber(L, static_cast<lua_Number>(a->speed.y));
+		lua_pushnumber(L, static_cast<lua_Number>(a->base_addr));
+		lua_pushnumber(L, static_cast<lua_Number>(a->attackarea.size()));
+		lua_pushnumber(L, static_cast<lua_Number>(a->hitarea.size()));
 		return 11;
 	}
 	int scriptLua::lua_get_obj_attackarea(lua_State *L) {
@@ -326,13 +326,12 @@ scriptLua *scriptLua::instance = NULL;
 			return 0;
 		}
 		int i = lua_tointeger(L,3);
-		Box *b;
-		if(a->attackarea_n>i && i>=0) {
-			b = &a->attackarea[i];
-			lua_pushnumber(L,(lua_Number)b->left);
-			lua_pushnumber(L,(lua_Number)b->top);
-			lua_pushnumber(L,(lua_Number)b->right);
-			lua_pushnumber(L,(lua_Number)b->bottom);
+		if(a->attackarea.size()>i && i>=0) {
+			const Box &b = a->attackarea[i];
+			::lua_pushnumber(L, static_cast<lua_Number>(b.left));
+			::lua_pushnumber(L, static_cast<lua_Number>(b.top));
+			::lua_pushnumber(L, static_cast<lua_Number>(b.right));
+			::lua_pushnumber(L, static_cast<lua_Number>(b.bottom));
 			return 4;
 		}
 		return 0;
@@ -355,13 +354,12 @@ scriptLua *scriptLua::instance = NULL;
 			return 0;
 		}
 		int i = lua_tointeger(L,3);
-		Box *b;
-		if(a->hitarea_n>i && i>=0) {
-			b = &a->hitarea[i];
-			lua_pushnumber(L,(lua_Number)b->left);
-			lua_pushnumber(L,(lua_Number)b->top);
-			lua_pushnumber(L,(lua_Number)b->right);
-			lua_pushnumber(L,(lua_Number)b->bottom);
+		if(a->hitarea.size() > i && i >= 0) {
+			const Box &b = a->hitarea[i];
+			::lua_pushnumber(L, static_cast<lua_Number>(b.left));
+			::lua_pushnumber(L, static_cast<lua_Number>(b.top));
+			::lua_pushnumber(L, static_cast<lua_Number>(b.right));
+			::lua_pushnumber(L, static_cast<lua_Number>(b.bottom));
 			return 4;
 		}
 		return 0;

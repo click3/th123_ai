@@ -6,6 +6,10 @@ public:
 		FFLAG_STAND,	FFLAG_CROUCHI,	FFLAG_AIR,	FFLAG_GUARD,
 		FFLAG_CANCEL
 	};
+	enum AI_MODE {
+		AI_MODE_1P = 1,
+		AI_MODE_2P,
+	};
 
 	unsigned int base_addr;
 	float x;
@@ -14,17 +18,15 @@ public:
 		float x;
 		float y;
 	} speed;
-	char dir;
-	short action;
-	short act_block;
-	int frame;
-	int img_no;
-	short hp;
-	short hit_stop;
-	char attackarea_n;
-	char hitarea_n;
-	Box hitarea[16];
-	Box attackarea[16];
+	unsigned char dir;
+	unsigned short action;
+	unsigned short act_block;
+	unsigned int frame;
+	unsigned int img_no;
+	unsigned short hp;
+	unsigned short hit_stop;
+	std::vector<Box> hitarea;
+	std::vector<Box> attackarea;
 	unsigned int fflags;
 	unsigned int aflags;
 
@@ -36,23 +38,22 @@ public:
 		SetProcessHandle(h);
 	}
 
-	virtual void ReloadBaseAddr(int) = 0;
-	virtual void ReloadVal(int) = NULL;
+	virtual void ReloadBaseAddr(AI_MODE mode) = 0;
+	virtual void ReloadVal(AI_MODE mode) = 0;
 	
 	void SetProcessHandle(org::click3::Utility::SHARED_HANDLE ph);
-	void Reload(int param);
+	void Reload(AI_MODE mode);
 
-	bool CheckFFlags(int n) {
-		return fflags&n;
+	bool CheckFFlags(unsigned int n) const {
+		return (fflags&n) > 0;
 	}
-	bool CheckAFlags(int n) {
-		return aflags&n;
+	bool CheckAFlags(unsigned int n) const {
+		return (aflags&n) > 0;
 	}
 protected:
 	org::click3::Utility::SHARED_HANDLE ph;
 
 	void initialize() {
-		attackarea_n = hitarea_n = 0;
 		base_addr = 0;
 	}
 };

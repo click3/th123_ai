@@ -8,11 +8,9 @@ public:
 		base_addr = addr;
 	}
 
-	void ReloadBaseAddr(int) {
-	}
+	void ReloadBaseAddr(AI_MODE) { }
 
-	void ReloadVal(int) {
-	}
+	void ReloadVal(AI_MODE) { }
 };
 
 class player : public ObjBase
@@ -59,10 +57,10 @@ public:
 	TYPE SetType(TYPE a);
 	int SetRootAddress(int addr);
 	int GetSpecialData(int n);
-	virtual void ReloadBaseAddr(int mode);
-	virtual void ReloadVal(int mode);
-	void ReloadObject(int mode);
-	void ReloadLuaValue(int mode);
+	virtual void ReloadBaseAddr(AI_MODE mode);
+	virtual void ReloadVal(AI_MODE mode);
+	void ReloadObject(AI_MODE mode);
+	void ReloadLuaValue(AI_MODE mode);
 	obj *GetObject(int n);
 	obj *GetOptionObject(int n);
 	int GetKeyState(int n);

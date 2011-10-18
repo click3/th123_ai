@@ -263,8 +263,8 @@ int player::GetSpecialData(int n) {
 	}
 	return data;
 }
-void player::ReloadBaseAddr(int mode) {
-	if( (mode==1 && type==MY) || (mode==2 && type==ENEMY)) {
+void player::ReloadBaseAddr(AI_MODE mode) {
+	if( (mode == AI_MODE_1P && type == MY) || (mode == AI_MODE_2P && type == ENEMY)) {
 		ReadProcessMemory(ph, root+ADDR_LCHAROFS, base_addr);
 		ReadProcessMemory(ph, ADDR_LCHARID, &char_id, 4);
 	} else {
@@ -272,7 +272,7 @@ void player::ReloadBaseAddr(int mode) {
 		ReadProcessMemory(ph, ADDR_RCHARID, &char_id, 4);
 	}
 }
-void player::ReloadVal(int mode) {
+void player::ReloadVal(AI_MODE mode) {
 	ReadProcessMemory(ph, base_addr+ADDR_AIRDASHCOUNTOFS, air_dash_count);
 	ReadProcessMemory(ph, base_addr+ADDR_REIPOWEROFS, rei);
 	ReadProcessMemory(ph, base_addr+ADDR_REISTOPROFS, rei_stop);
@@ -347,7 +347,7 @@ void player::ReloadVal(int mode) {
 	ReloadLuaValue(mode);
 }
 
-void player::ReloadObject(int mode) {
+void player::ReloadObject(AI_MODE mode) {
 	//STLリストコンテナ
 	typedef struct{
 		int alloc;
@@ -393,7 +393,7 @@ void player::ReloadObject(int mode) {
 	}
 
 	int p;
-	if( (mode==1 && type==MY) || (mode==2 && type==ENEMY)) {
+	if( (mode == AI_MODE_1P && type == MY) || (mode == AI_MODE_2P && type == ENEMY)) {
 		p = 0;
 	} else {
 		p = 1;
@@ -428,7 +428,7 @@ void player::ReloadObject(int mode) {
 	}
 }
 
-void player::ReloadLuaValue(int mode) {
+void player::ReloadLuaValue(AI_MODE) {
 	char name[32],*s;
 
 #define setValue(k,v)	strcpy(s,k);engine->setScriptValue(name,v)
@@ -458,8 +458,8 @@ void player::ReloadLuaValue(int mode) {
 	setValue("xspeed",speed.x);
 	setValue("yspeed",speed.y);
 	setValue("img",img_no);
-	setValue("hitarea_n",hitarea_n);
-	setValue("attackarea_n",attackarea_n);
+	setValue("hitarea_n",	hitarea.size());
+	setValue("attackarea_n",	attackarea.size());
 	setValue("correction",correction);
 	setValue("fflags",fflags);
 	setValue("aflags",aflags);
@@ -495,7 +495,7 @@ obj *player::GetOptionObject(int n) {
 	int i = 0;
 	while(n>0 && i < object.size()) {
 		if(char_id==CHAR_ALICE) {
-			if(object[i].attackarea_n==0 && object[i].action == 805 && object[i].img_no!=221)n--;
+			if(object[i].attackarea.size()==0 && object[i].action == 805 && object[i].img_no!=221)n--;
 		} else if(char_id==CHAR_YOUMU) {
 			if(n!=1) {
 				return NULL;
