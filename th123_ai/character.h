@@ -1,10 +1,10 @@
 
 #define SPECIALDATA_MAX	28
 
-class obj : public obj_base
+class obj : public ObjBase
 {
 public:
-	obj(org::click3::Utility::SHARED_HANDLE ph, unsigned int addr) : obj_base(ph) {
+	obj(org::click3::Utility::SHARED_HANDLE ph, unsigned int addr) : ObjBase(ph) {
 		base_addr = addr;
 	}
 
@@ -15,13 +15,13 @@ public:
 	}
 };
 
-class player : public obj_base
+class player : public ObjBase
 {
 public:
 	enum TYPE{
 		MY, ENEMY
 	};
-	player(TYPE a) : obj_base() {
+	player(TYPE a) : ObjBase() {
 		type = a;
 	}
 

@@ -1,9 +1,9 @@
 #include "stdafx.h"
 
-void obj_base::SetProcessHandle(org::click3::Utility::SHARED_HANDLE ph) {
+void ObjBase::SetProcessHandle(org::click3::Utility::SHARED_HANDLE ph) {
 	this->ph = ph;
 }
-void obj_base::Reload(int param) {
+void ObjBase::Reload(int param) {
 	ReloadBaseAddr(param);
 	if(base_addr == 0) {
 		return;

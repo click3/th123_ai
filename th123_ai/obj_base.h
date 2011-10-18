@@ -1,5 +1,5 @@
 
-class obj_base
+class ObjBase
 {
 public:
 	enum{
@@ -28,10 +28,10 @@ public:
 	unsigned int fflags;
 	unsigned int aflags;
 
-	obj_base() {
+	ObjBase() {
 		initialize();
 	}
-	obj_base(org::click3::Utility::SHARED_HANDLE h) {
+	ObjBase(org::click3::Utility::SHARED_HANDLE h) {
 		initialize();
 		SetProcessHandle(h);
 	}
