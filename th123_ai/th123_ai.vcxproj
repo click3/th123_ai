@@ -90,6 +90,7 @@
     <ClCompile Include="lib.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="network.cpp" />
+    <ClCompile Include="obj_base.cpp" />
     <ClCompile Include="script.cpp" />
     <ClCompile Include="scriptBase.cpp" />
     <ClCompile Include="scriptLua.cpp" />
@@ -112,6 +113,7 @@
     <ClInclude Include="lib.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="network.h" />
+    <ClInclude Include="obj_base.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="script.h" />
     <ClInclude Include="scriptBase.h" />

@@ -48,5 +48,6 @@
 #include "scriptBase.h"
 #include "scriptLua.h"
 #include "script.h"
+#include "obj_base.h"
 #include "character.h"
 #include "main.h"
