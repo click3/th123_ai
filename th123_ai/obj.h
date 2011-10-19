@@ -1,8 +1,8 @@
 
-class obj : public ObjBase
+class Obj : public ObjBase
 {
 public:
-	obj(org::click3::Utility::SHARED_HANDLE ph, unsigned int addr) : ObjBase(ph) {
+	Obj(org::click3::Utility::SHARED_HANDLE ph, unsigned int addr) : ObjBase(ph) {
 		base_addr = addr;
 	}
 

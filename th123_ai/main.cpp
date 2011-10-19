@@ -1234,7 +1234,7 @@ void is_bullethit(void) {
 
 	l = 0;
 	while(l < enemy_data.object.size()) {
-		obj *a = enemy_data.GetObject(l);
+		Obj *a = enemy_data.GetObject(l);
 		temp = abs(my_data.x - a->x);
 		if(temp<obj_dis2) {
 			obj_dis2 = temp;

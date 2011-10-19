@@ -287,11 +287,11 @@ scriptLua *scriptLua::instance = NULL;
 			lua_error(L);
 		}
 		int p = lua_tointeger(L,1);
-		obj *a;
+		Obj *a;
 		if(p==0) {
-			a = my_data.GetObject(lua_tointeger(L,2));
+			a = my_data.GetObject(::lua_tointeger(L,2));
 		} else {
-			a = enemy_data.GetObject(lua_tointeger(L,2));
+			a = enemy_data.GetObject(::lua_tointeger(L,2));
 		}
 		if(a==NULL) {
 			return 0;
@@ -316,7 +316,7 @@ scriptLua *scriptLua::instance = NULL;
 			lua_error(L);
 		}
 		int p = lua_tointeger(L,1);
-		obj *a;
+		Obj *a;
 		if(p==0) {
 			a = my_data.GetObject(lua_tointeger(L,2));
 		} else {
@@ -344,7 +344,7 @@ scriptLua *scriptLua::instance = NULL;
 			lua_error(L);
 		}
 		int p = lua_tointeger(L,1);
-		obj *a;
+		Obj *a;
 		if(p==0) {
 			a = my_data.GetObject(lua_tointeger(L,2));
 		} else {
@@ -392,7 +392,7 @@ scriptLua *scriptLua::instance = NULL;
 			lua_error(L);
 		}
 		int p = lua_tointeger(L,1);
-		obj *a;
+		Obj *a;
 		if(p==0) {
 			a = my_data.GetOptionObject(lua_tointeger(L,2));
 		} else {

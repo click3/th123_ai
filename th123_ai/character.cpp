@@ -416,15 +416,13 @@ void player::ReloadObject(AI_MODE mode) {
 	if(!ReadProcessMemory(ph, objProjList.head, &objProjIter, sizeof(objProjIter))) {
 		return;
 	}
-	int k = 0;
-	while(objProjList.head != objProjIter.next && objProjIter.next != 0 && objProjList.size > k) {
+	for(unsigned int k = 0; objProjList.head != objProjIter.next && objProjIter.next != 0 && objProjList.size > k; k++) {
 		if(!ReadProcessMemory(ph, objProjIter.next, &objProjIter, sizeof(objProjIter))) {
 			return;
 		}
-		obj a(ph, objProjIter.val);
+		Obj a(ph, objProjIter.val);
 		a.Reload(mode);
 		object.push_back(a);
-		k++;
 	}
 }
 
@@ -480,14 +478,14 @@ void player::ReloadLuaValue(AI_MODE) {
 #undef setValue
 }
 
-obj *player::GetObject(int n) {
+Obj *player::GetObject(int n) {
 	if(n<0 || object.size()<=n) {
 		return NULL;
 	}
 	return &object[n];
 }
 
-obj *player::GetOptionObject(int n) {
+Obj *player::GetOptionObject(int n) {
 	if(n<0 || object.size()<=n) {
 		return NULL;
 	}

@@ -27,7 +27,7 @@ public:
 	} combo;
 	short card_id;
 	char air_dash_count;
-	std::vector<obj> object;
+	std::vector<Obj> object;
 	struct status{
 		float attack;
 		float defense;
@@ -49,8 +49,8 @@ public:
 	virtual void ReloadVal(AI_MODE mode);
 	void ReloadObject(AI_MODE mode);
 	void ReloadLuaValue(AI_MODE mode);
-	obj *GetObject(int n);
-	obj *GetOptionObject(int n);
+	Obj *GetObject(int n);
+	Obj *GetOptionObject(int n);
 	int GetKeyState(int n);
 private:
 	TYPE type;
