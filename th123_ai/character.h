@@ -1,13 +1,13 @@
 
 #define SPECIALDATA_MAX	28
 
-class player : public ObjBase
+class Character : public ObjBase
 {
 public:
 	enum TYPE{
 		MY, ENEMY
 	};
-	player(TYPE a) : ObjBase() {
+	Character(TYPE a) : ObjBase() {
 		type = a;
 	}
 
@@ -51,7 +51,7 @@ public:
 	void ReloadLuaValue(AI_MODE mode);
 	Obj *GetObject(int n);
 	Obj *GetOptionObject(int n);
-	int GetKeyState(int n);
+	int GetKeyState(int n) const;
 private:
 	TYPE type;
 	int root;

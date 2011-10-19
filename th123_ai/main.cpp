@@ -27,8 +27,8 @@ int obj_dis=0,obj_dis2=0,battle_time;
 short weather_time;
 char stage_num,bgm_num,last_on_key;
 
-player my_data(player::MY);
-player enemy_data(player::ENEMY);
+Character my_data(Character::MY);
+Character enemy_data(Character::ENEMY);
 
 KeybdEvent keyboard;
 
@@ -901,7 +901,7 @@ void get_th105param(void) {
 			ReadProcessMemory(ph, ADDR_PBATTLEMGR, root);
 			my_data.SetRootAddress(root);
 			enemy_data.SetRootAddress(root);
-			const player::AI_MODE ai_mode = (::ini_int2("Player",1) == 1 ? player::AI_MODE_1P : player::AI_MODE_2P);
+			const Character::AI_MODE ai_mode = (::ini_int2("Player",1) == 1 ? Character::AI_MODE_1P : Character::AI_MODE_2P);
 			my_data.Reload(ai_mode);
 			enemy_data.Reload(ai_mode);
 			is_bullethit();

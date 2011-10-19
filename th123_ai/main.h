@@ -51,7 +51,7 @@ extern char aimanager_signature[14];
 
 
 
-extern player my_data;
-extern player enemy_data;
+extern Character my_data;
+extern Character enemy_data;
 
 

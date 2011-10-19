@@ -1,18 +1,18 @@
 #include "stdafx.h"
 
-player::TYPE player::SetType(TYPE a) {
+Character::TYPE Character::SetType(TYPE a) {
 	TYPE temp;
 	temp = type;
 	type = a;
 	return temp;
 }
-int player::SetRootAddress(int addr) {
+int Character::SetRootAddress(int addr) {
 	int temp;
 	temp = root;
 	root = addr;
 	return temp;
 }
-int player::GetSpecialData(int n) {
+int Character::GetSpecialData(int n) {
 	int data,i;
 	short mini;
 	float f;
@@ -263,7 +263,7 @@ int player::GetSpecialData(int n) {
 	}
 	return data;
 }
-void player::ReloadBaseAddr(AI_MODE mode) {
+void Character::ReloadBaseAddr(AI_MODE mode) {
 	if( (mode == AI_MODE_1P && type == MY) || (mode == AI_MODE_2P && type == ENEMY)) {
 		ReadProcessMemory(ph, root+ADDR_LCHAROFS, base_addr);
 		ReadProcessMemory(ph, ADDR_LCHARID, &char_id, 4);
@@ -272,7 +272,7 @@ void player::ReloadBaseAddr(AI_MODE mode) {
 		ReadProcessMemory(ph, ADDR_RCHARID, &char_id, 4);
 	}
 }
-void player::ReloadVal(AI_MODE mode) {
+void Character::ReloadVal(AI_MODE mode) {
 	ReadProcessMemory(ph, base_addr+ADDR_AIRDASHCOUNTOFS, air_dash_count);
 	ReadProcessMemory(ph, base_addr+ADDR_REIPOWEROFS, rei);
 	ReadProcessMemory(ph, base_addr+ADDR_REISTOPROFS, rei_stop);
@@ -347,7 +347,7 @@ void player::ReloadVal(AI_MODE mode) {
 	ReloadLuaValue(mode);
 }
 
-void player::ReloadObject(AI_MODE mode) {
+void Character::ReloadObject(AI_MODE mode) {
 	//STLリストコンテナ
 	typedef struct{
 		int alloc;
@@ -426,7 +426,7 @@ void player::ReloadObject(AI_MODE mode) {
 	}
 }
 
-void player::ReloadLuaValue(AI_MODE) {
+void Character::ReloadLuaValue(AI_MODE) {
 	char name[32],*s;
 
 #define setValue(k,v)	strcpy(s,k);engine->setScriptValue(name,v)
@@ -478,14 +478,14 @@ void player::ReloadLuaValue(AI_MODE) {
 #undef setValue
 }
 
-Obj *player::GetObject(int n) {
+Obj *Character::GetObject(int n) {
 	if(n<0 || object.size()<=n) {
 		return NULL;
 	}
 	return &object[n];
 }
 
-Obj *player::GetOptionObject(int n) {
+Obj *Character::GetOptionObject(int n) {
 	if(n<0 || object.size()<=n) {
 		return NULL;
 	}
@@ -516,7 +516,7 @@ Obj *player::GetOptionObject(int n) {
 	return NULL;
 }
 
-int player::GetKeyState(int n) {
+int Character::GetKeyState(int n) const {
 	switch(n) {
 		case ACT_LEFT:
 			if(keyState[0] > 0) {

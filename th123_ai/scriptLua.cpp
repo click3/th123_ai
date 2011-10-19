@@ -621,38 +621,25 @@ scriptLua *scriptLua::instance = NULL;
 	}
 	int scriptLua::lua_get_key_stat2(lua_State *L) {
 		int n = lua_gettop(L);
-		player *p;
 
 		if(n!=2 || !lua_isnumber(L,1) || !lua_isnumber(L,2)) {
 			lua_pushstring(L,"ˆø”‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ");
 			lua_error(L);
 		}
-		if(lua_tonumber(L,1) == 0) {
-			p = &my_data;
-		} else {
-			p = &enemy_data;
-		}
-		lua_pushnumber(L, p->GetKeyState((int)lua_tonumber(L,2)));
+		const Character &player = (::lua_tonumber(L,1) == 0 ? my_data : enemy_data);
+		::lua_pushnumber(L, player.GetKeyState(::lua_tonumber(L, 2)));
 		return 1;
 	}
 	int scriptLua::lua_get_key_map2(lua_State *L) {
-		int n = lua_gettop(L);
-		int i;
-		player *p;
+		int n = ::lua_gettop(L);
 
-		if(n!=1 || !lua_isnumber(L,1)) {
-			lua_pushstring(L,"ˆø”‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ");
-			lua_error(L);
+		if(n!=1 || !::lua_isnumber(L, 1)) {
+			::lua_pushstring(L,"ˆø”‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ");
+			::lua_error(L);
 		}
-		if(lua_tonumber(L,1) == 0) {
-			p = &my_data;
-		} else {
-			p = &enemy_data;
-		}
-		i = 0;
-		while(i < 10) {
-			lua_pushnumber(L, p->GetKeyState(i));
-			i++;
+		const Character &player = (::lua_tonumber(L,1) == 0 ? my_data : enemy_data);
+		for(unsigned int i = 0; i < 10; i++) {
+			::lua_pushnumber(L, player.GetKeyState(i));
 		}
 		return 10;
 	}
