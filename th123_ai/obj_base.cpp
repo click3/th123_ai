@@ -8,29 +8,29 @@ void ObjBase::Reload(AI_MODE mode) {
 	if(base_addr == 0) {
 		return;
 	}
-	int temp;
 	//base+0x08	4	画像構造体的な何かへのアドレス？
-	ReadProcessMemory(ph, base_addr+ADDR_POINTXOFS, x);
-	ReadProcessMemory(ph, base_addr+ADDR_POINTYOFS, y);
-	ReadProcessMemory(ph, base_addr+ADDR_SPEEDXOFS, speed.x);
-	ReadProcessMemory(ph, base_addr+ADDR_SPEEDYOFS, speed.y);
-	ReadProcessMemory(ph, base_addr+ADDR_DIRECTIONOFS, dir);//0x104は画像の向き、0x1AEは向き+何か
+	ReadProcessMemory(ph, base_addr+ADDR_POINTXOFS,			x);
+	ReadProcessMemory(ph, base_addr+ADDR_POINTYOFS,			y);
+	ReadProcessMemory(ph, base_addr+ADDR_SPEEDXOFS,			speed.x);
+	ReadProcessMemory(ph, base_addr+ADDR_SPEEDYOFS,			speed.y);
+	ReadProcessMemory(ph, base_addr+ADDR_DIRECTIONOFS,		dir);//0x104は画像の向き、0x1AEは向き+何か
 	//base+0x11c	4	x倍率
 	//base+0x120	4	y倍率
-	ReadProcessMemory(ph, base_addr+ADDR_ACTIONIDOFS, action);
-	ReadProcessMemory(ph, base_addr+ADDR_ACTIONBLOCKIDOFS, act_block);
+	ReadProcessMemory(ph, base_addr+ADDR_ACTIONIDOFS,		action);
+	ReadProcessMemory(ph, base_addr+ADDR_ACTIONBLOCKIDOFS,		act_block);
 	//base+0x140	2	そのアクションの何画像目か
 	//base+0x142	2	その画像の何フレーム目か
-	ReadProcessMemory(ph, base_addr+ADDR_FRAMECOUNTOFS, frame);
+	ReadProcessMemory(ph, base_addr+ADDR_FRAMECOUNTOFS,		frame);
 	//base+0x150	4	136byteのアニメーション(?)構造体のアドレス(anim)
 	//anim+0x0A	4	画像ID
-	ReadProcessMemory(ph, base_addr+ADDR_IMAGESTRUCTOFS, temp);
-	ReadProcessMemory(ph, temp + ADDR_IMAGENUMBEROFS, img_no);
-	ReadProcessMemory(ph, temp + ADDR_FRAMEFLAGSOFS, fflags);
-	ReadProcessMemory(ph, temp + ADDR_ATTACKFLAGSOFS, aflags);
+	unsigned int image_struct_addr;
+	ReadProcessMemory(ph, base_addr+ADDR_IMAGESTRUCTOFS,		image_struct_addr);
+	ReadProcessMemory(ph, image_struct_addr + ADDR_IMAGENUMBEROFS,	img_no);
+	ReadProcessMemory(ph, image_struct_addr + ADDR_FRAMEFLAGSOFS,	fflags);
+	ReadProcessMemory(ph, image_struct_addr + ADDR_ATTACKFLAGSOFS,	aflags);
 	//base+0x158	4	158byteの構造体(詳細不明)
 	ReadProcessMemory(ph, base_addr+ADDR_HPOFS, hp);
-	ReadProcessMemory(ph, base_addr+ADDR_HITSTOPOFS, hit_stop);
+	ReadProcessMemory(ph, base_addr+ADDR_HITSTOPOFS,			hit_stop);
 	unsigned char hitarea_count;
 	ReadProcessMemory(ph, base_addr+ADDR_HITAREACOUNTOFS,		hitarea_count);
 
@@ -40,7 +40,7 @@ void ObjBase::Reload(AI_MODE mode) {
 			return;
 		}
 		unsigned int motion_struct_addr;
-		ReadProcessMemory(ph,  base_addr+ADDR_MOTIONSTRUCTOFS, motion_struct_addr);
+		ReadProcessMemory(ph,  base_addr+ADDR_MOTIONSTRUCTOFS,	motion_struct_addr);
 		unsigned int hitarea_base_addr;
 		ReadProcessMemory(ph,  motion_struct_addr+ADDR_HITAREAOFS, hitarea_base_addr);
 		for(unsigned int i = 0; i < hitarea_count; i++) {
