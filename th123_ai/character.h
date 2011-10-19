@@ -1,10 +1,9 @@
 
 #define SPECIALDATA_MAX	28
 
-class Character : public ObjBase
-{
+class Character : public ObjBase {
 public:
-	enum TYPE{
+	enum TYPE {
 		MY, ENEMY
 	};
 	Character(TYPE a) : ObjBase() {
@@ -44,13 +43,13 @@ public:
 
 	TYPE SetType(TYPE a);
 	int SetRootAddress(int addr);
-	int GetSpecialData(int n);
+	int GetSpecialData(int n) const;
 	virtual void ReloadBaseAddr(AI_MODE mode);
 	virtual void ReloadVal(AI_MODE mode);
 	void ReloadObject(AI_MODE mode);
 	void ReloadLuaValue(AI_MODE mode);
-	Obj *GetObject(int n);
-	Obj *GetOptionObject(int n);
+	const Obj &GetObject(unsigned int index) const;
+	const Obj *GetOptionObject(unsigned int index) const;
 	int GetKeyState(int n) const;
 private:
 	TYPE type;

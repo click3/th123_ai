@@ -1227,37 +1227,20 @@ short *GetDeckList(int player) {
 
 
 void is_bullethit(void) {
-	int i,min,temp,l;
-
 	obj_dis = 10000;
 	obj_dis2 = 10000;
+	BOOST_FOREACH(const Obj &obj, enemy_data.object) {
+		const unsigned int dis2 = static_cast<unsigned int>(::abs(my_data.x - obj.x));
+		obj_dis2 = (std::min)(obj_dis2, (int)dis2);
 
-	l = 0;
-	while(l < enemy_data.object.size()) {
-		Obj *a = enemy_data.GetObject(l);
-		temp = abs(my_data.x - a->x);
-		if(temp<obj_dis2) {
-			obj_dis2 = temp;
-		}
-
-		if(a->attackarea.size() < 16) {
-			i = 0;
-			while(i < a->attackarea.size()) {
-				if(a->attackarea[i].left<my_data.x && a->attackarea[i].right>my_data.x) {
-					obj_dis = 1;
-				} else {
-					min = abs(a->attackarea[i].left - my_data.x);
-					if(min > abs(a->attackarea[i].right - my_data.x)) {
-						min = abs(a->attackarea[i].right - my_data.x);
-					}
-					if(min < obj_dis) {
-						obj_dis = min;
-					}
-				}
-				i++;
+		BOOST_FOREACH(const Box &box, obj.attackarea) {
+			if(box.left < my_data.x && box.right > my_data.x) {
+				obj_dis = 1;
+			} else {
+				const unsigned int dis1 = static_cast<unsigned int>((std::min)(::abs(box.left - my_data.x), ::abs(box.right - my_data.x)));
+				obj_dis = (std::min)(obj_dis, (int)dis1);
 			}
 		}
-		l++;
 	}
 }
 

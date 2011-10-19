@@ -12,7 +12,7 @@ int Character::SetRootAddress(int addr) {
 	root = addr;
 	return temp;
 }
-int Character::GetSpecialData(int n) {
+int Character::GetSpecialData(int n) const {
 	int data,i;
 	short mini;
 	float f;
@@ -478,40 +478,48 @@ void Character::ReloadLuaValue(AI_MODE) {
 #undef setValue
 }
 
-Obj *Character::GetObject(int n) {
-	if(n<0 || object.size()<=n) {
-		return NULL;
-	}
-	return &object[n];
+const Obj &Character::GetObject(unsigned int index) const {
+	BOOST_ASSERT(object.size() > index);
+	return object[index];
 }
 
-Obj *Character::GetOptionObject(int n) {
-	if(n<0 || object.size()<=n) {
-		return NULL;
-	}
-	n++;
-	int i = 0;
-	while(n>0 && i < object.size()) {
-		if(char_id==CHAR_ALICE) {
-			if(object[i].attackarea.size()==0 && object[i].action == 805 && object[i].img_no!=221)n--;
-		} else if(char_id==CHAR_YOUMU) {
-			if(n!=1) {
-				return NULL;
+const Obj *Character::GetOptionObject(unsigned int index) const {
+	struct Inner {
+		static bool IsAliceOption(const Obj &obj) {
+			if(obj.attackarea.size() != 0 || obj.action != 805 || obj.img_no == 221) {
+				return false;
 			}
-			if(object[i].action == 899) {
-				n--;
-			}
-		} else if(char_id==CHAR_KOMACHI) {
-			if(object[i].action==855)n--;
-			if(object[i].action==801 || object[i].action==852)n--;
-		} else return NULL;
-		if(n<=0) {
-			break;
+			return true;
 		}
-		i++;
+		static bool IsYoumuOption(const Obj &obj) {
+			return (obj.action == 899);
+		}
+		static bool IsKomachiOption(const Obj &obj) {
+			if(obj.action != 801 && obj.action != 852 && obj.action != 855) {
+				return false;
+			}
+			return true;
+		}
+	};
+	static bool (* const is_option_func_list[SWRS_CHAR_ID_MAX+1])(const Obj &) = {
+		NULL,				NULL,				NULL,	Inner::IsAliceOption,
+		NULL,				Inner::IsYoumuOption,	NULL,	NULL,
+		NULL,				NULL,				NULL,	NULL,
+		Inner::IsKomachiOption,	NULL,				NULL,	NULL,
+		NULL,				NULL,				NULL,	NULL
+	};
+	if(object.size() <= index || (this->char_id == CHAR_YOUMU && index != 0) || is_option_func_list[this->char_id] == NULL) {
+		return false;
 	}
-	if(n==0) {
-		return &object[i];
+	unsigned int found_count = 0;
+	for(unsigned int i = 0; index <= found_count && i < object.size(); i++) {
+		if(!is_option_func_list[this->char_id](object[i])) {
+			continue;
+		}
+		if(index == found_count) {
+			return &object[i];
+		}
+		found_count++;
 	}
 	return NULL;
 }

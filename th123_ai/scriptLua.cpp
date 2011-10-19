@@ -280,54 +280,48 @@ scriptLua *scriptLua::instance = NULL;
 		return 0;
 	}
 	int scriptLua::lua_get_obj_data(lua_State *L) {
-		int n = lua_gettop(L);
+		const unsigned int n = ::lua_gettop(L);
 
-		if(n!=2 || !lua_isnumber(L,1) || !lua_isnumber(L,2) || lua_tointeger(L,1)<0 || lua_tointeger(L,1)>1) {
-			lua_pushstring(L,"ˆø”‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ");
-			lua_error(L);
+		if(n!=2 || !::lua_isnumber(L, 1) || !::lua_isnumber(L, 2) || ::lua_tointeger(L, 1)<0 || ::lua_tointeger(L, 1)>1) {
+			::lua_pushstring(L,"ˆø”‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ");
+			::lua_error(L);
 		}
-		int p = lua_tointeger(L,1);
-		Obj *a;
-		if(p==0) {
-			a = my_data.GetObject(::lua_tointeger(L,2));
-		} else {
-			a = enemy_data.GetObject(::lua_tointeger(L,2));
-		}
-		if(a==NULL) {
+		const unsigned int player_type = ::lua_tointeger(L, 1);
+		const unsigned int index = ::lua_tointeger(L, 2);
+		const Character &player = (player_type == 0 ? my_data : enemy_data);
+		if(index >= player.object.size()) {
 			return 0;
 		}
-		lua_pushnumber(L, static_cast<lua_Number>(a->action));
-		lua_pushnumber(L, static_cast<lua_Number>(a->x));
-		lua_pushnumber(L, static_cast<lua_Number>(a->y));
-		lua_pushnumber(L, static_cast<lua_Number>(a->hp));
-		lua_pushnumber(L, static_cast<lua_Number>(a->img_no));
-		lua_pushnumber(L, static_cast<lua_Number>(a->frame));
-		lua_pushnumber(L, static_cast<lua_Number>(a->speed.x));
-		lua_pushnumber(L, static_cast<lua_Number>(a->speed.y));
-		lua_pushnumber(L, static_cast<lua_Number>(a->base_addr));
-		lua_pushnumber(L, static_cast<lua_Number>(a->attackarea.size()));
-		lua_pushnumber(L, static_cast<lua_Number>(a->hitarea.size()));
+		const Obj &obj = player.GetObject(index);
+		::lua_pushnumber(L, static_cast<lua_Number>(obj.action));
+		::lua_pushnumber(L, static_cast<lua_Number>(obj.x));
+		::lua_pushnumber(L, static_cast<lua_Number>(obj.y));
+		::lua_pushnumber(L, static_cast<lua_Number>(obj.hp));
+		::lua_pushnumber(L, static_cast<lua_Number>(obj.img_no));
+		::lua_pushnumber(L, static_cast<lua_Number>(obj.frame));
+		::lua_pushnumber(L, static_cast<lua_Number>(obj.speed.x));
+		::lua_pushnumber(L, static_cast<lua_Number>(obj.speed.y));
+		::lua_pushnumber(L, static_cast<lua_Number>(obj.base_addr));
+		::lua_pushnumber(L, static_cast<lua_Number>(obj.attackarea.size()));
+		::lua_pushnumber(L, static_cast<lua_Number>(obj.hitarea.size()));
 		return 11;
 	}
 	int scriptLua::lua_get_obj_attackarea(lua_State *L) {
-		int n = lua_gettop(L);
-		if(n!=3 || !lua_isnumber(L,1) || !lua_isnumber(L,2) || !lua_isnumber(L,3) || lua_tointeger(L,1)<0 || lua_tointeger(L,1)>1) {
-			lua_pushstring(L,"ˆø”‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ");
-			lua_error(L);
+		const unsigned int n = lua_gettop(L);
+		if(n != 3 || !::lua_isnumber(L, 1) || !::lua_isnumber(L, 2) || !::lua_isnumber(L, 3) || ::lua_tointeger(L, 1) < 0 || ::lua_tointeger(L, 1) > 1) {
+			::lua_pushstring(L,"ˆø”‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ");
+			::lua_error(L);
 		}
-		int p = lua_tointeger(L,1);
-		Obj *a;
-		if(p==0) {
-			a = my_data.GetObject(lua_tointeger(L,2));
-		} else {
-			a = enemy_data.GetObject(lua_tointeger(L,2));
-		}
-		if(a==NULL) {
+		const unsigned int player_type = ::lua_tointeger(L, 1);
+		const unsigned int index = ::lua_tointeger(L, 2);
+		const Character &player = (player_type == 0 ? my_data : enemy_data);
+		if(index >= player.object.size()) {
 			return 0;
 		}
-		int i = lua_tointeger(L,3);
-		if(a->attackarea.size()>i && i>=0) {
-			const Box &b = a->attackarea[i];
+		const Obj &obj = player.GetObject(index);
+		const unsigned int attackarea_index = ::lua_tointeger(L, 3);
+		if(obj.attackarea.size() > attackarea_index) {
+			const Box &b = obj.attackarea[attackarea_index];
 			::lua_pushnumber(L, static_cast<lua_Number>(b.left));
 			::lua_pushnumber(L, static_cast<lua_Number>(b.top));
 			::lua_pushnumber(L, static_cast<lua_Number>(b.right));
@@ -337,25 +331,22 @@ scriptLua *scriptLua::instance = NULL;
 		return 0;
 	}
 	int scriptLua::lua_get_obj_hitarea(lua_State *L) {
-		int n = lua_gettop(L);
+		const unsigned int n = ::lua_gettop(L);
 
-		if(n!=3 || !lua_isnumber(L,1) || !lua_isnumber(L,2) || !lua_isnumber(L,3) || lua_tointeger(L,1)<0 || lua_tointeger(L,1)>1) {
+		if(n != 3 || !::lua_isnumber(L, 1) || !::lua_isnumber(L, 2) || !::lua_isnumber(L, 3) || ::lua_tointeger(L, 1) < 0 || ::lua_tointeger(L, 1) > 1) {
 			lua_pushstring(L,"ˆø”‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ");
 			lua_error(L);
 		}
-		int p = lua_tointeger(L,1);
-		Obj *a;
-		if(p==0) {
-			a = my_data.GetObject(lua_tointeger(L,2));
-		} else {
-			a = enemy_data.GetObject(lua_tointeger(L,2));
-		}
-		if(a==NULL) {
+		const unsigned int player_type = ::lua_tointeger(L, 1);
+		const unsigned int index = ::lua_tointeger(L, 2);
+		const Character &player = (player_type == 0 ? my_data : enemy_data);
+		if(index >= player.object.size()) {
 			return 0;
 		}
-		int i = lua_tointeger(L,3);
-		if(a->hitarea.size() > i && i >= 0) {
-			const Box &b = a->hitarea[i];
+		const Obj &obj = player.GetObject(index);
+		const unsigned int hitarea_index = ::lua_tointeger(L, 3);
+		if(obj.hitarea.size() > hitarea_index) {
+			const Box &b = obj.hitarea[hitarea_index];
 			::lua_pushnumber(L, static_cast<lua_Number>(b.left));
 			::lua_pushnumber(L, static_cast<lua_Number>(b.top));
 			::lua_pushnumber(L, static_cast<lua_Number>(b.right));
@@ -385,24 +376,24 @@ scriptLua *scriptLua::instance = NULL;
 		return 0;
 	}
 	int scriptLua::lua_get_opt_xy(lua_State *L) {
-		int n = lua_gettop(L);
+		const unsigned int n = ::lua_gettop(L);
 
-		if(n!=2 || !lua_isnumber(L,1) || !lua_isnumber(L,2) || lua_tointeger(L,1)<0 || lua_tointeger(L,1)>1) {
+		if(n != 2 || !::lua_isnumber(L, 1) || !::lua_isnumber(L, 2) || ::lua_tointeger(L, 1)<0 || ::lua_tointeger(L, 1)>1) {
 			lua_pushstring(L,"ˆø”‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ");
 			lua_error(L);
 		}
-		int p = lua_tointeger(L,1);
-		Obj *a;
-		if(p==0) {
-			a = my_data.GetOptionObject(lua_tointeger(L,2));
-		} else {
-			a = enemy_data.GetOptionObject(lua_tointeger(L,2));
-		}
-		if(a==NULL) {
+		const unsigned int player_type = ::lua_tointeger(L, 1);
+		const unsigned int index = ::lua_tointeger(L, 2);
+		const Character &player = (player_type == 0 ? my_data : enemy_data);
+		if(index >= player.object.size()) {
 			return 0;
 		}
-		lua_pushnumber(L,(lua_Number)a->x);
-		lua_pushnumber(L,(lua_Number)a->y);
+		const Obj * const obj = player.GetOptionObject(index);
+		if(obj == NULL) {
+			return 0;
+		}
+		::lua_pushnumber(L, static_cast<lua_Number>(obj->x));
+		::lua_pushnumber(L, static_cast<lua_Number>(obj->y));
 		return 2;
 	}
 	int scriptLua::lua_get_deck_list(lua_State *L) {
