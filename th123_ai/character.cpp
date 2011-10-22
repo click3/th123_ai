@@ -6,13 +6,12 @@ Character::TYPE Character::SetType(TYPE a) {
 	type = a;
 	return temp;
 }
-int Character::SetRootAddress(int addr) {
-	int temp;
-	temp = root;
-	root = addr;
-	return temp;
+unsigned int Character::SetRootAddress(unsigned int addr) {
+	const unsigned int result = character_manager_addr;
+	character_manager_addr = addr;
+	return result;
 }
-int Character::GetSpecialData(int n) const {
+int Character::GetSpecialData(unsigned int n) const {
 	int data,i;
 	short mini;
 	float f;
@@ -265,10 +264,10 @@ int Character::GetSpecialData(int n) const {
 }
 void Character::ReloadBaseAddr(AI_MODE mode) {
 	if( (mode == AI_MODE_1P && type == MY) || (mode == AI_MODE_2P && type == ENEMY)) {
-		ReadProcessMemory(ph, root+ADDR_LCHAROFS, base_addr);
+		ReadProcessMemory(ph, character_manager_addr+ADDR_LCHAROFS, base_addr);
 		ReadProcessMemory(ph, ADDR_LCHARID, &char_id, 4);
 	} else {
-		ReadProcessMemory(ph, root+ADDR_RCHAROFS, base_addr);
+		ReadProcessMemory(ph, character_manager_addr+ADDR_RCHAROFS, base_addr);
 		ReadProcessMemory(ph, ADDR_RCHARID, &char_id, 4);
 	}
 }

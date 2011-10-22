@@ -42,8 +42,8 @@ public:
 	int keyState[8];
 
 	TYPE SetType(TYPE a);
-	int SetRootAddress(int addr);
-	int GetSpecialData(int n) const;
+	unsigned int SetRootAddress(unsigned int addr);
+	int GetSpecialData(unsigned int n) const;
 	virtual void ReloadBaseAddr(AI_MODE mode);
 	virtual void ReloadVal(AI_MODE mode);
 	void ReloadObject(AI_MODE mode);
@@ -53,5 +53,5 @@ public:
 	int GetKeyState(int n) const;
 private:
 	TYPE type;
-	int root;
+	unsigned int character_manager_addr;
 };
