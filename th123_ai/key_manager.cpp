@@ -4,7 +4,7 @@
 KeybdEvent keyboard;
 
 int key[10] = {DIK_UP,DIK_DOWN,DIK_LEFT,DIK_RIGHT,DIK_Z,DIK_X,DIK_C,DIK_A,DIK_S,DIK_D};
-int muki,gyaku,dis,dfront,dback,ufront,uback,dis_y,dis2,is_dir_front;
+int muki,gyaku,dis,dfront,dback,ufront,uback,is_dir_front;
 
 char last_on_key;
 char on[10] = {0,0,0,0,0,0,0,0,0,0};

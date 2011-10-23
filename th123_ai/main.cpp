@@ -19,6 +19,7 @@ int seen,mode,weather,weather2;
 int obj_dis=0,obj_dis2=0,battle_time;
 short weather_time;
 char stage_num,bgm_num;
+int dis_y,dis2;
 
 Character my_data(Character::MY);
 Character enemy_data(Character::ENEMY);
