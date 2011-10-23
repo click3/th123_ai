@@ -10,10 +10,6 @@ void MyWndActive(int flag);
 void reload_check(void);
 
 void yield(void);
-void key_reset(void);
-void key_off(int n);
-void key_on(int n);
-void set_key_delay(int delay);
 void set_data_delay(int delay);
 void set_weather_delay(int n);
 
@@ -32,12 +28,12 @@ void ai(void);
 void SWR_ScanProjectile(HANDLE proc);
 org::click3::Utility::SHARED_HANDLE GetProcessHandle(void);
 void get_th105param(void);
-void search_key(void);
 void is_bullethit(void);
 int GetPlayerAddr(int player);
 long WINAPI exep(EXCEPTION_POINTERS *pep);
 void changeLoadLibraryExW(int flag);
 void load_inis(void);
+void change_player(void);
 
 char get_key_stat(int n);
 

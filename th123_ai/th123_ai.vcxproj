@@ -87,6 +87,7 @@
     <ClCompile Include="address.cpp" />
     <ClCompile Include="character.cpp" />
     <ClCompile Include="keybd_event.cpp" />
+    <ClCompile Include="key_manager.cpp" />
     <ClCompile Include="lib.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="network.cpp" />
@@ -111,6 +112,7 @@
     <ClInclude Include="consts.h" />
     <ClInclude Include="dik_list.h" />
     <ClInclude Include="keybd_event.h" />
+    <ClInclude Include="key_manager.h" />
     <ClInclude Include="lib.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="network.h" />

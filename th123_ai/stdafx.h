@@ -51,4 +51,5 @@
 #include "obj_base.h"
 #include "obj.h"
 #include "character.h"
+#include "key_manager.h"
 #include "main.h"
