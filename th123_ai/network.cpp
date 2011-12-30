@@ -449,7 +449,6 @@ bool AIZipPost(const char *url, const char *fn, int char_id, const char *signatu
 
 bool PostDeleteMethod(const char *url,int char_id,const char *signature,const char *name,const char *description,const char *root) {
 	char data[2048]="";
-	bool ret;
 
 	add_param(data,"char_id",char_id);
 	add_param(data,"signature",signature);
@@ -461,8 +460,7 @@ bool PostDeleteMethod(const char *url,int char_id,const char *signature,const ch
 }
 
 bool PostScriptError(const char *url,const char *signature, const char *e) {
-	char data[4096]="",*s;
-	bool ret;
+	char data[4096]="";
 
 	add_param(data,"signature",signature);
 	add_param(data,"method","error_regist");

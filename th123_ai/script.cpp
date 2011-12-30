@@ -25,7 +25,6 @@ bool OpenAI(const char *s) {
 	if(ini_int2("th105_start",0)==1) {
 		ph = GetProcessHandle();
 	}
-	char *fn;
 	if(s == NULL || strlen(s)==0 || strcmp(s,"dialog")==0) {
 		engine->loadDialog();
 	} else if(strcmp(s, "auto")==0) {

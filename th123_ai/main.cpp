@@ -48,7 +48,6 @@ int main2(int argc,char *argv[]) {
 #else
 int main(int argc,char *argv[]) {
 #endif
-	int a;
 #ifdef __BORLANDC__
 	__asm{
 		push EAX
@@ -78,7 +77,7 @@ long WINAPI exep(EXCEPTION_POINTERS *pep) {
 	int list[10];
 	int i,a;
 	char s[2048]="",str[256];
-	static int t = 0;
+	static time_t t = 0;
 	static int flag = 0;
 	static int ftol = 0;
 
@@ -627,10 +626,7 @@ void check_th105(void) {
 }
 
 void get_th105param(void) {
-	unsigned int root,l,r,temp=0,temp2,temp3;
-	float ftemp,ftemp2;
-	int time,time2;
-	char s[256];
+	unsigned int root,temp=0;
 
 	check_th105();
 	switch(seen) {
@@ -711,9 +707,9 @@ void get_th105param(void) {
 
 void reload_check(void) {
 	int a;
+/*
 	char b;
 	HMODULE hm;
-/*
 	static BOOL (WINAPI *ReadProcessMemory)(HANDLE,LPCVOID,LPVOID,DWORD,LPDWORD) = NULL;
 
 	//不正対策
@@ -919,9 +915,6 @@ char GetSkillLv(int player,int n) {
 }
 
 short GetCardId(int player,int n) {
-	int p,temp,temp2,temp3;
-	int a;
-
 	if(weather==11 || (player!=MY && player!=ENEMY) || n<0 || n>5)return -1;
 	if(player==MY) {
 		return my_data.card[n].id;
@@ -930,9 +923,6 @@ short GetCardId(int player,int n) {
 	}
 }
 int GetCardCost(int player,int n) {
-	int p,temp,temp2,temp3;
-	short a;
-
 	if(weather==11 || (player!=MY && player!=ENEMY) || n<0 || n>5)return -1;
 	if(player==MY) {
 		return my_data.card[n].cost;
@@ -1082,7 +1072,7 @@ void changeDbgBreakPoint(void) {
 		return;
 	}
 	if(VirtualProtect((void *)hm,(int)paddr-(int)hm+1,PAGE_EXECUTE_READWRITE,&old)) {//勝手に範囲を決めてくれるのでアバウドでよい
-		*(char *)paddr = 0xC3;
+		*(unsigned char *)paddr = 0xC3;
 		VirtualProtect((void *)hm,paddr-(int)hm+1,old,&old);//変更前の権限に戻す
 	}
 }
@@ -1114,16 +1104,16 @@ void changeLoadLibraryExW(int flag) {
 	}
 	if(VirtualProtect((void *)hm,(int)paddr-(int)hm+7,PAGE_EXECUTE_READWRITE,&old)) {//勝手に範囲を決めてくれるのでアバウドでよい
 		if(flag == 0) {
-			((char*)paddr)[0] = 0xb8;
-			*(int*)&((char*)paddr)[1] = 0x00000000;
-			((char*)paddr)[5] = 0xc2;
-			*(short*)&((char*)paddr)[6] = 0x000c;
+			((unsigned char*)paddr)[0] = 0xb8;
+			*(unsigned int*)&((char*)paddr)[1] = 0x00000000;
+			((unsigned char*)paddr)[5] = 0xc2;
+			*(unsigned short*)&((char*)paddr)[6] = 0x000c;
 		} else {
-			((char*)paddr)[0] = 0x6A;//code[0]~code[6]まで上書きで消してしまう機械語の代わり
-			((char*)paddr)[1] = 0x34;
-			((char*)paddr)[2] = 0x68;
-			*(int *)&((char*)paddr)[3] = 0x7C80E0E8;
-			((char*)paddr)[7] = 0xE8;
+			((unsigned char*)paddr)[0] = 0x6A;//code[0]~code[6]まで上書きで消してしまう機械語の代わり
+			((unsigned char*)paddr)[1] = 0x34;
+			((unsigned char*)paddr)[2] = 0x68;
+			*(unsigned int *)&((char*)paddr)[3] = 0x7C80E0E8;
+			((unsigned char*)paddr)[7] = 0xE8;
 		}
 		VirtualProtect((void *)hm,paddr-(int)hm+5,old,&old);//変更前の権限に戻す
 	}
@@ -1141,7 +1131,7 @@ int main(int argc,char *_argv[]) {
 #else
 int main2(int argc,char *_argv[]) {
 #endif
-	char s[256],script[8192];
+	char s[256];
 	hInst = GetModuleHandle(NULL);
 
 	SetUnhandledExceptionFilter(exep);

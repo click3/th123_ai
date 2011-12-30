@@ -7,5 +7,6 @@ void check_lastkey();
 void Clear();
 void search_key(CHAR_ID operation_char);
 
-extern int muki,gyaku,dis,dfront,dback,ufront,uback,is_dir_front;
+extern int muki,gyaku,dis,dfront,dback,ufront,uback;
+extern bool is_dir_front;
 extern KeybdEvent keyboard;
