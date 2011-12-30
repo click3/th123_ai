@@ -108,7 +108,7 @@
 #define ADDR_KEYMAPOFS		addr[address::KEYMAPOFS]
 #define ADDR_ACTIONBLOCKIDOFS	addr[address::ACTIONBLOCKIDOFS]
 
-class address{
+class address : boost::noncopyable {
 public:
 	enum{
 		PBATTLEMGR=0,	PNETOBJECT,	COMMMODE,
@@ -148,11 +148,9 @@ public:
 		KEYMGROFS,	KEYMAPOFS,	ACTIONBLOCKIDOFS,
 		ADDR_MAX
 	};
-	char *name_list[ADDR_MAX];
-	int list[ADDR_MAX];
 
-	void init() {
-		char *temp[ADDR_MAX] = {
+	address() {
+		const char * const temp[ADDR_MAX] = {
 			"ADDR_PBATTLEMGR",	"ADDR_PNETOBJECT",	"ADDR_COMMMODE",
 			"ADDR_LCHARID",		"ADDR_RCHARID",		"ADDR_SCENEID",
 			"ADDR_LCHAROFS",	"ADDR_RCHAROFS",	"ADDR_BTLMODEOFS",
@@ -189,7 +187,7 @@ public:
 			"ADDR_ATTACKFLAGSOFS",	"ADDR_DIAHARDOFS",	"ADDR_REISTOPROFS",
 			"ADDR_KEYMGROFS",	"ADDR_KEYMAPOFS",	"ADDR_ACTIONBLOCKIDOFS"
 		};
-		memcpy(name_list,temp,sizeof(temp));
+		::memcpy(name_list, temp, sizeof(temp));
 		reset();
 		//		名称		緋想天		非想天則
 		//84BDE0	泡姫の最大HP
@@ -305,8 +303,10 @@ public:
 		set_default(TEKETENOFS,		0x7EA,		0x8D6);		//
 		set_default(MUNENOFS,		0x838,		0x924);		//
 	}
+	const char *name_list[ADDR_MAX];
+	unsigned int list[ADDR_MAX];
 
-	int & operator [](int n) {
+	const unsigned int &operator [](unsigned int n) {
 		if(list[n] == 0) {
 			list[n] = g_ini.GetInt(name_list[n]);
 		}
@@ -314,10 +314,10 @@ public:
 	}
 
 	void reset() {
-		memset(list, 0, sizeof(list));
+		::memset(list, 0, sizeof(list));
 	}
 private:
-	void set_default(int n,int swr_addr,int swrs_addr) {
+	void set_default(unsigned int n, unsigned int swr_addr, unsigned int swrs_addr) {
 		char addr[256],name[256];
 		snprintf(name, sizeof(name), "SWR_%s", name_list[n]);
 		snprintf(addr, sizeof(addr), "0x%x", swr_addr);

@@ -502,7 +502,6 @@ void init(void) {
 	g_ini.Add("default","StartupAI","dialog");
 	g_ini.Add("default","Player","1");
 	g_ini.Add("default","AppDownExit","0");
-	addr.init();
 	load_inis();
 	change_player();
 }
