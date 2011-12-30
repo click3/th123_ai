@@ -51,48 +51,42 @@ public:
 		return atof2(GetValue(name), def);
 	}
 
-	int LoadFile(const char *fn) {
-		FILE *fp;
-		char section[256] = "root";
-		char s[256],*value;
-		int i,count;
-
-		fp = fopen(fn,"r");
-		if(fp == NULL)return 0;
-		count = 0;
-		while(fgets(s,256,fp) != NULL) {
-			if(s[strlen(s)-1] == '\n')s[strlen(s)-1] = '\0';
-			if(strcmp(section,"SwrName") != 0 && strcmp(section,"SWRSName") != 0)del_space(s);//SwrName‚Ìê‡‚Í‹ó”’íœ‚È‚µ
-			if(*s == ';' || *s == '\0' || strncmp(s,"//",2)==0 || *s == '#') {
+	bool LoadFile(const boost::filesystem::path &path) {
+		boost::filesystem::ifstream ifs(path);
+		if(!ifs.is_open()) {
+			return false;
+		}
+		std::string curSection = "root";
+		while(ifs.good()) {
+			char line[256];
+			ifs.getline(line, sizeof(line));
+			if(!ifs.good()) {
+				return false;
+			}
+			if(curSection != "SwrName" && curSection != "SWRSName") {//SwrName‚Ìê‡‚Í‹ó”’íœ‚È‚µ
+				del_space(line);
+			}
+			if(*line == ';' || *line == '\0' || ::strncmp(line, "//", 2)==0 || *line == '#') {
 				continue;
-			} else if(*s == '[') {
-				i = 1;
-				while(s[i] != ']') {
-					if(s[i] == '\0') {
-						fclose(fp);
-						return -1;
-					}
-					i++;
+			} else if(*line == '[') {
+				unsigned int i;
+				for(i = 1; line[i] != '\0' && line[i] != ']'; i++) ;
+				if(line[i] == '\0') {
+					return false;
 				}
-				s[i] = '\0';
-				strcpy(section,&s[1]);
+				curSection.assign(&line[1], i - 1);
 			} else {
-				i = 0;
-				while(s[i] != '=') {
-					if(s[i] == '\0') {
-						fclose(fp);
-						return -2;
-					}
-					i++;
+				unsigned int i;
+				for(i = 0; line[i] != '\0' && line[i] != '='; i++) ;
+				if(line[i] == '\0') {
+					return false;
 				}
-				s[i] = '\0';
-				value = &s[i+1];
-				Add(section,s,value);
-				count++;
+				const std::string key(&line[0], &line[i]);
+				const std::string value(&line[i+1]);
+				Add(curSection.c_str(), key.c_str(), value.c_str());
 			}
 		}
-		fclose(fp);
-		return count;
+		return true;
 	}
 
 	virtual void Add(const char *section,const char *name,const char *value) {
@@ -229,6 +223,6 @@ char *ini_value(const char *name);
 int ini_int(const char *name);
 int ini_int2(const char *name, int def);
 float ini_float(const char *name);
-int load_ini(const char *fn);
+bool load_ini(const char *fn);
 void ini_add(const char *section,const char *name,const char *value);
 void create_ini(void);

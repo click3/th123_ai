@@ -154,8 +154,8 @@ int ini_int2(const char *name, int def) {
 float ini_float(const char *name) {
 	return g_ini.GetFloat(name);
 }
-int load_ini(const char *fn) {
-	return g_ini.LoadFile(fn);
+bool load_ini(const boost::filesystem::path &path) {
+	return g_ini.LoadFile(path);
 }
 void ini_add(const char *section,const char *name,const char *value) {
 	g_ini.Add(section, name, value);
