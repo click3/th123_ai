@@ -25,7 +25,7 @@ public:
 	ini() {
 		head = NULL;
 	}
-	~ini() {
+	virtual ~ini() {
 		LIST *a,*b;
 
 		a = head;
@@ -223,6 +223,6 @@ char *ini_value(const char *name);
 int ini_int(const char *name);
 int ini_int2(const char *name, int def);
 float ini_float(const char *name);
-bool load_ini(const char *fn);
+bool load_ini(const boost::filesystem::path &path);
 void ini_add(const char *section,const char *name,const char *value);
 void create_ini(void);
