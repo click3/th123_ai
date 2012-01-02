@@ -10,6 +10,7 @@
 #include <boost/static_assert.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/type_traits/remove_pointer.hpp>
+#include <boost/filesystem.hpp>
 
 #include <org/click3/utility.h>
 
