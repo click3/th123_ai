@@ -149,7 +149,7 @@ public:
 		ADDR_MAX
 	};
 
-	address() {
+	void initialize() {
 		const char * const temp[ADDR_MAX] = {
 			"ADDR_PBATTLEMGR",	"ADDR_PNETOBJECT",	"ADDR_COMMMODE",
 			"ADDR_LCHARID",		"ADDR_RCHARID",		"ADDR_SCENEID",
