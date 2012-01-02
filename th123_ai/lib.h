@@ -51,43 +51,7 @@ public:
 		return atof2(GetValue(name), def);
 	}
 
-	bool LoadFile(const boost::filesystem::path &path) {
-		boost::filesystem::ifstream ifs(path);
-		if(!ifs.is_open()) {
-			return false;
-		}
-		std::string curSection = "root";
-		while(ifs.good()) {
-			char line[256];
-			ifs.getline(line, sizeof(line));
-			if(!ifs.good()) {
-				return false;
-			}
-			if(curSection != "SwrName" && curSection != "SWRSName") {//SwrName‚Ìê‡‚Í‹ó”’íœ‚È‚µ
-				del_space(line);
-			}
-			if(*line == ';' || *line == '\0' || ::strncmp(line, "//", 2)==0 || *line == '#') {
-				continue;
-			} else if(*line == '[') {
-				unsigned int i;
-				for(i = 1; line[i] != '\0' && line[i] != ']'; i++) ;
-				if(line[i] == '\0') {
-					return false;
-				}
-				curSection.assign(&line[1], i - 1);
-			} else {
-				unsigned int i;
-				for(i = 0; line[i] != '\0' && line[i] != '='; i++) ;
-				if(line[i] == '\0') {
-					return false;
-				}
-				const std::string key(&line[0], &line[i]);
-				const std::string value(&line[i+1]);
-				Add(curSection.c_str(), key.c_str(), value.c_str());
-			}
-		}
-		return true;
-	}
+	bool LoadFile(const boost::filesystem::path &path);
 
 	virtual void Add(const char *section,const char *name,const char *value) {
 		LIST *a;

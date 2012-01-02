@@ -141,6 +141,70 @@ bool ReadProcessMemory(org::click3::Utility::SHARED_HANDLE ph, unsigned int base
 
 th_ini g_ini;
 
+typedef std::pair<std::wstring, std::wstring> Param;
+struct Section {
+	std::wstring name;
+	std::vector<Param> params;
+};
+BOOST_FUSION_ADAPT_STRUCT (
+	Section,
+	(std::wstring, name)
+	(std::vector<Param>, params)
+)
+
+bool ini::LoadFile(const boost::filesystem::path &path) {
+	if(!boost::filesystem::exists(path) || !boost::filesystem::is_regular_file(path)) {
+		return false;
+	}
+	const unsigned int size = static_cast<unsigned int>(boost::filesystem::file_size(path));
+	if(size == 0) {
+		return true;
+	}
+	boost::filesystem::wifstream wifs(path);
+	if(!wifs.is_open()) {
+		return false;
+	}
+	wifs.imbue(std::locale("japanese"));
+	std::vector<wchar_t> data(size);
+	wifs.read(&data[0], data.size());
+	if(wifs.eof()) {
+		const unsigned int pos = static_cast<unsigned int>(wifs.gcount());
+		data.resize(pos);
+		wifs.clear(wifs.rdstate() & ~boost::filesystem::wifstream::eofbit & ~boost::filesystem::wifstream::failbit);
+	}
+	if(!wifs.good()) {
+		return false;
+	}
+	wifs.close();
+
+	typedef std::vector<wchar_t>::iterator Iterator;
+	namespace qi = boost::spirit::qi;
+	const qi::rule<Iterator, std::wstring()> quotedString = '"' >> *(qi::standard_wide::char_ - L'"' - qi::eol) >> '"';
+	const qi::rule<Iterator, std::wstring()> emptyString = qi::lit("");
+	const qi::rule<Iterator, std::wstring()> key = quotedString | +(qi::standard_wide::char_ - '=' - qi::space);
+	const qi::rule<Iterator, std::wstring()> value = quotedString | +(qi::standard_wide::char_ - qi::eol) | emptyString;
+	const qi::rule<Iterator, Param()> paramLine = key >> qi::omit[*qi::blank] >> '=' >> qi::omit[*qi::blank] >> value >> *qi::eol;
+	const qi::rule<Iterator> comment = (qi::lit("//") | qi::lit(";") | qi::lit("#")) >> *(qi::standard_wide::char_ - qi::eol);
+	const qi::rule<Iterator> commentLine = comment >> *qi::eol;
+	const qi::rule<Iterator, std::wstring()> sectionName = '[' >> (quotedString | *(qi::standard_wide::char_ - ']')) >> ']';
+	const qi::rule<Iterator, std::wstring()> sectionNameLine = sectionName >> *qi::eol;
+	const qi::rule<Iterator, Section()> section = *commentLine >> sectionNameLine >> *(*commentLine >> paramLine);
+	const qi::rule<Iterator, std::vector<Section>()> ini = *section;
+	std::vector<wchar_t>::iterator it = data.begin();
+	std::vector<Section> sectionList;
+	const bool result = qi::parse(it, data.end(), ini, sectionList);
+	if(!result || it != data.end()) {
+		std::wcout << std::wstring(it, data.end());
+		return false;
+	}
+	BOOST_FOREACH(const Section &section, sectionList) {
+		BOOST_FOREACH(const Param &param, section.params) {
+			this->Add(boost::filesystem::path(section.name).string().c_str(), boost::filesystem::path(param.first).string().c_str(), boost::filesystem::path(param.second).string().c_str());
+		}
+	}
+	return true;
+}
+
 
 char *ini_value(const char *name) {
 	return g_ini.GetValue(name);
