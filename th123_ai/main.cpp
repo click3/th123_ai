@@ -450,11 +450,16 @@ int EnumProcess(char *name) {
 }
 
 void load_inis(void) {
-	load_ini("SwrAddr.ini");
-	load_ini("SWRSAddr.ini");
-	load_ini("th105_ai.ini");
-	load_ini("th123_ai.ini");
-	load_ini("dev.ini");
+	const char * const iniList[] = {
+		"SwrAddr.ini",
+		"SWRSAddr.ini",
+		"th105_ai.ini",
+		"th123_ai.ini",
+		"dev.ini"
+	};
+	BOOST_FOREACH(const char * const name, iniList) {
+		load_ini(name);
+	}
 }
 
 void change_player(void) {
