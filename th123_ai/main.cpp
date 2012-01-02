@@ -2,6 +2,9 @@
 #include "stdafx.h"
 
 //#define DEBUG
+#if !defined(DEBUG) && defined(_DEBUG)
+#define DEBUG
+#endif
 #define DEBUG2
 
 org::click3::Utility::SHARED_HANDLE ph;
