@@ -18,7 +18,7 @@ public:
 		float x;
 		float y;
 	} speed;
-	unsigned char dir;
+	char dir; // -1 or 1
 	unsigned short action;
 	unsigned short act_block;
 	unsigned int frame;
