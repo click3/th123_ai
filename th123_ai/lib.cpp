@@ -244,7 +244,7 @@ ini::Param *ini::Search(const std::wstring &key) {
 }
 
 
-const char *ini_value(const std::wstring &key) {
+const std::wstring *ini_value(const std::wstring &key) {
 	return g_ini.GetValue(key);
 }
 int ini_int(const std::wstring &key) {

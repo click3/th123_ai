@@ -552,7 +552,6 @@ scriptLua *scriptLua::instance = NULL;
 	}
 	int scriptLua::lua_get_ini_value(lua_State *L) {
 		int n = lua_gettop(L);
-		const char *s;
 
 		if(n!=1 || !lua_isstring(L,1)) {
 			lua_pushstring(L,"à¯êîÇ™ê≥ÇµÇ≠Ç†ÇËÇ‹ÇπÇÒ");
@@ -561,13 +560,15 @@ scriptLua *scriptLua::instance = NULL;
 		std::wstring key;
 		const bool result = org::click3::Utility::SJISToWChar(key, lua_tostring(L,1));
 		BOOST_ASSERT(result);
-		s = ini_value(key);
-		if(s==NULL) {
+		const std::wstring *ptr = ini_value(key);
+		if(ptr == NULL) {
 			return 0;
-		} else {
-			lua_pushstring(L,s);
-			return 1;
 		}
+		std::string value;
+		const bool result2 = org::click3::Utility::WCharToSJIS(value, *ptr);
+		BOOST_ASSERT(result2);
+		lua_pushstring(L, value.c_str());
+		return 1;
 	}
 
 	int scriptLua::lua_get_ini_int(lua_State *L) {

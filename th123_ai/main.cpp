@@ -240,79 +240,73 @@ void change_ini(char *fn,char *name,char *param) {
 	SetCurrentDirectoryA(dir);
 }
 
-char *GetTouhouPath(const char *regkey, const char *name, const char *exe_name, const std::wstring &iniKey) {
-	HKEY hKey;
-	static char str[256]="";
-	char temp[256];
-	DWORD size = 256;
-	OPENFILENAME ofn;
-	FILE *fp;
+const wchar_t *GetTouhouPath(const std::wstring &regkey, const std::wstring &name, const std::wstring &exe_name, const std::wstring &iniKey) {
+	static wchar_t str[256] = L"";
 	int i;
 	int ret;
 
 	if(ini_value(iniKey) != NULL) {
-		strcpy(str,ini_value(L"StartupTH105"));
-		fp = fopen(str,"rb");
-		if(fp!=NULL) {
-			fclose(fp);
+		::wcscpy(str, ini_value(iniKey)->c_str());
+		if(boost::filesystem::exists(str) && boost::filesystem::is_regular_file(str)) {
 			return str;
 		}
 		str[0] = '\0';
 	}
-
-	if(ERROR_SUCCESS==RegOpenKeyEx(HKEY_LOCAL_MACHINE,regkey,0,KEY_READ,&hKey)) {
-		if(ERROR_SUCCESS==RegQueryValueEx(hKey,"Inno Setup: App Path",NULL,NULL,reinterpret_cast<LPBYTE>(temp),&size)) {
-			RegCloseKey(hKey);
-			snprintf(str, sizeof(str), "%s\\%s",temp,exe_name);
-			fp = fopen(str,"rb");
-			if(fp!=NULL) {
-				fclose(fp);
+	
+	HKEY hKey;
+	if(ERROR_SUCCESS == RegOpenKeyExW(HKEY_LOCAL_MACHINE, regkey.c_str(), 0, KEY_READ, &hKey)) {
+		wchar_t temp[256];
+		DWORD size = 256;
+		if(ERROR_SUCCESS == ::RegQueryValueExW(hKey, L"Inno Setup: App Path", NULL, NULL, reinterpret_cast<LPBYTE>(temp), &size)) {
+			::RegCloseKey(hKey);
+			::_snwprintf(str, _countof(str), L"%s\\%s", temp, exe_name.c_str());
+			if(boost::filesystem::exists(str) && boost::filesystem::is_regular_file(str)) {
 				return str;
 			}
 			str[0] = '\0';
 		}
-		RegCloseKey(hKey);
+		::RegCloseKey(hKey);
 	}
 
 	std::string dir_str;
 	org::click3::Utility::GetAppDir(dir_str);
 	const boost::filesystem::path dir(dir_str);
-	memset(&ofn,0,sizeof(OPENFILENAME));
-	ofn.lStructSize = sizeof(OPENFILENAME);
-	snprintf(temp, sizeof(temp), "%s実行ファイル(%s)\n%s\nAll files(*.*)\n*.*\n\n",name, exe_name, exe_name);
-	i = strlen(temp)-1;
-	while(i > 0) {
+	OPENFILENAMEW ofn;
+	::memset(&ofn, 0, sizeof(OPENFILENAMEW));
+	ofn.lStructSize = sizeof(OPENFILENAMEW);
+	wchar_t temp[256];
+	::_snwprintf(temp, _countof(temp), L"%s実行ファイル(%s)\n%s\nAll files(*.*)\n*.*\n\n", name.c_str(), exe_name.c_str(), exe_name.c_str());
+	for(unsigned int i = ::wcslen(temp)-1; i > 0; i--) {
 		if(temp[i]=='\n') {
 			temp[i] = '\0';
 		}
-		i--;
 	}
 	ofn.lpstrFilter = temp;
 	ofn.lpstrFile = str;
 	ofn.nMaxFile = 256;
-	ofn.lpstrInitialDir = dir.string().c_str();
+	ofn.lpstrInitialDir = dir.wstring().c_str();
 	ofn.Flags = OFN_FILEMUSTEXIST;
-	ofn.lpstrTitle = "ファイルを開く";
-	ofn.lpstrDefExt = "exe";
+	ofn.lpstrTitle = L"ファイルを開く";
+	ofn.lpstrDefExt = L"exe";
 
 	changeLoadLibraryExW(1);
-	ret = GetOpenFileName(&ofn);
+	ret = GetOpenFileNameW(&ofn);
 	changeLoadLibraryExW(0);
 	if(ret == 0) {
 		return NULL;
 	}
 	return str;
 }
-char *GetTh105Path(void) {
-	return GetTouhouPath("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{F9942587-59C1-43CC-8B6A-A5DB09CBA735}_is1", "緋想天", "th105.exe", L"StartupTH105");
+const wchar_t *GetTh105Path(void) {
+	return GetTouhouPath(L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{F9942587-59C1-43CC-8B6A-A5DB09CBA735}_is1", L"緋想天", L"th105.exe", L"StartupTH105");
 }
-char *GetTh123Path(void) {
-	return GetTouhouPath("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{8E5CFA2B-8CC5-4C8D-88CB-C4A1D4AD9790}_is1", "非想天則", "th123.exe", L"StartupTH123");
+const wchar_t *GetTh123Path(void) {
+	return GetTouhouPath(L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{8E5CFA2B-8CC5-4C8D-88CB-C4A1D4AD9790}_is1", L"非想天則", L"th123.exe", L"StartupTH123");
 }
 
-org::click3::Utility::SHARED_HANDLE WindowName2Handle(const char *name, const char *text) {
+org::click3::Utility::SHARED_HANDLE WindowName2Handle(const std::wstring &name, const std::wstring &text) {
 	org::click3::Utility::SHARED_HANDLE ret;
-	wh = ::FindWindowA(name, text);
+	wh = ::FindWindowW(name.c_str(), text.c_str());
 	if(wh == NULL) {
 		return ret;
 	}
@@ -329,17 +323,25 @@ org::click3::Utility::SHARED_HANDLE WindowName2Handle(const char *name, const ch
 }
 
 org::click3::Utility::SHARED_HANDLE GetSWRHandle(void) {
-	return WindowName2Handle(ini_value(L"SWR_WINDOW_CLASS"),ini_value(L"SWR_WINDOW_TEXT"));
+	const std::wstring *className = ini_value(L"SWR_WINDOW_CLASS");
+	const std::wstring *title = ini_value(L"SWR_WINDOW_TEXT");
+	BOOST_ASSERT(className != NULL);
+	BOOST_ASSERT(title != NULL);
+	return WindowName2Handle(*className, *title);
 }
 
 org::click3::Utility::SHARED_HANDLE GetSOKUHandle(void) {
-	return WindowName2Handle(ini_value(L"SWRS_WINDOW_CLASS"),ini_value(L"SWRS_WINDOW_TEXT"));
+	const std::wstring *className = ini_value(L"SWRS_WINDOW_CLASS");
+	const std::wstring *title = ini_value(L"SWRS_WINDOW_TEXT");
+	BOOST_ASSERT(className != NULL);
+	BOOST_ASSERT(title != NULL);
+	return WindowName2Handle(*className, *title);
 }
 
 void AutoStartTouhouExe(bool swr, bool soku) {
-	STARTUPINFO si;
+	STARTUPINFOW si;
 	PROCESS_INFORMATION pi;
-	char *s = NULL;
+	const wchar_t *s = NULL;
 
 	changeLoadLibraryExW(1);
 	if(soku) {
@@ -351,25 +353,25 @@ void AutoStartTouhouExe(bool swr, bool soku) {
 	}
 	changeLoadLibraryExW(0);
 	if(s == NULL) {
-		printf("自動起動に失敗しました\n");
+		::printf("自動起動に失敗しました\n");
 	} else {
 		if(soku) {
-			printf("非想天則を自動起動します(%s)\n",s);
+			::wprintf(L"非想天則を自動起動します(%s)\n", s);
 		} else if(swr) {
-			printf("緋想天を自動起動します(%s)\n",s);
+			::wprintf(L"緋想天を自動起動します(%s)\n", s);
 		}
-		memset(&si,0,sizeof(si));
-		memset(&pi,0,sizeof(pi));
+		::memset(&si,0,sizeof(si));
+		::memset(&pi,0,sizeof(pi));
 		si.cb = sizeof(si);
 		changeLoadLibraryExW(1);
-		if(CreateProcess(s,NULL,NULL,NULL,FALSE,NORMAL_PRIORITY_CLASS,NULL,NULL,&si,&pi)) {
-			CloseHandle(pi.hProcess);
-			CloseHandle(pi.hThread);
+		if(::CreateProcessW(s, NULL, NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, NULL, &si, &pi)) {
+			::CloseHandle(pi.hProcess);
+			::CloseHandle(pi.hThread);
 			//change_ini("th105_ai.ini","StartupTH105",s);
 		} else {
 			char message[2048];
 			::FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, ::GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), message, sizeof(message), NULL);
-			printf("CreateProcessError:%s\n", message);
+			::printf("CreateProcessError:%s\n", message);
 		}
 		changeLoadLibraryExW(0);
 	}
@@ -1151,6 +1153,7 @@ int main2(int argc,char *_argv[]) {
 	changeDbgBreakPoint();
 	changeLoadLibraryExW(0);
 
+	std::locale::global(std::locale("japanese"));
 	char *argv[64];
 	{
 		int i = 0;
@@ -1188,7 +1191,10 @@ int main2(int argc,char *_argv[]) {
 	if(argc == 2) {
 		OpenAI(argv[1]);
 	} else if(ini_value(L"StartupAI") != NULL) {
-		strcpy(s, ini_value(L"StartupAI"));
+		std::string value;
+		const bool result = org::click3::Utility::WCharToSJIS(value, *ini_value(L"StartupAI"));
+		BOOST_ASSERT(result);
+		::strcpy(s, value.c_str());
 		to_lowstring(s);
 		OpenAI(s);
 	} else {

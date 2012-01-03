@@ -29,22 +29,28 @@ public:
 	ini() { }
 	~ini() { }
 
-	const char *GetValue(const std::wstring &key) const {
-		const std::wstring * const value = GetValueImpl(key);
-		if(value == NULL) {
-			return NULL;
-		}
-		static std::string result; // TODO remove
-		if(!org::click3::Utility::WCharToSJIS(result, *value)) {
-			return NULL;
-		}
-		return result.c_str();
+	const std::wstring *GetValue(const std::wstring &key) const {
+		return GetValueImpl(key);
 	}
 	int GetInt(const std::wstring &key, int def = 0) const {
-		return atoi2(GetValue(key), def);
+		const std::wstring *ptr = GetValue(key);
+		if(ptr == NULL) {
+			return def;
+		}
+		std::string value;
+		const bool result = org::click3::Utility::WCharToSJIS(value, *ptr);
+		BOOST_ASSERT(result);
+		return atoi2(value.c_str(), def);
 	}
 	float GetFloat(const std::wstring &key, float def = 0.0) const {
-		return atof2(GetValue(key), def);
+		const std::wstring *ptr = GetValue(key);
+		if(ptr == NULL) {
+			return def;
+		}
+		std::string value;
+		const bool result = org::click3::Utility::WCharToSJIS(value, *ptr);
+		BOOST_ASSERT(result);
+		return atof2(value.c_str(), def);
 	}
 
 	bool LoadFile(const boost::filesystem::path &path);
@@ -91,7 +97,7 @@ public:
 		return type;
 	}
 
-	const char *GetValue(const std::wstring &key) const {
+	const std::wstring *GetValue(const std::wstring &key) const {
 		return ini::GetValue(GetTypeName(key, type));
 	}
 protected:
@@ -119,7 +125,7 @@ protected:
 
 extern th_ini g_ini;
 
-const char *ini_value(const std::wstring &key);
+const std::wstring *ini_value(const std::wstring &key);
 int ini_int(const std::wstring &key);
 int ini_int2(const std::wstring &key, int def);
 float ini_float(const std::wstring &key);
