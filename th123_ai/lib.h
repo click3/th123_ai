@@ -29,8 +29,8 @@ public:
 	ini() { }
 	~ini() { }
 
-	const char *GetValue(const char *name) const {
-		const std::wstring * const value = GetValueImpl(name);
+	const char *GetValue(const std::wstring &key) const {
+		const std::wstring * const value = GetValueImpl(key);
 		if(value == NULL) {
 			return NULL;
 		}
@@ -40,36 +40,29 @@ public:
 		}
 		return result.c_str();
 	}
-	int GetInt(const char *name, int def = 0) const {
-		return atoi2(GetValue(name), def);
+	int GetInt(const std::wstring &key, int def = 0) const {
+		return atoi2(GetValue(key), def);
 	}
-	float GetFloat(const char *name, float def = 0.0) const {
-		return atof2(GetValue(name), def);
+	float GetFloat(const std::wstring &key, float def = 0.0) const {
+		return atof2(GetValue(key), def);
 	}
 
 	bool LoadFile(const boost::filesystem::path &path);
 
-	void Add(const char *section, const char *name, const char *value);
+	void Add(const std::wstring &sectionName, const std::wstring &key, const std::wstring &value);
 protected:
 	std::vector<Section> sectionList;
 
-	const std::wstring *GetValueImpl(const char *name) const {
-		const Param *param = Search(name);
+	const std::wstring *GetValueImpl(const std::wstring &key) const {
+		const Param *param = Search(key);
 		if(param == NULL) {
 			return NULL;
 		}
 		return &param->second;
 	}
 	
-	const Param *Search(const char *name) const;
-	Param *Search(const char *name);
-
-	Param *get_list(const char *name) {
-		return Search(name);
-	}
-	const Param *get_list(const char *name) const {
-		return Search(name);
-	}
+	const Param *Search(const std::wstring &key) const;
+	Param *Search(const std::wstring &key);
 };
 
 class th_ini : public ini
@@ -98,38 +91,38 @@ public:
 		return type;
 	}
 
-	const char *GetValue(const char *name) const {
-		return ini::GetValue(GetTypeName(name, type));
+	const char *GetValue(const std::wstring &key) const {
+		return ini::GetValue(GetTypeName(key, type));
 	}
 protected:
 	TYPE type;
 
-	static const char *GetTypeName(const char *name, TYPE type) {
-		if(strncmp(name, "ADDR_", 4) != 0) {
-			return name;
+	static const std::wstring GetTypeName(const std::wstring &key, TYPE type) {
+		if(key.compare(0, 5, L"ADDR_", 5) != 0) {
+			return key;
 		}
-		static char temp[256];
+		static std::wstring newKey;
 		if(type == TYPE_TH105_SWR) {
-			::strcpy(temp, "SWR_");
+			newKey.assign(L"SWR_");
 		} else if(type == TYPE_TH123_SOKU) {
-			::strcpy(temp, "SWRS_");
+			newKey.assign(L"SWRS_");
 		} else {
-			printf("Error ini::GetValue type error(name = %s, type = %d)\n", name, type);
+			printf("Error ini::GetValue type error(key = %s, type = %d)\n", key, type);
 			BOOST_ASSERT(false);
-			return "";
+			return L"";
 		}
-		::strcat(temp, name);
-		return temp;
+		newKey.append(key);
+		return newKey;
 	}
 
 };
 
 extern th_ini g_ini;
 
-const char *ini_value(const char *name);
-int ini_int(const char *name);
-int ini_int2(const char *name, int def);
-float ini_float(const char *name);
+const char *ini_value(const std::wstring &key);
+int ini_int(const std::wstring &key);
+int ini_int2(const std::wstring &key, int def);
+float ini_float(const std::wstring &key);
 bool load_ini(const boost::filesystem::path &path);
-void ini_add(const char *section,const char *name,const char *value);
+void ini_add(const std::wstring &sectionName, const std::wstring &key, const std::wstring &value);
 void create_ini(void);

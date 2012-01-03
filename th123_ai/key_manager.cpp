@@ -78,25 +78,25 @@ void search_key(CHAR_ID operation_char) {
 
 	//全ての条件で検出できなかったらINIの設定を使用する。
 	if(p==0) {
-		p = ini_int2("Player",1);
+		p = ini_int2(L"Player", 1);
 		if(p!=2) {
 			p = 1;
 		}
 	}
-	i = ini_int2("Player",1);
+	i = ini_int2(L"Player", 1);
 	if(i!=2) {
 		i = 1;
 	}
 	if(p!=i) {
 		if(p==1) {
-			ini_add("default","Player","1");
+			ini_add(L"default", L"Player", L"1");
 		} else {
-			ini_add("default","Player","2");
+			ini_add(L"default", L"Player", L"2");
 		}
 		change_player();
 	}
 
-	p = ini_int2("Player",1);
+	p = ini_int2(L"Player", 1);
 	if(p!=2) {
 		p = 1;
 	}

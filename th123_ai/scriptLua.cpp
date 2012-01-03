@@ -558,7 +558,10 @@ scriptLua *scriptLua::instance = NULL;
 			lua_pushstring(L,"ˆø”‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ");
 			lua_error(L);
 		}
-		s = ini_value(lua_tostring(L,1));
+		std::wstring key;
+		const bool result = org::click3::Utility::SJISToWChar(key, lua_tostring(L,1));
+		BOOST_ASSERT(result);
+		s = ini_value(key);
 		if(s==NULL) {
 			return 0;
 		} else {
@@ -574,7 +577,10 @@ scriptLua *scriptLua::instance = NULL;
 			lua_pushstring(L,"ˆø”‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ");
 			lua_error(L);
 		}
-		lua_pushnumber(L,(lua_Number)ini_int(lua_tostring(L,1)));
+		std::wstring key;
+		const bool result = org::click3::Utility::SJISToWChar(key, lua_tostring(L,1));
+		BOOST_ASSERT(result);
+		lua_pushnumber(L,(lua_Number)ini_int(key));
 		return 1;
 	}
 
@@ -585,7 +591,10 @@ scriptLua *scriptLua::instance = NULL;
 			lua_pushstring(L,"ˆø”‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ");
 			lua_error(L);
 		}
-		lua_pushnumber(L,(lua_Number)ini_int2(lua_tostring(L,1), static_cast<int>(lua_tonumber(L,2))));
+		std::wstring key;
+		const bool result = org::click3::Utility::SJISToWChar(key, lua_tostring(L,1));
+		BOOST_ASSERT(result);
+		lua_pushnumber(L,(lua_Number)ini_int2(key, static_cast<int>(lua_tonumber(L,2))));
 		return 1;
 	}
 

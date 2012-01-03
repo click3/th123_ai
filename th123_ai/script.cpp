@@ -22,7 +22,7 @@ bool OpenAI(const char *s) {
 		return false;
 	}
 	protect_flag = 1;//luaをプロテクトモードにする
-	if(ini_int2("th105_start",0)==1) {
+	if(ini_int2(L"th105_start", 0)==1) {
 		ph = GetProcessHandle();
 	}
 	if(s == NULL || strlen(s)==0 || strcmp(s,"dialog")==0) {

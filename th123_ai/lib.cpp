@@ -194,7 +194,7 @@ bool ini::LoadFile(const boost::filesystem::path &path) {
 	}
 	BOOST_FOREACH(const Section &section, sectionList) {
 		BOOST_FOREACH(const Param &param, section.params) {
-			this->Add(boost::filesystem::path(section.name).string().c_str(), boost::filesystem::path(param.first).string().c_str(), boost::filesystem::path(param.second).string().c_str());
+			this->Add(section.name, param.first, param.second);
 		}
 	}
 	return true;
@@ -214,13 +214,7 @@ struct IniFindParam {
 	}
 };
 #include <WinError.h>
-void ini::Add(const char *sectionName_, const char *key_, const char *value_) {
-	std::wstring sectionName;
-	std::wstring key;
-	std::wstring value;
-	org::click3::Utility::SJISToWChar(sectionName, sectionName_); // TODO remove
-	org::click3::Utility::SJISToWChar(key, key_); // TODO remove
-	org::click3::Utility::SJISToWChar(value, value_); // TODO remove
+void ini::Add(const std::wstring &sectionName, const std::wstring &key, const std::wstring &value){
 	std::vector<Section>::iterator section = std::find_if(sectionList.begin(), sectionList.end(), IniFindSection(sectionName));
 	if(section == sectionList.end()) {
 		Section newSection;
@@ -235,9 +229,7 @@ void ini::Add(const char *sectionName_, const char *key_, const char *value_) {
 	}
 	param->second = value;
 }
-const ini::Param *ini::Search(const char *key_) const {
-	std::wstring key;
-	org::click3::Utility::SJISToWChar(key, key_); // TODO remove
+const ini::Param *ini::Search(const std::wstring &key) const {
 	BOOST_FOREACH(const Section &section, sectionList) {
 		const std::vector<std::pair<std::wstring, std::wstring> >::const_iterator param = std::find_if(section.params.begin(), section.params.end(), IniFindParam(key));
 		if(param != section.params.end()) {
@@ -246,29 +238,29 @@ const ini::Param *ini::Search(const char *key_) const {
 	}
 	return NULL;
 }
-ini::Param *ini::Search(const char *key) {
+ini::Param *ini::Search(const std::wstring &key) {
 	const Param * const param = const_cast<const ini * const>(this)->Search(key);
 	return const_cast<Param * const>(param);
 }
 
 
-const char *ini_value(const char *name) {
-	return g_ini.GetValue(name);
+const char *ini_value(const std::wstring &key) {
+	return g_ini.GetValue(key);
 }
-int ini_int(const char *name) {
-	return g_ini.GetInt(name);
+int ini_int(const std::wstring &key) {
+	return g_ini.GetInt(key);
 }
-int ini_int2(const char *name, int def) {
-	return g_ini.GetInt(name, def);
+int ini_int2(const std::wstring &key, int def) {
+	return g_ini.GetInt(key, def);
 }
-float ini_float(const char *name) {
-	return g_ini.GetFloat(name);
+float ini_float(const std::wstring &key) {
+	return g_ini.GetFloat(key);
 }
 bool load_ini(const boost::filesystem::path &path) {
 	return g_ini.LoadFile(path);
 }
-void ini_add(const char *section,const char *name,const char *value) {
-	g_ini.Add(section, name, value);
+void ini_add(const std::wstring &sectionName, const std::wstring &key, const std::wstring &value) {
+	g_ini.Add(sectionName, key, value);
 }
 void create_ini(void) {
 }

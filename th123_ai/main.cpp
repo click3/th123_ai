@@ -197,7 +197,7 @@ void SetActiveWindow2(HWND hWnd) {
 void MyWndActive(int flag) {
 	int a;
 	if(flag==FALSE) {
-		if(ini_int2("MyWindowActive",1)==0)return;
+		if(ini_int2(L"MyWindowActive", 1)==0)return;
 		ReadProcessMemory(ph, ADDR_ACTIVEFLAG, a);
 		if(a==0) {
 			return;
@@ -240,7 +240,7 @@ void change_ini(char *fn,char *name,char *param) {
 	SetCurrentDirectoryA(dir);
 }
 
-char *GetTouhouPath(const char *regkey, const char *name, const char *exe_name,char *ini_name) {
+char *GetTouhouPath(const char *regkey, const char *name, const char *exe_name, const std::wstring &iniKey) {
 	HKEY hKey;
 	static char str[256]="";
 	char temp[256];
@@ -250,8 +250,8 @@ char *GetTouhouPath(const char *regkey, const char *name, const char *exe_name,c
 	int i;
 	int ret;
 
-	if(ini_value(ini_name) != NULL) {
-		strcpy(str,ini_value("StartupTH105"));
+	if(ini_value(iniKey) != NULL) {
+		strcpy(str,ini_value(L"StartupTH105"));
 		fp = fopen(str,"rb");
 		if(fp!=NULL) {
 			fclose(fp);
@@ -304,10 +304,10 @@ char *GetTouhouPath(const char *regkey, const char *name, const char *exe_name,c
 	return str;
 }
 char *GetTh105Path(void) {
-	return GetTouhouPath("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{F9942587-59C1-43CC-8B6A-A5DB09CBA735}_is1", "緋想天", "th105.exe","StartupTH105");
+	return GetTouhouPath("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{F9942587-59C1-43CC-8B6A-A5DB09CBA735}_is1", "緋想天", "th105.exe", L"StartupTH105");
 }
 char *GetTh123Path(void) {
-	return GetTouhouPath("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{8E5CFA2B-8CC5-4C8D-88CB-C4A1D4AD9790}_is1", "非想天則", "th123.exe","StartupTH123");
+	return GetTouhouPath("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{8E5CFA2B-8CC5-4C8D-88CB-C4A1D4AD9790}_is1", "非想天則", "th123.exe", L"StartupTH123");
 }
 
 org::click3::Utility::SHARED_HANDLE WindowName2Handle(const char *name, const char *text) {
@@ -329,11 +329,11 @@ org::click3::Utility::SHARED_HANDLE WindowName2Handle(const char *name, const ch
 }
 
 org::click3::Utility::SHARED_HANDLE GetSWRHandle(void) {
-	return WindowName2Handle(ini_value("SWR_WINDOW_CLASS"),ini_value("SWR_WINDOW_TEXT"));
+	return WindowName2Handle(ini_value(L"SWR_WINDOW_CLASS"),ini_value(L"SWR_WINDOW_TEXT"));
 }
 
 org::click3::Utility::SHARED_HANDLE GetSOKUHandle(void) {
-	return WindowName2Handle(ini_value("SWRS_WINDOW_CLASS"),ini_value("SWRS_WINDOW_TEXT"));
+	return WindowName2Handle(ini_value(L"SWRS_WINDOW_CLASS"),ini_value(L"SWRS_WINDOW_TEXT"));
 }
 
 void AutoStartTouhouExe(bool swr, bool soku) {
@@ -381,7 +381,7 @@ org::click3::Utility::SHARED_HANDLE GetProcessHandle(void) {
 	
 	static bool is_first_run = true;
 	//終了時を検出する
-	if(!is_first_run && ini_int2("AppDownExit", 0) == 0) {
+	if(!is_first_run && ini_int2(L"AppDownExit", 0) == 0) {
 		::exit(0);
 	}
 	addr.reset();
@@ -464,7 +464,7 @@ void load_inis(void) {
 
 void change_player(void) {
 	static HANDLE h = NULL;
-	int n = ini_int2("Player",1);
+	int n = ini_int2(L"Player", 1);
 
 	if(h) {
 		ReleaseMutex(h);
@@ -478,10 +478,10 @@ void change_player(void) {
 	}
 	if(WAIT_OBJECT_0 != WaitForSingleObject(h,0)) {
 		if(n!=2) {
-			ini_add("default","Player","2");
+			ini_add(L"default", L"Player", L"2");
 			n = 2;
 		} else {
-			ini_add("default","Player","1");
+			ini_add(L"default", L"Player", L"1");
 			n = 1;
 		}
 		CloseHandle(h);
@@ -503,13 +503,13 @@ void init(void) {
 	const bool set_dir_result = org::click3::Utility::SetAppDir();
 	BOOST_ASSERT(set_dir_result);
 	create_ini();
-	g_ini.Add("default","SWR_WINDOW_CLASS",		"th105_106");
-	g_ini.Add("default","SWR_WINDOW_TEXT",		"東方緋想天 Ver1.06");
-	g_ini.Add("default","SWRS_WINDOW_CLASS",	"th123_110");//
-	g_ini.Add("default","SWRS_WINDOW_TEXT",		"東方非想天則 ～ 超弩級ギニョルの謎を追え Ver1.10");//
-	g_ini.Add("default","StartupAI","dialog");
-	g_ini.Add("default","Player","1");
-	g_ini.Add("default","AppDownExit","0");
+	g_ini.Add(L"default",L"SWR_WINDOW_CLASS",	L"th105_106");
+	g_ini.Add(L"default",L"SWR_WINDOW_TEXT",	L"東方緋想天 Ver1.06");
+	g_ini.Add(L"default",L"SWRS_WINDOW_CLASS",	L"th123_110");//
+	g_ini.Add(L"default",L"SWRS_WINDOW_TEXT",	L"東方非想天則 ～ 超弩級ギニョルの謎を追え Ver1.10");//
+	g_ini.Add(L"default",L"StartupAI",		L"dialog");
+	g_ini.Add(L"default",L"Player",			L"1");
+	g_ini.Add(L"default",L"AppDownExit",		L"0");
 	addr.initialize();
 	load_inis();
 	change_player();
@@ -676,7 +676,7 @@ void get_th105param(void) {
 			ReadProcessMemory(ph, ADDR_PBATTLEMGR, root);
 			my_data.SetRootAddress(root);
 			enemy_data.SetRootAddress(root);
-			const Character::AI_MODE ai_mode = (::ini_int2("Player",1) == 1 ? Character::AI_MODE_1P : Character::AI_MODE_2P);
+			const Character::AI_MODE ai_mode = (::ini_int2(L"Player", 1) == 1 ? Character::AI_MODE_1P : Character::AI_MODE_2P);
 			my_data.Reload(ai_mode);
 			enemy_data.Reload(ai_mode);
 			is_bullethit();
@@ -1187,8 +1187,8 @@ int main2(int argc,char *_argv[]) {
 
 	if(argc == 2) {
 		OpenAI(argv[1]);
-	} else if(ini_value("StartupAI") != NULL) {
-		strcpy(s,ini_value("StartupAI"));
+	} else if(ini_value(L"StartupAI") != NULL) {
+		strcpy(s, ini_value(L"StartupAI"));
 		to_lowstring(s);
 		OpenAI(s);
 	} else {
