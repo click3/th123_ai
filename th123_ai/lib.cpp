@@ -230,13 +230,18 @@ void ini::Add(const std::wstring &sectionName, const std::wstring &key, const st
 	param->second = value;
 }
 const ini::Param *ini::Search(const std::wstring &key) const {
+	const Param *defaultParam = NULL;
 	BOOST_FOREACH(const Section &section, sectionList) {
 		const std::vector<std::pair<std::wstring, std::wstring> >::const_iterator param = std::find_if(section.params.begin(), section.params.end(), IniFindParam(key));
 		if(param != section.params.end()) {
+			if(section.name == L"default") {
+				defaultParam = &*param;
+				continue;
+			}
 			return &*param;
 		}
 	}
-	return NULL;
+	return defaultParam;
 }
 ini::Param *ini::Search(const std::wstring &key) {
 	const Param * const param = const_cast<const ini * const>(this)->Search(key);
