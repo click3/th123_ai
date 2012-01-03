@@ -19,110 +19,57 @@ bool ReadProcessMemory(org::click3::Utility::SHARED_HANDLE ph, unsigned int base
 bool ReadProcessMemory(org::click3::Utility::SHARED_HANDLE ph, unsigned int base_addr, float &buffer);
 
 
-class ini
-{
+class ini : boost::noncopyable {
 public:
-	ini() {
-		head = NULL;
-	}
-	virtual ~ini() {
-		LIST *a,*b;
+	typedef std::pair<std::wstring, std::wstring> Param;
+	struct Section {
+		std::wstring name;
+		std::vector<Param> params;
+	};
+	ini() { }
+	~ini() { }
 
-		a = head;
-		while(a != NULL) {
-			b = a;
-			a = a->next;
-			free(b);
+	const char *GetValue(const char *name) const {
+		const std::wstring * const value = GetValueImpl(name);
+		if(value == NULL) {
+			return NULL;
 		}
-		head = NULL;
+		static std::string result; // TODO remove
+		if(!org::click3::Utility::WCharToSJIS(result, *value)) {
+			return NULL;
+		}
+		return result.c_str();
 	}
-
-	virtual char *GetValue(const char *name) {
-		return GetValueImpl(head, name);
-	}
-
-	virtual const char *GetValue(const char *name) const {
-		return GetValueImpl(head, name);
-	}
-	virtual int GetInt(const char *name, int def = 0) const {
+	int GetInt(const char *name, int def = 0) const {
 		return atoi2(GetValue(name), def);
 	}
-	virtual float GetFloat(const char *name, float def = 0.0) const {
+	float GetFloat(const char *name, float def = 0.0) const {
 		return atof2(GetValue(name), def);
 	}
 
 	bool LoadFile(const boost::filesystem::path &path);
 
-	virtual void Add(const char *section,const char *name,const char *value) {
-		LIST *a;
-
-		a = get_list(name);
-		if(a == NULL) {
-			a = static_cast<LIST*>(malloc(sizeof(LIST)));
-			if(head == NULL) {
-				head = a;
-			} else {
-				tail->next = a;
-			}
-			tail = a;
-
-			strncpy(a->section, section, sizeof(a->section));
-			strncpy(a->name, name, sizeof(a->name));
-			a->next = NULL;
-		}
-		strncpy(a->value, value, sizeof(a->value));
-		//printf("%s->%s = %s\n",a->section,a->name,a->value);
-	}
+	void Add(const char *section, const char *name, const char *value);
 protected:
-	typedef struct list{
-		char section[256];
-		char name[256];
-		char value[256];
-		struct list *next;
-	}LIST;
-	LIST *head;
-	LIST *tail;
+	std::vector<Section> sectionList;
 
-	static unsigned int del_space(char *s) {
-		int count = 0;
-		while(*s != '\0') {
-			if(*s == ' ' || *s == '\t') {
-				memmove(s, &s[1], strlen(&s[1])+1);
-				count++;
-			} else {
-				s++;
-			}
+	const std::wstring *GetValueImpl(const char *name) const {
+		const Param *param = Search(name);
+		if(param == NULL) {
+			return NULL;
 		}
-		return count;
+		return &param->second;
 	}
+	
+	const Param *Search(const char *name) const;
+	Param *Search(const char *name);
 
-	static char *GetValueImpl(LIST *head, const char *name) {
-		LIST *a;
-		a = Search(head, name);
-		if(a==NULL)return NULL;
-		return a->value;
+	Param *get_list(const char *name) {
+		return Search(name);
 	}
-
-	static LIST *Search(LIST *head, const char *name) {
-		LIST *a;
-
-		a = head;
-		while(a != NULL) {
-			if(strcmp(a->name,name)==0) {
-				return a;
-			}
-			a = a->next;
-		}
-		return NULL;
+	const Param *get_list(const char *name) const {
+		return Search(name);
 	}
-
-	LIST *get_list(const char *name) {
-		return Search(head, name);
-	}
-	const LIST *get_list(const char *name) const {
-		return Search(head, name);
-	}
-
 };
 
 class th_ini : public ini
@@ -149,10 +96,6 @@ public:
 	}
 	TYPE GetType(void) const {
 		return type;
-	}
-
-	char *GetValue(const char *name) {
-		return ini::GetValue(GetTypeName(name, type));
 	}
 
 	const char *GetValue(const char *name) const {
@@ -183,7 +126,7 @@ protected:
 
 extern th_ini g_ini;
 
-char *ini_value(const char *name);
+const char *ini_value(const char *name);
 int ini_int(const char *name);
 int ini_int2(const char *name, int def);
 float ini_float(const char *name);

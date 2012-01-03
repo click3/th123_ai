@@ -552,7 +552,7 @@ scriptLua *scriptLua::instance = NULL;
 	}
 	int scriptLua::lua_get_ini_value(lua_State *L) {
 		int n = lua_gettop(L);
-		char *s;
+		const char *s;
 
 		if(n!=1 || !lua_isstring(L,1)) {
 			lua_pushstring(L,"ˆø”‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ");

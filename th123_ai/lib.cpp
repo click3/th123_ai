@@ -141,15 +141,10 @@ bool ReadProcessMemory(org::click3::Utility::SHARED_HANDLE ph, unsigned int base
 
 th_ini g_ini;
 
-typedef std::pair<std::wstring, std::wstring> Param;
-struct Section {
-	std::wstring name;
-	std::vector<Param> params;
-};
 BOOST_FUSION_ADAPT_STRUCT (
-	Section,
+	ini::Section,
 	(std::wstring, name)
-	(std::vector<Param>, params)
+	(std::vector<ini::Param>, params)
 )
 
 bool ini::LoadFile(const boost::filesystem::path &path) {
@@ -204,9 +199,60 @@ bool ini::LoadFile(const boost::filesystem::path &path) {
 	}
 	return true;
 }
+struct IniFindSection {
+	const std::wstring &sectionName;
+	IniFindSection(const std::wstring &sectionName) : sectionName(sectionName) { }
+	bool operator()(ini::Section &section) const {
+		return section.name == sectionName;
+	}
+};
+struct IniFindParam {
+	const std::wstring &key;
+	IniFindParam(const std::wstring &key) : key(key) { }
+	bool operator()(const std::pair<std::wstring, std::wstring> &param) const {
+		return param.first == key;
+	}
+};
+#include <WinError.h>
+void ini::Add(const char *sectionName_, const char *key_, const char *value_) {
+	std::wstring sectionName;
+	std::wstring key;
+	std::wstring value;
+	org::click3::Utility::SJISToWChar(sectionName, sectionName_); // TODO remove
+	org::click3::Utility::SJISToWChar(key, key_); // TODO remove
+	org::click3::Utility::SJISToWChar(value, value_); // TODO remove
+	std::vector<Section>::iterator section = std::find_if(sectionList.begin(), sectionList.end(), IniFindSection(sectionName));
+	if(section == sectionList.end()) {
+		Section newSection;
+		newSection.name = sectionName;
+		sectionList.push_back(newSection);
+		section = sectionList.end() - 1;
+	}
+	const std::vector<std::pair<std::wstring, std::wstring> >::iterator param = std::find_if(section->params.begin(), section->params.end(), IniFindParam(key));
+	if(param == section->params.end()) {
+		section->params.push_back(std::make_pair(key, value));
+		return;
+	}
+	param->second = value;
+}
+const ini::Param *ini::Search(const char *key_) const {
+	std::wstring key;
+	org::click3::Utility::SJISToWChar(key, key_); // TODO remove
+	BOOST_FOREACH(const Section &section, sectionList) {
+		const std::vector<std::pair<std::wstring, std::wstring> >::const_iterator param = std::find_if(section.params.begin(), section.params.end(), IniFindParam(key));
+		if(param != section.params.end()) {
+			return &*param;
+		}
+	}
+	return NULL;
+}
+ini::Param *ini::Search(const char *key) {
+	const Param * const param = const_cast<const ini * const>(this)->Search(key);
+	return const_cast<Param * const>(param);
+}
 
 
-char *ini_value(const char *name) {
+const char *ini_value(const char *name) {
 	return g_ini.GetValue(name);
 }
 int ini_int(const char *name) {
