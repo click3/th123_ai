@@ -213,7 +213,6 @@ struct IniFindParam {
 		return param.first == key;
 	}
 };
-#include <WinError.h>
 void ini::Add(const std::wstring &sectionName, const std::wstring &key, const std::wstring &value){
 	std::vector<Section>::iterator section = std::find_if(sectionList.begin(), sectionList.end(), IniFindSection(sectionName));
 	if(section == sectionList.end()) {
@@ -234,7 +233,7 @@ const ini::Param *ini::Search(const std::wstring &key) const {
 	BOOST_FOREACH(const Section &section, sectionList) {
 		const std::vector<std::pair<std::wstring, std::wstring> >::const_iterator param = std::find_if(section.params.begin(), section.params.end(), IniFindParam(key));
 		if(param != section.params.end()) {
-			if(section.name == L"default") {
+			if(section.name == L"default") { // TODO defaultˆÈŠO‚Ì‘Î‰ž
 				defaultParam = &*param;
 				continue;
 			}
