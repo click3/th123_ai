@@ -100,6 +100,12 @@ public:
 	const std::wstring *GetValue(const std::wstring &key) const {
 		return ini::GetValue(GetTypeName(key, type));
 	}
+	int GetInt(const std::wstring &key, int def = 0) const {
+		return ini::GetInt(GetTypeName(key, type), def);
+	}
+	float GetFloat(const std::wstring &key, float def = 0.0) const {
+		return ini::GetFloat(GetTypeName(key, type), def);
+	}
 protected:
 	TYPE type;
 

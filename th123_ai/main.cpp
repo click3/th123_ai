@@ -507,8 +507,8 @@ void init(void) {
 	create_ini();
 	g_ini.Add(L"default",L"SWR_WINDOW_CLASS",	L"th105_106");
 	g_ini.Add(L"default",L"SWR_WINDOW_TEXT",	L"東方緋想天 Ver1.06");
-	g_ini.Add(L"default",L"SWRS_WINDOW_CLASS",	L"th123_110");//
-	g_ini.Add(L"default",L"SWRS_WINDOW_TEXT",	L"東方非想天則 ～ 超弩級ギニョルの謎を追え Ver1.10");//
+	g_ini.Add(L"default",L"SWRS_WINDOW_CLASS",	L"th123_110a");//
+	g_ini.Add(L"default",L"SWRS_WINDOW_TEXT",	L"東方非想天則 ～ 超弩級ギニョルの謎を追え Ver1.10a");//
 	g_ini.Add(L"default",L"StartupAI",		L"dialog");
 	g_ini.Add(L"default",L"Player",			L"1");
 	g_ini.Add(L"default",L"AppDownExit",		L"0");
