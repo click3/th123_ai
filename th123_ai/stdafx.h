@@ -11,6 +11,8 @@
 #include <list>
 
 #include <winsock2.h>
+// XPÇ≈Ç‡ìÆÇ≠ÇÊÇ§êßå¿Ç∑ÇÈ
+#define PSAPI_VERSION 1
 #include <psapi.h>
 #include <tlhelp32.h>
 #include <windows.h>
