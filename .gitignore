@@ -32,3 +32,5 @@
 /common/Release
 /common/Debug
 *.zip
+/th123_ai.v11.suo
+*.txt~
