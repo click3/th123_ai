@@ -61,11 +61,9 @@ bool scriptEngine::loadFile(const char *fileName) {
 		SetCurrentDirectoryA(prevDir);
 		return false;
 	}
+  strncpy(scriptName, fullPath, _countof(scriptName));
 	bool ret = loadFile(fp, fullPath);
 	fclose(fp);
-	if(ret) {
-		strncpy(scriptName, fullPath, sizeof(scriptName));
-	}
 	SetCurrentDirectoryA(prevDir);
 	return ret;
 }
@@ -152,7 +150,7 @@ bool scriptEngine::reload() {
 		return false;
 	}
 	char fileName[256];
-	strncpy(fileName, scriptName, sizeof(fileName));
+	strncpy(fileName, scriptName, _countof(fileName));
 	end();
 	init();
 	bool ret = loadFile(fileName);
