@@ -29,7 +29,7 @@ bool GetVersion(std::string &out, const char *path) {
 	}
 	const unsigned int len = STRLEN(line);
 	for(unsigned int i = 0; i < len; i++) {
-		if(line[i] == '\t') {
+		if(line[i] == '\t' || line[i] == ' ') {
 			const unsigned int start = i + 1;
 			const unsigned int copy_len = len - start + (line[len-1] == '\n' ? -1 : 0);
 			out.assign(&line[start], copy_len);
