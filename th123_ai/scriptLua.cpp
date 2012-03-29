@@ -451,7 +451,7 @@ scriptLua *scriptLua::instance = NULL;
 			lua_pushstring(L,"ˆø”‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ");
 			lua_error(L);
 		}
-		a = GetKeyState(static_cast<int>(lua_tonumber(L,1)));
+		a = GetKeyState(static_cast<unsigned int>(lua_tonumber(L,1)));
 		lua_pushnumber(L,a);
 		return 1;
 	}
@@ -628,7 +628,7 @@ scriptLua *scriptLua::instance = NULL;
 			lua_error(L);
 		}
 		const Character &player = (::lua_tonumber(L,1) == 0 ? my_data : enemy_data);
-		::lua_pushnumber(L, player.GetKeyState(static_cast<int>(::lua_tonumber(L, 2))));
+		::lua_pushnumber(L, player.GetKeyState(static_cast<unsigned int>(::lua_tonumber(L, 2))));
 		return 1;
 	}
 	int scriptLua::lua_get_key_map2(lua_State *L) {

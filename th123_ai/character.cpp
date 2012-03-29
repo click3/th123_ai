@@ -523,7 +523,7 @@ const Obj *Character::GetOptionObject(unsigned int index) const {
 	return NULL;
 }
 
-int Character::GetKeyState(int n) const {
+int Character::GetKeyState(unsigned int n) const {
   switch(n) {
     case ACT_LEFT:
       if(keyState[0] > 0) {

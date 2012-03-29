@@ -50,7 +50,7 @@ public:
 	void ReloadLuaValue(AI_MODE mode);
 	const Obj &GetObject(unsigned int index) const;
 	const Obj *GetOptionObject(unsigned int index) const;
-	int GetKeyState(int n) const;
+	int GetKeyState(unsigned int n) const;
 private:
 	TYPE type;
 	unsigned int character_manager_addr;
