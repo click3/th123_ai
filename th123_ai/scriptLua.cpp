@@ -123,41 +123,41 @@ scriptLua *scriptLua::instance = NULL;
 		lua_close(state);
 	}
 
-	bool scriptLua::execBuffer(const char *buffer, int size, const char *name) {
-		int a = luaL_loadbuffer(state, buffer, size, name);
-		if(a != 0) {
-		        FILE *fp = fopen("error_tmp.tmp147258369","a");
-			fprintf(fp,"Error:require(%s)\n",name);
-			if(a==LUA_ERRFILE) {
-				fprintf(fp,"fileread failed(ファイル読み取りに失敗しました)\n");
-			} else if(a==LUA_ERRSYNTAX) {
-				fprintf(fp,"syntax error(構文エラーが発生しました)\n");
-			} else if(a==LUA_ERRMEM ) {
-				fprintf(fp,"memory malloc failed(メモリー割り当てに失敗しました)\n");
-			} else {
-				fprintf(fp,"unknown error %d(想定外のエラーに遭遇しました)\n",a);
-			}
-			fclose(fp);
-			return false;
-		}
-		a = lua_pcall(state,0,0,0);
-		if(a != 0) {
-		        FILE *fp = fopen("error_tmp.tmp147258369","a");
-			fprintf(fp,"Error:call(%s)\n",name);
-			if(a==LUA_ERRRUN) {
-				fprintf(fp,"run error(実行時エラー)\n");
-			} else if(a==LUA_ERRERR) {
-				fprintf(fp,"errorhandler error(エラーハンドラ実行中にエラーしました)\n");
-			} else if(a==LUA_ERRMEM) {
-				fprintf(fp,"memory malloc failed(メモリー割り当てに失敗しました)\n");
-			} else {
-				fprintf(fp,"unknown error %d(想定外のエラーに遭遇しました)\n",a);
-			}
-			fclose(fp);
-			return false;
-		}
-		return true;
-	}
+  bool scriptLua::execBuffer(const char *buffer, int size, const char *name) {
+    int a = luaL_loadbuffer(state, buffer, size, name);
+    if(a != 0) {
+      FILE *fp = fopen("error_tmp.tmp147258369","a");
+      fprintf(fp,"Error:require(%s)\n",name);
+      if(a==LUA_ERRFILE) {
+        fprintf(fp,"fileread failed(ファイル読み取りに失敗しました)\n");
+      } else if(a==LUA_ERRSYNTAX) {
+        fprintf(fp,"syntax error(構文エラーが発生しました)\n");
+      } else if(a==LUA_ERRMEM ) {
+        fprintf(fp,"memory malloc failed(メモリー割り当てに失敗しました)\n");
+      } else {
+        fprintf(fp,"unknown error %d(想定外のエラーに遭遇しました)\n",a);
+      }
+      fclose(fp);
+      return false;
+    }
+    a = lua_pcall(state,0,0,0);
+    if(a != 0) {
+      FILE *fp = fopen("error_tmp.tmp147258369","a");
+      fprintf(fp,"Error:call(%s)\n",name);
+      if(a==LUA_ERRRUN) {
+        fprintf(fp,"run error(実行時エラー)\n");
+      } else if(a==LUA_ERRERR) {
+        fprintf(fp,"errorhandler error(エラーハンドラ実行中にエラーしました)\n");
+      } else if(a==LUA_ERRMEM) {
+        fprintf(fp,"memory malloc failed(メモリー割り当てに失敗しました)\n");
+      } else {
+        fprintf(fp,"unknown error %d(想定外のエラーに遭遇しました)\n",a);
+      }
+      fclose(fp);
+      return false;
+    }
+    return true;
+  }
 
 
 
