@@ -26,7 +26,7 @@ protected:
 	virtual bool initScript();
 	virtual void startScript();
 	virtual void endScript();
-	virtual bool execBuffer(const char *buffer, int size, const char *name);
+	virtual bool execBuffer(const char *buffer, unsigned int size, const char *name);
 	static int lua_yield(lua_State *L);
 	static int lua_key_reset(lua_State *L);
 	static int lua_key_off(lua_State *L);

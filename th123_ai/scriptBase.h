@@ -45,7 +45,7 @@ protected:
 	virtual bool initScript() = 0;
 	virtual void startScript() = 0;
 	virtual void endScript() = 0;
-	virtual bool execBuffer(const char *buffer, int size, const char *name) = 0;
+	virtual bool execBuffer(const char *buffer, unsigned int size, const char *name) = 0;
 
 };
 

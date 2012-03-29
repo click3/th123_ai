@@ -123,37 +123,35 @@ scriptLua *scriptLua::instance = NULL;
 		lua_close(state);
 	}
 
-  bool scriptLua::execBuffer(const char *buffer, int size, const char *name) {
-    int a = luaL_loadbuffer(state, buffer, size, name);
-    if(a != 0) {
-      FILE *fp = fopen("error_tmp.tmp147258369","a");
-      fprintf(fp,"Error:require(%s)\n",name);
-      if(a==LUA_ERRFILE) {
-        fprintf(fp,"fileread failed(ファイル読み取りに失敗しました)\n");
-      } else if(a==LUA_ERRSYNTAX) {
-        fprintf(fp,"syntax error(構文エラーが発生しました)\n");
-      } else if(a==LUA_ERRMEM ) {
-        fprintf(fp,"memory malloc failed(メモリー割り当てに失敗しました)\n");
+  bool scriptLua::execBuffer(const char * const buffer, unsigned int size, const char * const name) {
+    const int loadResult = ::luaL_loadbuffer(state, buffer, size, name);
+    if(loadResult != 0) {
+      boost::filesystem::ofstream ofs("error_tmp.tmp147258369", std::ios::app);
+      ofs << boost::format("Error:require(%s)\n") % name;
+      if(loadResult == LUA_ERRFILE) {
+        ofs << "fileread failed(ファイル読み取りに失敗しました)\n";
+      } else if(loadResult == LUA_ERRSYNTAX) {
+        ofs << "syntax error(構文エラーが発生しました)\n";
+      } else if(loadResult == LUA_ERRMEM ) {
+        ofs << "memory malloc failed(メモリー割り当てに失敗しました)\n";
       } else {
-        fprintf(fp,"unknown error %d(想定外のエラーに遭遇しました)\n",a);
+        ofs << boost::format("unknown error %d(想定外のエラーに遭遇しました)\n") % loadResult;
       }
-      fclose(fp);
       return false;
     }
-    a = lua_pcall(state,0,0,0);
-    if(a != 0) {
-      FILE *fp = fopen("error_tmp.tmp147258369","a");
-      fprintf(fp,"Error:call(%s)\n",name);
-      if(a==LUA_ERRRUN) {
-        fprintf(fp,"run error(実行時エラー)\n");
-      } else if(a==LUA_ERRERR) {
-        fprintf(fp,"errorhandler error(エラーハンドラ実行中にエラーしました)\n");
-      } else if(a==LUA_ERRMEM) {
-        fprintf(fp,"memory malloc failed(メモリー割り当てに失敗しました)\n");
+    const int callResult = ::lua_pcall(state,0,0,0);
+    if(callResult != 0) {
+      boost::filesystem::ofstream ofs("error_tmp.tmp147258369", std::ios::app);
+      ofs << boost::format("Error:call(%s)\n") % name;
+      if(callResult == LUA_ERRRUN) {
+        ofs << "run error(実行時エラー)\n";
+      } else if(callResult == LUA_ERRERR) {
+        ofs << "errorhandler error(エラーハンドラ実行中にエラーしました)\n";
+      } else if(callResult == LUA_ERRMEM) {
+        ofs << "memory malloc failed(メモリー割り当てに失敗しました)\n";
       } else {
-        fprintf(fp,"unknown error %d(想定外のエラーに遭遇しました)\n",a);
+        ofs << boost::format("unknown error %d(想定外のエラーに遭遇しました)\n") % callResult;
       }
-      fclose(fp);
       return false;
     }
     return true;
