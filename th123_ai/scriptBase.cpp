@@ -67,26 +67,25 @@ bool scriptEngine::loadFile(const char *fileName) {
 	SetCurrentDirectoryA(prevDir);
 	return ret;
 }
-bool scriptEngine::loadFile(FILE *fp, const char *name) {
-	if(fp == NULL) {
-		return false;
-	}
-	int start = ftell(fp);
-	fseek(fp,0,SEEK_END);
-	int size = ftell(fp) - start;
-	fseek(fp,start,SEEK_SET);
-	char *data = (char *)malloc(size);
-	if(data == NULL) {
-		return false;
-	}
-	fread(data,1,size,fp);
-	fseek(fp,start,SEEK_SET);
-	bool ret = loadBuffer(data, size, name);
-	free(data);
-	return ret;
+bool scriptEngine::loadFile(FILE * const fp, const char * const name) {
+  if(fp == NULL) {
+    return false;
+  }
+  const unsigned int start = ::ftell(fp);
+  ::fseek(fp,0,SEEK_END);
+  const unsigned int size = ::ftell(fp) - start;
+  ::fseek(fp,start,SEEK_SET);
+  if (size == 0) {
+    return false;
+  }
+  std::vector<char> data(size);
+  ::fread(&data.front(), 1, size, fp);
+  ::fseek(fp,start,SEEK_SET);
+  bool ret = loadBuffer(&data.front(), size, name);
+  return ret;
 }
-bool scriptEngine::loadFile(FILE *fp) {
-	return loadFile(fp, SCRIPT_NAME_EMPTY);
+bool scriptEngine::loadFile(FILE * const fp) {
+  return loadFile(fp, SCRIPT_NAME_EMPTY);
 }
 bool scriptEngine::loadDialog() {
 	OPENFILENAME ofn;
