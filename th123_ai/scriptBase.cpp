@@ -127,14 +127,14 @@ bool scriptEngine::loadResource(int id) {
 	return loadBuffer(buffer, size, "Resource");
 }
 bool scriptEngine::loadBuffer(const char *buffer, int size, const char *name) {
-	if(buffer == NULL) {
-		return false;
-	}
-	if(!loadable) {
-		yield();
-	}
-	bool ret = execBuffer(buffer, size, name);
-	return ret;
+  if(buffer == NULL) {
+    return false;
+  }
+  if(!loadable) {
+    yield();
+  }
+  bool ret = execBuffer(buffer, size, name);
+  return ret;
 }
 bool scriptEngine::loadBuffer(const char *buffer, int size) {
 	return loadBuffer(buffer, size, SCRIPT_NAME_EMPTY);
