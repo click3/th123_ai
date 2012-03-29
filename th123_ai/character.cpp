@@ -524,39 +524,39 @@ const Obj *Character::GetOptionObject(unsigned int index) const {
 }
 
 int Character::GetKeyState(int n) const {
-	switch(n) {
-		case ACT_LEFT:
-			if(keyState[0] > 0) {
-				return 0;
-			}
-			return -keyState[0];
-		case ACT_RIGHT:
-			if(keyState[0] < 0) {
-				return 0;
-			}
-			return keyState[0];
-		case ACT_UP:
-			if(keyState[1] > 0) {
-				return 0;
-			}
-			return -keyState[1];
-		case ACT_DOWN:
-			if(keyState[1] < 0) {
-				return 0;
-			}
-			return keyState[1];
-		case ACT_A:
-			return keyState[2];
-		case ACT_B:
-			return keyState[3];
-		case ACT_C:
-			return keyState[4];
-		case ACT_D:
-			return keyState[5];
-		case ACT_AB:
-			return keyState[6];
-		case ACT_BC:
-			return keyState[7];
-	}
-	return -1;
+  switch(n) {
+    case ACT_LEFT:
+      if(keyState[0] > 0) {
+        return 0;
+      }
+      return -keyState[0];
+    case ACT_RIGHT:
+      if(keyState[0] < 0) {
+        return 0;
+      }
+      return keyState[0];
+    case ACT_UP:
+      if(keyState[1] > 0) {
+        return 0;
+      }
+      return -keyState[1];
+    case ACT_DOWN:
+      if(keyState[1] < 0) {
+        return 0;
+      }
+      return keyState[1];
+    case ACT_A:
+      return keyState[2];
+    case ACT_B:
+      return keyState[3];
+    case ACT_C:
+      return keyState[4];
+    case ACT_D:
+      return keyState[5];
+    case ACT_AB:
+      return keyState[6];
+    case ACT_BC:
+      return keyState[7];
+  }
+  return -1;
 }
