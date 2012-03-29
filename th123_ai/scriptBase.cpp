@@ -109,21 +109,30 @@ bool scriptEngine::loadDialog() {
 	}
 	return loadFile(fileName);
 }
-bool scriptEngine::loadResource(int id) {
-	char *buffer;
-	int size;
-	{
-		HMODULE hm = GetModuleHandle(NULL);
-		char name[64];
-		snprintf(name, sizeof(name), "#%d",id);
-		HRSRC hr = FindResource(hm, name, "RT_RCDATA");
-		size = SizeofResource(hm, hr);
-		buffer = static_cast<char*>(LockResource(LoadResource(hm, hr)));
-		if(hm==NULL || hr==NULL || size==0 || buffer==NULL) {
-			return false;
-		}
-	}
-	return loadBuffer(buffer, size, "Resource");
+bool scriptEngine::loadResource(unsigned int id) {
+  const HMODULE hm = ::GetModuleHandle(NULL);
+  if (hm == NULL) {
+    return false;
+  }
+  char name[64];
+  ::snprintf(name, sizeof(name), "#%d", id);
+  const HRSRC hr = ::FindResource(hm, name, "RT_RCDATA");
+  if (hr == NULL) {
+    return false;
+  }
+  const unsigned int size = ::SizeofResource(hm, hr);
+  if (size == 0) {
+    return false;
+  }
+  const HGLOBAL res = ::LoadResource(hm, hr);
+  if (res == NULL) {
+    return false;
+  }
+  const char * const buffer = static_cast<char*>(::LockResource(res));
+  if (buffer==NULL) {
+    return false;
+  }
+  return loadBuffer(buffer, size, "Resource");
 }
 bool scriptEngine::loadBuffer(const char * const buffer, unsigned int size, const char * const name) {
   if(buffer == NULL) {
