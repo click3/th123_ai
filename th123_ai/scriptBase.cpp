@@ -126,7 +126,7 @@ bool scriptEngine::loadResource(int id) {
 	}
 	return loadBuffer(buffer, size, "Resource");
 }
-bool scriptEngine::loadBuffer(const char *buffer, int size, const char *name) {
+bool scriptEngine::loadBuffer(const char * const buffer, unsigned int size, const char * const name) {
   if(buffer == NULL) {
     return false;
   }
@@ -136,14 +136,14 @@ bool scriptEngine::loadBuffer(const char *buffer, int size, const char *name) {
   bool ret = execBuffer(buffer, size, name);
   return ret;
 }
-bool scriptEngine::loadBuffer(const char *buffer, int size) {
-	return loadBuffer(buffer, size, SCRIPT_NAME_EMPTY);
+bool scriptEngine::loadBuffer(const char * const buffer, unsigned int size) {
+  return loadBuffer(buffer, size, SCRIPT_NAME_EMPTY);
 }
-bool scriptEngine::loadBuffer(const char *buffer, const char *name) {
-	return loadBuffer(buffer, strlen(buffer),name);
+bool scriptEngine::loadBuffer(const char * const buffer, const char * const name) {
+  return loadBuffer(buffer, strlen(buffer), name);
 }
-bool scriptEngine::loadBuffer(const char *buffer) {
-	return loadBuffer(buffer, strlen(buffer));
+bool scriptEngine::loadBuffer(const char * const buffer) {
+  return loadBuffer(buffer, strlen(buffer));
 }
 bool scriptEngine::reload() {
 	if(scriptName[0] == '\0') {
