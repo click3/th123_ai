@@ -14,6 +14,7 @@
 #include <boost/program_options.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/foreach.hpp>
+#include <boost/filesystem/fstream.hpp>
 
 #include <org/click3/utility.h>
 
@@ -33,6 +34,44 @@ SHARED_REG_KEY MyReadRegOpen(HKEY key, const wchar_t *sub_key) {
   const LSTATUS result = ::RegOpenKeyExW(key, sub_key, 0, KEY_READ, &reg_key);
   BOOST_ASSERT(result == ERROR_SUCCESS);
   return SHARED_REG_KEY(reg_key, MyRegCloseKey);
+}
+
+bool Patch(const boost::filesystem::path &path) {
+  boost::filesystem::ifstream ifs(path, std::ios::binary);
+  if (!ifs.is_open()) {
+    return false;
+  }
+  std::vector<unsigned char> data(boost::filesystem::file_size(path));
+  ifs.read(reinterpret_cast<char *>(&data.front()), data.size());
+  if (!ifs.good()) {
+    return false;
+  }
+  ifs.close();
+
+  unsigned char * const baseAddr = &data.front();
+  const IMAGE_DOS_HEADER * const mz = reinterpret_cast<const IMAGE_DOS_HEADER *>(baseAddr);
+  IMAGE_NT_HEADERS32 * const pe = reinterpret_cast<IMAGE_NT_HEADERS32 *>(baseAddr + mz->e_lfanew);
+  pe->OptionalHeader.MajorOperatingSystemVersion = pe->OptionalHeader.MajorSubsystemVersion = 5;
+  pe->OptionalHeader.MinorOperatingSystemVersion = pe->OptionalHeader.MinorSubsystemVersion = 1;
+
+  std::string oldValue = "KERNEL32.dll";
+  std::string newValue = "KERNELXP.dll";
+  const std::vector<unsigned char>::iterator it = std::search(data.begin(), data.end(), oldValue.begin(), oldValue.end());
+  if (it == data.end()) {
+    return false;
+  }
+  std::copy(newValue.begin(), newValue.end(), it);
+
+  boost::filesystem::ofstream ofs(path, std::ios::binary);
+  if (!ofs.is_open()) {
+    return false;
+  }
+  ofs.write(reinterpret_cast<const char *>(baseAddr), data.size());
+  if (!ofs.good()) {
+    return false;
+  }
+  ofs.close();
+  return true;
 }
 
 }
@@ -58,8 +97,8 @@ std::string history_path;
 
 const char * const list[] = {
   "th123_ai.exe",   "SWRSAddr.ini",     "SwrAddr.ini",  "th123_ai.ini",
-  "../History.txt", "../motion.txt",    "Readme.txt",    "../skill.txt",
-  "../spell.txt",   "../document.txt",  "../card.txt"
+  "../History.txt", "../motion.txt",    "Readme.txt",   "../skill.txt",
+  "../spell.txt",   "../document.txt",  "../card.txt",  "../KernelXP.dll"
 };
 
 bool ParseArgs(unsigned int argc, const char * const *argv) {
@@ -95,7 +134,11 @@ int main(unsigned int argc, const char * const *argv) {
     return 1;
   }
 
-  boost::filesystem::copy_file(app_dir / "../README", app_dir / "Readme.txt");
+  boost::filesystem::copy_file(app_dir / "../README", app_dir / "Readme.txt", boost::filesystem::copy_option::overwrite_if_exists);
+
+  if (!Patch(app_dir / "th123_ai.exe")) {
+    return 1;
+  }
 
   const boost::filesystem::path out_path = boost::filesystem::system_complete(app_dir / "../" / (version + ".zip"));
 
