@@ -191,29 +191,29 @@ public:
     reset();
     //    名称    緋想天    非想天則
     //84BDE0  泡姫の最大HP
-    set_default(WEATHER,            0x006E4E20, 0x008841A0);//未検証
-    set_default(DISPLAYWEATHER,     0x006E4E24, 0x008841A4);//未検証
-    set_default(WEATHERCOUNTER,     0x006E4E2C, 0x008841AC);//未検証
-    set_default(STAGENUMBER,        0x00000000, 0x008841AE);//未検証
-    set_default(TIMECOUNT,          0x006E6238, 0x008855B8);//未検証
-    set_default(GAMEDATAMGR,        0x006E623C, 0x008855BC);//未検証
-    set_default(CHAROBJHEADOFS,     0x3C,       0x40);      //未検証
-    set_default(CHAROBJTAILOFS,     0x40,       0x48);      //未検証
-    set_default(OBJLISTMGR,         0x658,      0x6F8);     //未検証
+    set_default(WEATHER,            0x006E4E20, 0x008971C0);//
+    set_default(DISPLAYWEATHER,     0x006E4E24, 0x008971C4);//
+    set_default(WEATHERCOUNTER,     0x006E4E2C, 0x008971CC);//
+    set_default(STAGENUMBER,        0x00000000, 0x008971CE);//
+    set_default(TIMECOUNT,          0x006E6238, 0x008985D8);//
+    set_default(GAMEDATAMGR,        0x006E623C, 0x008985DC);//
+    set_default(CHAROBJHEADOFS,     0x3C,       0x40);      //
+    set_default(CHAROBJTAILOFS,     0x40,       0x44);      //
+    set_default(OBJLISTMGR,         0x658,      0x6F8);     //
     set_default(OBJPROJOFS,         0x54,       0x54);      //未検証
-    set_default(PBATTLEMGR,         0x006E6244, 0x008855C4);//未検証
-    set_default(COMMMODE,           0x006E62EC, 0x00885670);//未検証
-    set_default(PNETOBJECT,         0x006E62FC, 0x00885680);//未検証
+    set_default(PBATTLEMGR,         0x006E6244, 0x008985E4);//
+    set_default(COMMMODE,           0x006E62EC, 0x00898690);//
+    set_default(PNETOBJECT,         0x006E62FC, 0x008986A0);//
     set_default(LPROFNAME,          0x006E6578, 0x008604A0);//未検証
-    set_default(KEYMAP1P,           0x006E6598, 0x00885920);//未検証
+    set_default(KEYMAP1P,           0x006E6598, 0x00898940);//
     set_default(RPROFNAME,          0x006E68B4, 0x00860C8C);//未検証
-    set_default(KEYMAP2P,           0x006E6940, 0x0088610C);//未検証
-    set_default(STAGENUMBER2,       0x00000000, 0x00886CEC);//未検証
-    set_default(BGMNUMBER,          0x00000000, 0x00886CED);//未検証
-    set_default(LCHARID,            0x006E6FF0, 0x00886CF0);//未検証
-    set_default(RCHARID,            0x006E7010, 0x00886D10);//未検証
-    set_default(SCENEID,            0x006ECE7C, 0x0088D024);//未検証
-    set_default(ACTIVEFLAG,         0x006ED3A8, 0x0088DF68);//未検証
+    set_default(KEYMAP2P,           0x006E6940, 0x0089912C);//
+    set_default(STAGENUMBER2,       0x00000000, 0x00899D0C);//
+    set_default(BGMNUMBER,          0x00000000, 0x00899D0D);//
+    set_default(LCHARID,            0x006E6FF0, 0x00899D10);//
+    set_default(RCHARID,            0x006E7010, 0x00899D30);//
+    set_default(SCENEID,            0x006ECE7C, 0x008A0044);//
+    set_default(ACTIVEFLAG,         0x006ED3A8, 0x008A0F88);//
     set_default(LCHAROFS,           0x0c,       0x0c);      //未検証
     set_default(RCHAROFS,           0x10,       0x10);      //未検証
     set_default(BTLMODEOFS,         0x88,       0x88);      //未検証
@@ -301,7 +301,7 @@ public:
     set_default(TENSEINUMOFS,       0x7C8,      0x8B6);     //未検証
     set_default(TENSEIONOFS,        0x7CA,      0x8B8);     //未検証
     set_default(TEKETENOFS,         0x7EA,      0x8D6);     //未検証
-    set_default(MUNENOFS,           0x838,      0x924);     //未検証
+    set_default(MUNENOFS,           0x838,      0x924);     //
   }
   const wchar_t *name_list[ADDR_MAX];
   unsigned int list[ADDR_MAX];
