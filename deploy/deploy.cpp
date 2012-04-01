@@ -58,7 +58,7 @@ std::string history_path;
 
 const char * const list[] = {
   "th123_ai.exe",   "SWRSAddr.ini",     "SwrAddr.ini",  "th123_ai.ini",
-  "../History.txt", "../motion.txt",    "../README",    "../skill.txt",
+  "../History.txt", "../motion.txt",    "Readme.txt",    "../skill.txt",
   "../spell.txt",   "../document.txt",  "../card.txt"
 };
 
@@ -88,12 +88,14 @@ int main(unsigned int argc, const char * const *argv) {
   if(!org::click3::Utility::GetAppDir(app_dir_str)) {
     return 1;
   }
-  const boost::filesystem::path app_dir = boost::filesystem::path(app_dir_str);
+  const boost::filesystem::path app_dir(app_dir_str);
 
   std::string version;
   if(!common::GetVersion(version, history_path.c_str())) {
     return 1;
   }
+
+  boost::filesystem::copy_file(app_dir / "../README", app_dir / "Readme.txt");
 
   const boost::filesystem::path out_path = boost::filesystem::system_complete(app_dir / "../" / (version + ".zip"));
 
