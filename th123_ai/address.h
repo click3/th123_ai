@@ -102,7 +102,7 @@
 #define ADDR_HITAREA2OFS        addr[address::HITAREA2OFS]
 #define ADDR_FRAMEFLAGSOFS      addr[address::FRAMEFLAGSOFS]
 #define ADDR_ATTACKFLAGSOFS     addr[address::ATTACKFLAGSOFS]
-#define  ADDR_DIAHARDOFS        addr[address::DIAHARDOFS]
+#define ADDR_DIAHARDOFS         addr[address::DIAHARDOFS]
 #define ADDR_REISTOPROFS        addr[address::REISTOPROFS]
 #define ADDR_KEYMGROFS          addr[address::KEYMGROFS]
 #define ADDR_KEYMAPOFS          addr[address::KEYMAPOFS]
