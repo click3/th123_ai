@@ -63,7 +63,7 @@ int main(int argc,char *argv[]) {
 #endif
 	__argc__ = argc;
 	__argv__ = argv;
-	SetUnhandledExceptionFilter(main_jump);
+	AddVectoredExceptionHandler(NULL, main_jump);
 	RaiseException(0xC00000FD,0/*EXCEPTION_CONTINUABLE*/,0,NULL);
 	return 0;
 }

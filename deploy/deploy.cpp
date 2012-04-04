@@ -36,7 +36,8 @@ SHARED_REG_KEY MyReadRegOpen(HKEY key, const wchar_t *sub_key) {
   return SHARED_REG_KEY(reg_key, MyRegCloseKey);
 }
 
-bool Patch(const boost::filesystem::path &path) {
+bool Patch(const boost::filesystem::path &app_dir) {
+  const boost::filesystem::path path(app_dir / "th123_ai.exe");
   boost::filesystem::ifstream ifs(path, std::ios::binary);
   if (!ifs.is_open()) {
     return false;
@@ -51,26 +52,12 @@ bool Patch(const boost::filesystem::path &path) {
   unsigned char * const baseAddr = &data.front();
   const IMAGE_DOS_HEADER * const mz = reinterpret_cast<const IMAGE_DOS_HEADER *>(baseAddr);
   IMAGE_NT_HEADERS32 * const pe = reinterpret_cast<IMAGE_NT_HEADERS32 *>(baseAddr + mz->e_lfanew);
-  pe->OptionalHeader.MajorOperatingSystemVersion = pe->OptionalHeader.MajorSubsystemVersion = 5;
-  pe->OptionalHeader.MinorOperatingSystemVersion = pe->OptionalHeader.MinorSubsystemVersion = 1;
+  if (pe->OptionalHeader.MajorSubsystemVersion == 5 && pe->OptionalHeader.MinorSubsystemVersion == 1) {
+    return true;
+  }
 
-  std::string oldValue = "KERNEL32.dll";
-  std::string newValue = "KERNELXP.dll";
-  const std::vector<unsigned char>::iterator it = std::search(data.begin(), data.end(), oldValue.begin(), oldValue.end());
-  if (it == data.end()) {
-    return false;
-  }
-  std::copy(newValue.begin(), newValue.end(), it);
-
-  boost::filesystem::ofstream ofs(path, std::ios::binary);
-  if (!ofs.is_open()) {
-    return false;
-  }
-  ofs.write(reinterpret_cast<const char *>(baseAddr), data.size());
-  if (!ofs.good()) {
-    return false;
-  }
-  ofs.close();
+  boost::filesystem::copy_file(app_dir / "../th123_ai_wrapper.exe", app_dir / "th123_ai_wrapper.exe", boost::filesystem::copy_option::overwrite_if_exists);
+  ::system("th123_ai_wrapper.exe");
   return true;
 }
 
@@ -136,7 +123,7 @@ int main(unsigned int argc, const char * const *argv) {
 
   boost::filesystem::copy_file(app_dir / "../README", app_dir / "Readme.txt", boost::filesystem::copy_option::overwrite_if_exists);
 
-  if (!Patch(app_dir / "th123_ai.exe")) {
+  if (!Patch(app_dir)) {
     return 1;
   }
 
