@@ -64,12 +64,6 @@ void ObjBase::Reload(AI_MODE mode) {
 			ReadProcessMemory(ph,  base_addr + ADDR_HITAREAFLAGOFS + i * sizeof(flag), flag);
 			Box box;
 			ReadProcessMemory(ph,  base_addr + ADDR_HITAREA2OFS + i * sizeof(box), &box, sizeof(box));
-			if(flag != 0) {//ëäëŒç¿ïW
-				box.left = static_cast<int>(x) + box.left;
-				box.top = -static_cast<int>(y) + box.top;
-				box.right = static_cast<int>(x) + box.right;
-				box.bottom = -static_cast<int>(y)+ box.bottom;
-			}
 			box.top *= -1;
 			box.bottom *= -1;
 			hitarea.push_back(box);
