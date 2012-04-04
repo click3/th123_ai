@@ -85,7 +85,7 @@ std::string history_path;
 const char * const list[] = {
   "th123_ai.exe",   "SWRSAddr.ini",     "SwrAddr.ini",  "th123_ai.ini",
   "../History.txt", "../motion.txt",    "Readme.txt",   "../skill.txt",
-  "../spell.txt",   "../document.txt",  "../card.txt",  "../KernelXP.dll"
+  "../spell.txt",   "../document.txt",  "../card.txt"
 };
 
 bool ParseArgs(unsigned int argc, const char * const *argv) {
