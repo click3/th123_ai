@@ -26,7 +26,6 @@ zip展開するだけ
 
 ファイル解説：
 th123_ai.exe		プログラム本体です。
-KernelXP.dll		XPで動かすために必要なサブプログラムです。
 th123_ai.ini		設定ファイルです、設定必須ではないのでスルー可。
 Readme.txt		今読んでいるこれ
 History.txt		更新履歴です。
