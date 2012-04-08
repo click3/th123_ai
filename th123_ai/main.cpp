@@ -163,36 +163,33 @@ long WINAPI exep(EXCEPTION_POINTERS *pep) {
 /*
 処理に直接関係する定義群ここから
 */
-#define is_th105_active()	(wh==GetForegroundWindow())
+bool is_th105_active() {
+  return wh==GetForegroundWindow();
+}
 
 void th105_active(void) {
 	SetActiveWindow2(wh);
 }
 void SetActiveWindow2(HWND hWnd) {
-	DWORD pid;
-	HANDLE p;
-	HWND w;
-	HMODULE hm;
-	LPTHREAD_START_ROUTINE proc;
+  const HWND w = ::GetForegroundWindow();
+  if(w != NULL) {
+    DWORD pid;
+    ::GetWindowThreadProcessId(w, &pid);
+    if(pid != 0) {
+      const HANDLE p = ::OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
+      if(p!=NULL) {
+        const HMODULE hm = ::GetModuleHandle("user32.dll");
+        const LPTHREAD_START_ROUTINE proc = reinterpret_cast<LPTHREAD_START_ROUTINE>(::GetProcAddress(hm,"SetForegroundWindow"));
+        ::CreateRemoteThread(p, NULL, 0, proc, hWnd, 0, NULL);
+        ::CloseHandle(p);
+      }
+    }
+  }
+  //ダメ押し
+  ::ShowWindow(hWnd, SW_NORMAL);
+  ::SetForegroundWindow(hWnd);
 
-	w = GetForegroundWindow();
-	if(w != NULL) {
-		GetWindowThreadProcessId(w,&pid);
-		if(pid != 0) {
-			p = OpenProcess(PROCESS_ALL_ACCESS,FALSE,pid);
-			if(p!=NULL) {
-				hm = GetModuleHandle("user32.dll");
-				proc = (LPTHREAD_START_ROUTINE)GetProcAddress(hm,"SetForegroundWindow");
-				CreateRemoteThread(p,NULL,0,proc,hWnd,0,NULL);
-				CloseHandle(p);
-			}
-		}
-	}
-	//ダメ押し
-	ShowWindow(hWnd,SW_NORMAL);
-	SetForegroundWindow(hWnd);
-
-	Sleep(50);
+  ::Sleep(50);
 }
 //flag==TRUEで強制最前窓、FALSEでフルスクリーンでないときのみ最前窓
 void MyWndActive(int flag) {
@@ -468,8 +465,9 @@ void load_inis(void) {
 void change_player(void) {
 	static HANDLE h = NULL;
 	int n = ini_int2(L"Player", 1);
+  return;
 
-	if(h) {
+	if(h != NULL) {
 		ReleaseMutex(h);
 		CloseHandle(h);
 		h = NULL;
