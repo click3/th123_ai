@@ -1157,10 +1157,6 @@ int main2(int argc,char *_argv[]) {
 	my_wh = GetForegroundWindow();
 	init();
 	timeBeginPeriod(1);
-	engine = scriptLua::getCurrentInstance();
-	engine->init();
-	changeDbgBreakPoint();
-	changeLoadLibraryExW(0);
 
 	std::locale::global(std::locale("japanese"));
 	char *argv[64];
@@ -1196,6 +1192,11 @@ int main2(int argc,char *_argv[]) {
 			i++;
 		}
 	}
+
+	engine = scriptLua::getCurrentInstance();
+	engine->init();
+	changeDbgBreakPoint();
+	changeLoadLibraryExW(0);
 
 	if(argc == 2) {
 		OpenAI(argv[1]);
