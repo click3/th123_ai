@@ -61,7 +61,9 @@ bool scriptEngine::loadFile(const char *fileName) {
 		SetCurrentDirectoryA(prevDir);
 		return false;
 	}
-  strncpy(scriptName, fullPath, _countof(scriptName));
+  if (scriptName[0] == '\0') {
+    strncpy(scriptName, fullPath, _countof(scriptName));
+  }
 	bool ret = loadFile(fp, fullPath);
 	fclose(fp);
 	SetCurrentDirectoryA(prevDir);
