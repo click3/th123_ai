@@ -89,9 +89,9 @@ void search_key(CHAR_ID operation_char) {
 	}
 	if(p!=i) {
 		if(p==1) {
-			ini_add(L"default", L"Player", L"1");
+			ini_add(L"Option", L"Player", L"1");
 		} else {
-			ini_add(L"default", L"Player", L"2");
+			ini_add(L"Option", L"Player", L"2");
 		}
 		change_player();
 	}

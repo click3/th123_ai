@@ -488,10 +488,10 @@ void change_player(void) {
 	}
 	if(WAIT_OBJECT_0 != WaitForSingleObject(h,0)) {
 		if(n!=2) {
-			ini_add(L"default", L"Player", L"2");
+			ini_add(L"Option", L"Player", L"2");
 			n = 2;
 		} else {
-			ini_add(L"default", L"Player", L"1");
+			ini_add(L"Option", L"Player", L"1");
 			n = 1;
 		}
 		CloseHandle(h);
