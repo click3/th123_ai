@@ -475,7 +475,6 @@ void load_inis(void) {
 void change_player(void) {
 	static HANDLE h = NULL;
 	int n = ini_int2(L"Player", 1);
-  return;
 
 	if(h != NULL) {
 		ReleaseMutex(h);
