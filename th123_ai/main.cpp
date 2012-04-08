@@ -171,25 +171,35 @@ void th105_active(void) {
 	SetActiveWindow2(wh);
 }
 void SetActiveWindow2(HWND hWnd) {
+  if (is_th105_active()) {
+    return;
+  }
   const HWND w = ::GetForegroundWindow();
   if(w != NULL) {
     DWORD pid;
     ::GetWindowThreadProcessId(w, &pid);
     if(pid != 0) {
-      const HANDLE p = ::OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
-      if(p!=NULL) {
-        const HMODULE hm = ::GetModuleHandle("user32.dll");
-        const LPTHREAD_START_ROUTINE proc = reinterpret_cast<LPTHREAD_START_ROUTINE>(::GetProcAddress(hm,"SetForegroundWindow"));
-        ::CreateRemoteThread(p, NULL, 0, proc, hWnd, 0, NULL);
-        ::CloseHandle(p);
+      if (pid == ::GetCurrentProcessId()) {
+        ::SetForegroundWindow(hWnd);
+      } else {
+        const HANDLE p = ::OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
+        if(p!=NULL) {
+          LPTHREAD_START_ROUTINE proc;
+          while (true) {
+            proc = reinterpret_cast<LPTHREAD_START_ROUTINE>(org::click3::DllHackLib::GetProcRemoteAddress(pid, L"user32.dll", "SetForegroundWindow"));
+            if (proc != NULL) {
+              break;
+            }
+            ::Sleep(50);
+          }
+          ::CreateRemoteThread(p, NULL, 0, proc, hWnd, 0, NULL);
+          ::CloseHandle(p);
+        }
       }
     }
   }
   //ダメ押し
   ::ShowWindow(hWnd, SW_NORMAL);
-  ::SetForegroundWindow(hWnd);
-
-  ::Sleep(50);
 }
 //flag==TRUEで強制最前窓、FALSEでフルスクリーンでないときのみ最前窓
 void MyWndActive(int flag) {

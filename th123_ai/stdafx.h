@@ -38,6 +38,7 @@
 #include <boost/format.hpp>
 
 #include <org/click3/utility.h>
+#include <org/click3/dll_hack_lib.h>
 
 #include "../common/common.h"
 

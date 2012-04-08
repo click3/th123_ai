@@ -1,2 +1,2 @@
-#define VERSION 2238
-#define OPEN_VERSION "ver0.95a"
+#define VERSION 2294
+#define OPEN_VERSION "ver0.95b"
