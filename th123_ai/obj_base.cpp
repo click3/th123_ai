@@ -75,7 +75,7 @@ void ObjBase::Reload(AI_MODE mode) {
 	if(attackarea_count > 16) { // ƒƒ‚ƒŠ[”z’uã16ŒÂ’´‚Í‚ ‚è“¾‚È‚¢
 		return;
 	}
-	for(unsigned int i = 0; i < 16; i++) {
+  for(unsigned int i = 0; i < attackarea_count; i++) {
 		unsigned int attackarea_addr;
 		ReadProcessMemory(ph, base_addr+ADDR_ATTACKAREAOFS + i*4, attackarea_addr);
 		Box box;
