@@ -25,7 +25,7 @@ public:
 	bool loadFile(FILE *fp);
 	bool loadDialog();
 	bool loadResource(unsigned int id);
-	bool loadBuffer(const char *buffer, unsigned int size, const char *name);
+	bool loadBuffer(const char *buffer, unsigned int size, const char *name, bool runYield = true);
 	bool loadBuffer(const char *buffer, unsigned int size);
 	bool loadBuffer(const char *buffer, const char *name);
 	bool loadBuffer(const char *buffer);

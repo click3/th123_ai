@@ -37,6 +37,9 @@ bool scriptEngine::loadFile(const char *fileName) {
 	if(fileName==NULL || fileName[0]=='\0' || strlen(fileName)>255) {
 		return false;
 	}
+  if (scriptName[0] == '\0') {
+    strncpy(scriptName, fileName, _countof(scriptName));
+  }
 	char fullPath[256];
 	strncpy(fullPath, fileName, sizeof(fullPath));
 	convertFilePath(fullPath);
@@ -61,9 +64,6 @@ bool scriptEngine::loadFile(const char *fileName) {
 		SetCurrentDirectoryA(prevDir);
 		return false;
 	}
-  if (scriptName[0] == '\0') {
-    strncpy(scriptName, fullPath, _countof(scriptName));
-  }
 	bool ret = loadFile(fp, fullPath);
 	fclose(fp);
 	SetCurrentDirectoryA(prevDir);
@@ -134,13 +134,13 @@ bool scriptEngine::loadResource(unsigned int id) {
   if (buffer==NULL) {
     return false;
   }
-  return loadBuffer(buffer, size, "Resource");
+  return loadBuffer(buffer, size, "Resource", false);
 }
-bool scriptEngine::loadBuffer(const char * const buffer, unsigned int size, const char * const name) {
+bool scriptEngine::loadBuffer(const char * const buffer, unsigned int size, const char * const name, bool runYield) {
   if(buffer == NULL) {
     return false;
   }
-  if(!loadable) {
+  if(runYield && !loadable) {
     yield();
   }
   bool ret = execBuffer(buffer, size, name);
