@@ -15,7 +15,7 @@ main関数が終了すると本体プログラムも終了します。
 
 ・文法
 こちらをお読みください。
-http://sugarpot.sakura.ne.jp/yuno/html/lua51_manual_ja.html
+http://milkpot.sakura.ne.jp/lua/lua51_manual_ja.html
 
 ・設定ファイル
 アプリケーションと同じディレクトリに存在するSWRSAddr.ini、SwrAddr.ini、th105_ai.ini、th123_ai.ini、dev.iniを起動時に自動で読み込みます。
