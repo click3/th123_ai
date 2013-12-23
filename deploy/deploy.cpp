@@ -55,9 +55,6 @@ bool Patch(const boost::filesystem::path &app_dir) {
   if (pe->OptionalHeader.MajorSubsystemVersion == 5 && pe->OptionalHeader.MinorSubsystemVersion == 1) {
     return true;
   }
-
-  boost::filesystem::copy_file(app_dir / "../th123_ai_wrapper.exe", app_dir / "th123_ai_wrapper.exe", boost::filesystem::copy_option::overwrite_if_exists);
-  ::system("th123_ai_wrapper.exe");
   return true;
 }
 
