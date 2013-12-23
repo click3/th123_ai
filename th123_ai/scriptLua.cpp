@@ -301,8 +301,10 @@ scriptLua *scriptLua::instance = NULL;
 		::lua_pushnumber(L, static_cast<lua_Number>(obj.speed.y));
 		::lua_pushnumber(L, static_cast<lua_Number>(obj.base_addr));
 		::lua_pushnumber(L, static_cast<lua_Number>(obj.attackarea.size()));
-		::lua_pushnumber(L, static_cast<lua_Number>(obj.hitarea.size()));
-		return 11;
+    ::lua_pushnumber(L, static_cast<lua_Number>(obj.hitarea.size()));
+    ::lua_pushnumber(L, static_cast<lua_Number>(obj.fflags));
+    ::lua_pushnumber(L, static_cast<lua_Number>(obj.aflags));
+		return 13;
 	}
 	int scriptLua::lua_get_obj_attackarea(lua_State *L) {
 		const unsigned int n = lua_gettop(L);

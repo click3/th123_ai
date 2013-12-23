@@ -170,11 +170,12 @@ set_data_delay(delay)
 	この命令を実行した場合、以前指定されていたdelayに関わらずdelayフレームの間はenemy_actとenemy_frameを読んでも0が返ります。
 get_obj_data(player,num)
 	指定プレイヤーのnum個目のオブジェクト(射撃の弾や人形など)の情報を取得します。
-	帰ってくる情報はid、x座標、y座標、HP、画像ID、フレーム数、x速度、y速度、固有識別子、攻撃範囲数、食らい範囲数です。
+	帰ってくる情報はid、x座標、y座標、HP、画像ID、フレーム数、x速度、y速度
+  固有識別子、攻撃範囲数、食らい範囲数、状態系フラグ、攻撃系フラグです。
 	固有識別子はオブジェクトごとの固有の数値であり、オブジェクトを一意に特定するために使用します。
 	別のオブジェクトが同じ識別子を持つことはありません。
 	使用例：
-	id,ox,oy,hp,img,frame,oxs,oys,oid,attack_n,hit_n = get_obj_data(TAG_MY,0);
+	id,ox,oy,hp,img,frame,oxs,oys,oid,attack_n,hit_n,fflags,aflags = get_obj_data(TAG_MY,0);
 set_weather_delay(delay)
 	極光時に発現する天候効果がわかるようになるまでの時間を設定します。
 	時間は気質カウンター依存で、
