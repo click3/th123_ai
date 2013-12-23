@@ -36,7 +36,6 @@ Character enemy_data(Character::ENEMY);
 //ïsê≥ëŒçÙ
 int __argc__;
 char **__argv__;
-void *exHandle;
 int main2(int argc,char *argv[]);
 
 void mj(void) {
@@ -64,7 +63,7 @@ int main(int argc,char *argv[]) {
 #endif
 	__argc__ = argc;
 	__argv__ = argv;
-	exHandle = ::AddVectoredExceptionHandler(NULL, main_jump);
+  ::SetUnhandledExceptionFilter(main_jump);
 	RaiseException(0xC00000FD,0/*EXCEPTION_CONTINUABLE*/,0,NULL);
 	return 0;
 }
@@ -1148,7 +1147,6 @@ void changeLoadLibraryExW(int flag) {
 int main(int argc,char *_argv[]) {
 #else
 int main2(int argc,char *_argv[]) {
-	::RemoveVectoredExceptionHandler(exHandle);
 #endif
 	char s[256];
 	hInst = GetModuleHandle(NULL);
